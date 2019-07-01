@@ -1,0 +1,25 @@
+# Ignoring third-party source
+third-party-source/
+
+# svn folder
+.svn/
+
+# Ignoring resourse folder which store the word-template
+resourse/
+
+# Ignoring temp folder which stores the uploaded files, export templates
+temp/export/*.*
+temp/upload/*.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows shortcuts
+*.lnk

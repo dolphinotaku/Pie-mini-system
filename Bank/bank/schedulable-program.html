@@ -1,0 +1,93 @@
+<div id="page-wrapper" ng-controller="schedulableProgramController">
+	<div class="container-fluid">
+			<div class="row">
+					<div class="col-lg-12">
+							<h1 class="page-header">Schedulable Program</h1>
+					</div>
+					<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<message ng-model="processMsg" auto-close></message>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					How to use:<br>
+					- For Create record, click on the "Create Form" tab, create record and then click the "Create" button<br>
+                    - Install the schedulable program to enable on schedule task
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			
+            <hr>
+	        <process program-id="cp01schedulableProgram" ng-model="processModel">
+                <button type="button" class="btn btn-default" aria-label="Create" ng-click="InquiryData()">
+                    <span class="fas fa-sync" aria-hidden="true"></span> Refresh
+                </button>
+                <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Program ID</th>
+                            <th>Description</th>
+                            <th>Install Status</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="programItem in processCtrl.ngModel.InquiryResult.Result">
+                                <td>{{programItem.ProgramID}}</td>
+                                <td>{{programItem.Description}}</td>
+                                <td>
+                                    <form>
+                                        <fieldset>
+                                            <label class="switch">
+                                                <input type="checkbox" ng-model="programItem.Status" ng-change="InstallSchedulableProgram(programItem)" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </fieldset>
+                                    </form>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-link" aria-label="Details" ng-click="ViewScheduleProgramRecord(programItem);" ng-show="programItem.Status=='Enabled'">
+                                        <i class="fas fa-angle-right" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </process>
+
+            <entry ng-model="entryViewForm" program-id="cw01schedulableProgram" edit-mode="view">
+                <form class="form-horizontal" ng-submit="SubmitData()">
+                    <fieldset>
+                        <legend>View Schedulable Program</legend>
+                        <div class="form-group">
+                            <label for="inputProgramID" class="col-sm-2 control-label">Program ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputProgramID" ng-model="entryCtrl.ngModel.ProgramID" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputDescription" ng-model="entryCtrl.ngModel.Description">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAvailableParameterJSON" class="col-sm-2 control-label">Available Parameter JSON</label>
+                            <div class="col-sm-10">
+                                <textarea type="text" class="form-control" id="inputAvailableParameterJSON" ng-model="entryCtrl.ngModel.AvailableParameterJSON" rows="10"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </entry>
+
+	</div>
+	<!-- /.container-fluid -->
+</div>

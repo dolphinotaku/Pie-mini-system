@@ -1,0 +1,207 @@
+<div id="page-wrapper" ng-controller="updateExchangeRateController">
+    <div class="container-fluid">
+        <div class="row">
+                <div class="col-lg-12">
+                        <h1 class="page-header">Exchange Rate Entry</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <message ng-model="processMsg" auto-close></message>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                How to use:<br>
+                - For Create record, click on the "Create Form" tab, create record and then click the "Create" button<br>
+                - For Amend record, Select a record on list, update or delete record
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        
+        <hr>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#list" ng-click="HideEntryForm()" aria-controls="list" role="tab" data-toggle="tab"><i class="fas fa-list fa-fw fa-lg"></i> List</a></li>
+            <li role="presentation"><a href="#create" ng-click="SwitchToCreate()" aria-controls="create" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> Create Form</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="list">
+                <pageview
+                        ng-model="excahngeRateModel"
+                        program-id="bw32exchangeRate">
+                    <screen></screen>
+                </pageview>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="create">
+            </div>
+        </div>
+        <entry ng-model="entryCreateForm" program-id="be32exchangeRate" edit-mode="create" ng-show="showEntryForm">
+            <form class="form-horizontal" ng-submit="SubmitData()">
+                <fieldset>
+                    <legend>{{entryFormTitle}}</legend>
+                    <div class="form-group">
+                        <label for="inputBuySellTypeC" class="col-sm-2 control-label">Buy Sell Type</label>                                    
+                        <div class="col-sm-10">
+                            <div class="radio">
+                                <label for="inputTypeBankInC">
+                                <input type="radio" ng-model="entryCtrl.ngModel.BuySellType" ng-value="'Sell to Bank'" class="" id="inputTypeBankInC">
+                                Sell to Bank</label>
+                            </div>
+                            <div class="radio">
+                                <label for="inputTypeBankOutC">
+                                <input type="radio" ng-model="entryCtrl.ngModel.BuySellType" ng-value="'Buy from Bank'" class="" id="inputTypeBankOutC">
+                                Buy from Bank</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputBankProviderC" class="col-sm-2 control-label">Bank Provider</label>                                    
+                        <div class="col-sm-10">
+                            <editbox ng-model="providerEditBoxC" program-id="bw21bank" id="bankProviderC">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inputBankProviderC" ng-model="entryCtrl.ngModel.Provider" readonly>
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" aria-label="Edit List" ng-click="OpenPageView()">
+                                    <span class="fas fa-th-list" aria-hidden="true"></span>
+                                </button>
+                                </span>
+                                <input type="text" class="form-control" ng-model="providerEditBoxC.BankEnglishName" readonly>
+                            </div>
+                            </editbox>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                            <label for="inputOutAmountC" class="col-sm-2 control-label">Out Amount</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="inputOutAmountC" min="0" step="0.00000001" ng-model="entryCtrl.ngModel.OutAmount">
+                                    <label for="inputOutCurrencyIDC" class="input-group-addon hidden-sm hidden-xs">Out Currency Code</label>
+                                    <select class="form-control" name="inputOutCurrencyIDC" id="inputOutCurrencyIDC" ng-model="entryCtrl.ngModel.OutCurrencyID" required>
+                                        <option ng-repeat="currencyRow in currencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                            {{currencyRow.AlphabeticCode}}
+                                        </option>
+                                    </select>
+                                    <span class="input-group-addon">
+                                        <span ng-hide="!entryCtrl.ngModel.OutCurrencyID" class="currency-flag currency-flag-{{entryCtrl.ngModel.OutCurrencyID | lowercase}} currency-flag-sm"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <pageview ng-model="currencyModel" program-id="bw22currency" id="inquiryPanel" style="display: none;">
+                                <screen></screen>
+                            </pageview>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputInAmountC" class="col-sm-2 control-label">In Amount</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="inputInAmountC" min="0" step="0.00000001" ng-model="entryCtrl.ngModel.InAmount">
+                                <label for="inputInCurrencyIDC" class="input-group-addon hidden-sm hidden-xs">In Currency Code</label>
+                                <select class="form-control" name="inputInCurrencyIDC" id="inputInCurrencyIDC" ng-model="entryCtrl.ngModel.InCurrencyID" required>
+                                    <option ng-repeat="currencyRow in currencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                        <span class="currency-flag currency-flag-{{currencyRow.AlphabeticCode | lowercase}} currency-flag-sm"></span>
+                                        {{currencyRow.AlphabeticCode}}
+                                    </option>
+                                </select>
+                                <span class="input-group-addon">
+                                    <span ng-hide="!entryCtrl.ngModel.InCurrencyID" class="currency-flag currency-flag-{{entryCtrl.ngModel.InCurrencyID | lowercase}} currency-flag-sm"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label for="inputOutCurrencyIDC" class="col-sm-2 control-label">Out Currency Code</label>                                    
+                        <div class="col-sm-10">
+                            <editbox ng-model="outCurrencyEditBoxC" program-id="bw22currency" id="outCurrencyC">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inputOutCurrencyIDC" ng-model="entryCtrl.ngModel.OutCurrencyID" readonly>
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" aria-label="Edit List" ng-click="OpenPageView()">
+                                    <span class="fas fa-th-list" aria-hidden="true"></span>
+                                </button>
+                                </span>
+                                <input type="text" class="form-control" ng-model="outCurrencyEditBoxC.Name" readonly>
+                            </div>
+                            </editbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputOutAmountC" class="col-sm-2 control-label">Out Amount</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputOutAmountC" min="0" step="0.00000001" ng-model="entryCtrl.ngModel.OutAmount">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputInCurrencyIDC" class="col-sm-2 control-label">In Currency Code</label>                                    
+                        <div class="col-sm-10">
+                            <editbox ng-model="inCurrencyEditBoxC" program-id="bw22currency" id="inCurrencyC">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inputInCurrencyIDC" ng-model="entryCtrl.ngModel.InCurrencyID" readonly>
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" aria-label="Edit List" ng-click="OpenPageView()">
+                                    <span class="fas fa-th-list" aria-hidden="true"></span>
+                                </button>
+                                </span>
+                                <input type="text" class="form-control" ng-model="inCurrencyEditBoxC.Name" readonly>
+                            </div>
+                            </editbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputInAmountC" class="col-sm-2 control-label">In Amount</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputInAmountC" min="0" step="0.00000001" ng-model="entryCtrl.ngModel.InAmount">
+                        </div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="inputRateC" class="col-sm-2 control-label">Rate</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputRateC" min="0" step="0.00000001" ng-model="entryCtrl.ngModel.Rate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEffectiveDateC" class="col-sm-2 control-label">Effective Date</label>
+                        <div class="col-sm-10">
+                            <input type="datetime-local" class="form-control" id="inputEffectiveDateC" ng-model="entryCtrl.ngModel.EffectiveDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputIsEffectiveC" class="col-sm-2 control-label">Is Effective</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" class="form-control" id="inputIsEffectiveC" ng-model="entryCtrl.ngModel.IsEffective" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+                        </div>
+                    </div>
+                    <div class="form-group" ng-hide="entryFormMode != 'amend'">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <button type="button" class="btn btn-success" aria-label="Save" ng-click="UpdateData()">
+                                <span class="fas fa-save" aria-hidden="true"></span> Save
+                            </button>
+                        </div>
+                        <div class="col-sm-5">
+                            <button type="button" class="btn btn-danger" aria-label="Delete" ng-click="DeleteData()">
+                                <span class="fas fa-trash-alt" aria-hidden="true"></span> Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-hide="entryFormMode != 'create'">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-primary" aria-label="Create" ng-click="CreateData()">
+                                <span class="far fa-plus-square" aria-hidden="true"></span> Create
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </entry>
+
+    </div>
+    <!-- /.container-fluid -->
+</div>

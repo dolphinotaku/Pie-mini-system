@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>How to automatically create heading anchors for links</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+	
+    <link rel="stylesheet" type="text/css" href="../third-party/animate.css">
+	
+    <!--<script type="text/javascript" src="../third-party/jQuery/jquery-2.2.1.min.js"></script>-->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../third-party/jQuery/jquery.cookie-1.4.1.min.js"></script>
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.6.5/angular.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.6.5/angular-animate.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.6.5/angular-aria.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.6.5/angular-route.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.6.5/angular-touch.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.6.5/angular-messages.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.6.5/angular-cookies.min.js"></script>
+	
+	<script type="text/javascript" src="../third-party/angularjs-modules-plugins/ui-router/ui-router-1.0.15.js"></script>
+    <script type="text/javascript" src="../third-party/ocLazyLoad/ocLazyLoad.js"></script>
+	
+    <script src="../third-party/bootstrap/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../third-party/bootstrap/bootstrap-notify.3.1.3/bootstrap-notify.js"></script>
+	
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="../js/config.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="../js/app.config.js"></script>
+    <script type="text/javascript" src="../js/directive.js"></script>
+    <script type="text/javascript" src="../js/directive.process.js"></script>
+    <script type="text/javascript" src="../js/service.js"></script>
+	
+    <script type="text/javascript" src="../third-party/Blob.js-master/Blob.js"></script>
+    <script type="text/javascript" src="../third-party/FileSaver.js/FileSaver.js-1.3.2/FileSaver.min.js"></script>
+    <script src="../third-party/angularjs-modules-plugins/ng-file-upload-12.2.13/demo/src/main/webapp/js/ng-file-upload-shim.js"></script>
+    <script src="../third-party/angularjs-modules-plugins/ng-file-upload-12.2.13/demo/src/main/webapp/js/ng-file-upload.js"></script>
+	
+    
+	<style>
+		.anchorBtn {
+			margin-left: 15px;
+		}
+	</style>
+<script>
+$(document).ready(function() {
+var divList = $(".source>div")
+var output = ""
+
+//var reversedList = divList.toArray().reverse();
+var reversedList = [];
+for(var index = 0; index<divList.length; index++){
+	reversedList.unshift(divList[index]);
+}
+
+for(var index=0; index<reversedList.length; index++){
+	var element = $(reversedList[index]);
+	var path = element.find("a").attr("href");
+var filename = path.split('/').pop();
+var filenameWithoutExt = filename.split('.').slice(0, -1).join('.')
+var photoSubtitle = filenameWithoutExt.replace("day", "Day ");
+var elementOuterHtml = $('<div>').append(element.clone()).html();
+output = output + "\n\r<h4>"+photoSubtitle+"</h4>"+"\n\r"+elementOuterHtml
+	
+}
+console.dir(output)
+
+jQuery.fn.outerHTML = function(s) {
+    return s
+        ? this.before(s).remove()
+        : jQuery("<p>").append(this.eq(0).clone()).html();
+};
+
+});
+</script>
+  </head>
+<body>
+<div class="source">
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-oXtcSEHioWM/W6JThF020YI/AAAAAAAAOGA/l_dDnoUcoKsJuFClzZp5A-pLKNSpN4CHACLcBGAs/s1600/day05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-oXtcSEHioWM/W6JThF020YI/AAAAAAAAOGA/l_dDnoUcoKsJuFClzZp5A-pLKNSpN4CHACLcBGAs/s320/day05.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-hBDHRywEUqA/W6JThMRNOfI/AAAAAAAAOF4/gQFQZSvfJ-QhdK33WhhOmnCSJSTQlT_ngCLcBGAs/s1600/day10.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-hBDHRywEUqA/W6JThMRNOfI/AAAAAAAAOF4/gQFQZSvfJ-QhdK33WhhOmnCSJSTQlT_ngCLcBGAs/s320/day10.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-AcW_kaG979I/W6JTmCz6UZI/AAAAAAAAOGw/ZYO2BZzxUSIwKZ8qIIdppVLcizhMPNSxACLcBGAs/s1600/day15.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-AcW_kaG979I/W6JTmCz6UZI/AAAAAAAAOGw/ZYO2BZzxUSIwKZ8qIIdppVLcizhMPNSxACLcBGAs/s320/day15.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-SqSR8AcOnWo/W6JTo_GFyUI/AAAAAAAAOHQ/zfn2QkMPxRINvtHaGrkGPiR4JgeWhAfwACLcBGAs/s1600/day21.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://3.bp.blogspot.com/-SqSR8AcOnWo/W6JTo_GFyUI/AAAAAAAAOHQ/zfn2QkMPxRINvtHaGrkGPiR4JgeWhAfwACLcBGAs/s320/day21.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-q_Jg21jVqVU/W6JTpYBx6dI/AAAAAAAAOHU/dCO3kBANKXQXTQK-4K_KpKR8Ixewn44uACLcBGAs/s1600/day30.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-q_Jg21jVqVU/W6JTpYBx6dI/AAAAAAAAOHU/dCO3kBANKXQXTQK-4K_KpKR8Ixewn44uACLcBGAs/s320/day30.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-i0Kt0cIzHyU/W6JTpcj75cI/AAAAAAAAOHY/-NaScQgD3bgqb62spOYJHcgHgWiEAGx9ACLcBGAs/s1600/day35.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-i0Kt0cIzHyU/W6JTpcj75cI/AAAAAAAAOHY/-NaScQgD3bgqb62spOYJHcgHgWiEAGx9ACLcBGAs/s320/day35.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-SrPZ3qmgjLk/W6JTpwqJqeI/AAAAAAAAOHc/kOyMCW127_0CXCjmsfQoqxWnPKr6zPmdQCLcBGAs/s1600/day40.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-SrPZ3qmgjLk/W6JTpwqJqeI/AAAAAAAAOHc/kOyMCW127_0CXCjmsfQoqxWnPKr6zPmdQCLcBGAs/s320/day40.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-RCtPn2JjGgI/W6JTqcrGdpI/AAAAAAAAOHg/UcyyJUfGndoeMon8bi13zCbAAxRsSPKzACLcBGAs/s1600/day46.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-RCtPn2JjGgI/W6JTqcrGdpI/AAAAAAAAOHg/UcyyJUfGndoeMon8bi13zCbAAxRsSPKzACLcBGAs/s320/day46.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-Nl2FUnj1n0c/W6JTqur2VNI/AAAAAAAAOHk/6YpyRrrYrKcx6oZK2P0NuI6JG5w9zszrACLcBGAs/s1600/day50.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-Nl2FUnj1n0c/W6JTqur2VNI/AAAAAAAAOHk/6YpyRrrYrKcx6oZK2P0NuI6JG5w9zszrACLcBGAs/s320/day50.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-oe9ZalTlB8E/W6JTrD6U4kI/AAAAAAAAOHo/d3QIMLtFMJoZrKMa10guOVPXkNwwbDY-gCLcBGAs/s1600/day55.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-oe9ZalTlB8E/W6JTrD6U4kI/AAAAAAAAOHo/d3QIMLtFMJoZrKMa10guOVPXkNwwbDY-gCLcBGAs/s320/day55.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-gG43C0CsqMI/W6JTrT4E0SI/AAAAAAAAOHs/2unOeV6ZKFILnpee95hGRZ5KTaYln9OfACLcBGAs/s1600/day60.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-gG43C0CsqMI/W6JTrT4E0SI/AAAAAAAAOHs/2unOeV6ZKFILnpee95hGRZ5KTaYln9OfACLcBGAs/s320/day60.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-HMQAq6CDExo/W6JTr5ckGiI/AAAAAAAAOHw/He07mSxO4GM31R4ZiTZgVopFsDq7J0HTgCLcBGAs/s1600/day65.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://3.bp.blogspot.com/-HMQAq6CDExo/W6JTr5ckGiI/AAAAAAAAOHw/He07mSxO4GM31R4ZiTZgVopFsDq7J0HTgCLcBGAs/s320/day65.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-HB47CJWadKY/W6JTsDrqGKI/AAAAAAAAOH0/EStSgGlSkFIA7NhCr-lAMbdqtL_C5T2ZwCLcBGAs/s1600/day70.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-HB47CJWadKY/W6JTsDrqGKI/AAAAAAAAOH0/EStSgGlSkFIA7NhCr-lAMbdqtL_C5T2ZwCLcBGAs/s320/day70.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-pkB-_MkkGKY/W6JTst5ND-I/AAAAAAAAOH4/pod62MpFdpgsv64uvyIyCIZVv_P87oXPwCLcBGAs/s1600/day75.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://3.bp.blogspot.com/-pkB-_MkkGKY/W6JTst5ND-I/AAAAAAAAOH4/pod62MpFdpgsv64uvyIyCIZVv_P87oXPwCLcBGAs/s320/day75.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-B1S_eCP9NLY/W6JTs-yLxmI/AAAAAAAAOH8/U0rR1qqMHsIdpJc3M67CxpKvvc8hYDsEACLcBGAs/s1600/day80.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-B1S_eCP9NLY/W6JTs-yLxmI/AAAAAAAAOH8/U0rR1qqMHsIdpJc3M67CxpKvvc8hYDsEACLcBGAs/s320/day80.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-LHRsB3Nqxkc/W6JTtYADurI/AAAAAAAAOIA/PrYNE3BYLQMjWNRgPPJrwXrdNxL_R96WwCLcBGAs/s1600/day85.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://3.bp.blogspot.com/-LHRsB3Nqxkc/W6JTtYADurI/AAAAAAAAOIA/PrYNE3BYLQMjWNRgPPJrwXrdNxL_R96WwCLcBGAs/s320/day85.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-u9gPx_Yt_VE/W6JTtsU7WsI/AAAAAAAAOIE/0uufGXTpsA4Mdlqv3AkT2KJGqgsZLLeQwCLcBGAs/s1600/day90.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-u9gPx_Yt_VE/W6JTtsU7WsI/AAAAAAAAOIE/0uufGXTpsA4Mdlqv3AkT2KJGqgsZLLeQwCLcBGAs/s320/day90.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-rpz3YdK8byk/W6JTuDcnD9I/AAAAAAAAOII/qblTnTzO48YMv6wPM7ZVCITFZrndM0G6QCLcBGAs/s1600/day95.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-rpz3YdK8byk/W6JTuDcnD9I/AAAAAAAAOII/qblTnTzO48YMv6wPM7ZVCITFZrndM0G6QCLcBGAs/s320/day95.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-TLk5diDgLO4/W6JThN2HzpI/AAAAAAAAOF8/P37ZyJH1Ax82F_fRJYHf2bGiYeS6cTwpwCLcBGAs/s1600/day100.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-TLk5diDgLO4/W6JThN2HzpI/AAAAAAAAOF8/P37ZyJH1Ax82F_fRJYHf2bGiYeS6cTwpwCLcBGAs/s320/day100.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-YeZJoXKVfuI/W6JTitg_Z_I/AAAAAAAAOGE/Fe1UxA_-1hQ51AdLjGwxsTaVuRMhQlfNgCLcBGAs/s1600/day105.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-YeZJoXKVfuI/W6JTitg_Z_I/AAAAAAAAOGE/Fe1UxA_-1hQ51AdLjGwxsTaVuRMhQlfNgCLcBGAs/s320/day105.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-6bvp9_GL7Nw/W6JTi8BFvFI/AAAAAAAAOGM/zV7VTsNrhNsSggjYgI0dwvv5boilLrargCLcBGAs/s1600/day110.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-6bvp9_GL7Nw/W6JTi8BFvFI/AAAAAAAAOGM/zV7VTsNrhNsSggjYgI0dwvv5boilLrargCLcBGAs/s320/day110.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-mv5ygFjhpsc/W6JTi0mNv5I/AAAAAAAAOGI/-_-DPChwMk44W1NTqYJaDhawfvecJ1pQQCLcBGAs/s1600/day115.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-mv5ygFjhpsc/W6JTi0mNv5I/AAAAAAAAOGI/-_-DPChwMk44W1NTqYJaDhawfvecJ1pQQCLcBGAs/s320/day115.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-gtfTRrzeaAw/W6JTjknwr3I/AAAAAAAAOGQ/A4F8TN8Vo6keEKgkTFM_yXoE5B7m5V_CwCLcBGAs/s1600/day121.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-gtfTRrzeaAw/W6JTjknwr3I/AAAAAAAAOGQ/A4F8TN8Vo6keEKgkTFM_yXoE5B7m5V_CwCLcBGAs/s320/day121.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-DhxbuSh-V-o/W6JTj0uR1SI/AAAAAAAAOGU/GRIz8oSL1tcEg4a_6N4rX5gqiaDmIFSgACLcBGAs/s1600/day122.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-DhxbuSh-V-o/W6JTj0uR1SI/AAAAAAAAOGU/GRIz8oSL1tcEg4a_6N4rX5gqiaDmIFSgACLcBGAs/s320/day122.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-y2m-C13GQXY/W6JTkJzSPkI/AAAAAAAAOGY/orV4tMTiLMwVUympoLyzgS4wT75nwKY7gCLcBGAs/s1600/day125.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://3.bp.blogspot.com/-y2m-C13GQXY/W6JTkJzSPkI/AAAAAAAAOGY/orV4tMTiLMwVUympoLyzgS4wT75nwKY7gCLcBGAs/s320/day125.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-NsUAnz3R2N8/W6JTkk0B4CI/AAAAAAAAOGc/Rgqru9VP8QAYDySoTqKN0rGjLOat6zkQwCLcBGAs/s1600/day131.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-NsUAnz3R2N8/W6JTkk0B4CI/AAAAAAAAOGc/Rgqru9VP8QAYDySoTqKN0rGjLOat6zkQwCLcBGAs/s320/day131.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-MvUP2F08n5Y/W6JTk5uO9yI/AAAAAAAAOGg/tJIHv_uwdYo6b-STVoMW4DO2WgfVaguHwCLcBGAs/s1600/day135.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-MvUP2F08n5Y/W6JTk5uO9yI/AAAAAAAAOGg/tJIHv_uwdYo6b-STVoMW4DO2WgfVaguHwCLcBGAs/s320/day135.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-Up72qcIqu1c/W6JTlLHf0LI/AAAAAAAAOGk/EvdUZPPxKa0u1DOLX5vo0DhNcP64PLE7ACLcBGAs/s1600/day140.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-Up72qcIqu1c/W6JTlLHf0LI/AAAAAAAAOGk/EvdUZPPxKa0u1DOLX5vo0DhNcP64PLE7ACLcBGAs/s320/day140.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-odmZ7RVSCUM/W6JTlvgfERI/AAAAAAAAOGo/eHbjdZKxeAY5Ah2RiO8c_UY2ezFeFXpQwCLcBGAs/s1600/day145.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://3.bp.blogspot.com/-odmZ7RVSCUM/W6JTlvgfERI/AAAAAAAAOGo/eHbjdZKxeAY5Ah2RiO8c_UY2ezFeFXpQwCLcBGAs/s320/day145.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-k6GyGdky4J4/W6JTmAaVEzI/AAAAAAAAOGs/uQNJmH6qmCwxf-8Jd3ZrS_DiR1-HAJxpgCLcBGAs/s1600/day150.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-k6GyGdky4J4/W6JTmAaVEzI/AAAAAAAAOGs/uQNJmH6qmCwxf-8Jd3ZrS_DiR1-HAJxpgCLcBGAs/s320/day150.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-HoNYwFIGbCg/W6JTmmoF2AI/AAAAAAAAOG0/zYsaIGvHCx44SXAQBkwEBamp0cB896HcwCLcBGAs/s1600/day155.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-HoNYwFIGbCg/W6JTmmoF2AI/AAAAAAAAOG0/zYsaIGvHCx44SXAQBkwEBamp0cB896HcwCLcBGAs/s320/day155.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://2.bp.blogspot.com/-s1BPipU3Wwc/W6JTnHN4LWI/AAAAAAAAOG4/Zl3F1CcyjXQFCpsRXCYd17xlfuq2jEjHACLcBGAs/s1600/day160.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://2.bp.blogspot.com/-s1BPipU3Wwc/W6JTnHN4LWI/AAAAAAAAOG4/Zl3F1CcyjXQFCpsRXCYd17xlfuq2jEjHACLcBGAs/s320/day160.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-Z2v2bwI0OnQ/W6JTnBFKBRI/AAAAAAAAOG8/mAw09EfcSV0P6qynHE26H5VIHvgYVAfoQCLcBGAs/s1600/day165.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-Z2v2bwI0OnQ/W6JTnBFKBRI/AAAAAAAAOG8/mAw09EfcSV0P6qynHE26H5VIHvgYVAfoQCLcBGAs/s320/day165.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-9cdIGxyUlec/W6JTnUznesI/AAAAAAAAOHA/TnUPI-knOioLPcHRygXZA_YokrznbqA0wCLcBGAs/s1600/day173.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-9cdIGxyUlec/W6JTnUznesI/AAAAAAAAOHA/TnUPI-knOioLPcHRygXZA_YokrznbqA0wCLcBGAs/s320/day173.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://4.bp.blogspot.com/-qD9XNmQZCHA/W6JToHzEmAI/AAAAAAAAOHM/oArP3NNG0mAq2UtJseR8hEhVsodWRea0ACLcBGAs/s1600/day175.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://4.bp.blogspot.com/-qD9XNmQZCHA/W6JToHzEmAI/AAAAAAAAOHM/oArP3NNG0mAq2UtJseR8hEhVsodWRea0ACLcBGAs/s320/day175.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://1.bp.blogspot.com/-dOEor8rOfy8/W6JToAlSarI/AAAAAAAAOHI/MSuzCyEcMlEdlxCVHc5CA7oklZ2dG2VfwCLcBGAs/s1600/day180.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="180" src="https://1.bp.blogspot.com/-dOEor8rOfy8/W6JToAlSarI/AAAAAAAAOHI/MSuzCyEcMlEdlxCVHc5CA7oklZ2dG2VfwCLcBGAs/s320/day180.png" width="320" /></a></div>
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-Ud1HiSkqlQ8/W6JToZWQyVI/AAAAAAAAOHE/jrh1VObWIlkaLUH5RL5xU4CgRH0BMm7-QCLcBGAs/s1600/day193.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="900" data-original-width="1600" height="360" src="https://3.bp.blogspot.com/-Ud1HiSkqlQ8/W6JToZWQyVI/AAAAAAAAOHE/jrh1VObWIlkaLUH5RL5xU4CgRH0BMm7-QCLcBGAs/s640/day193.jpg" width="640" /></a></div>
+
+
+	
+	<form name="myForm">
+		<process ng-model="processModel" program-id="convertWebpToJpg">
+		Upload webp files: 
+		<upload ng-model="uploadFileInfo">
+		<!--<button type="file" class="btn btn-default" ngf-select="UploadData($file)" ngf-multiple="true"
+			accept=".webp" ngf-max-size="10MB">Select Single File</button>-->			
+			<div ngf-drop="UploadData($files)" class="drop-box"
+  ngf-drag-over-class="'dragover'" ngf-multiple="true"
+  ngf-pattern="'.webp'" style="border: 2px dashed black; padding: 50px 100px 50px 100px;">Drop Webp files here</div>
+			<br>
+			<!--
+		<button type="file" class="btn btn-default" ngf-select="" ng-model="files" multiple
+			accept=".webp" ngf-max-size="10MB">Select Single File</button>
+			<br>
+		<button type="button" class="btn btn-default" UploadData(files)>Upload</button>
+		-->
+		<button class="btn btn-default" ng-click="SubmitData(uploadFileInfo)">Convert</button>
+		
+		<div ng-repeat="(key, value) in uploadInfo track by $index">
+			File name: {{value.name}}<br>
+			Size: {{value.size}} ({{value.uploadProgress}}%)<br>
+			<!-- <div style="font-size: smaller; background: orange; width:{{value.uploadProgress}}%" ng-bind="value.uploadProgress + '%'"></div> -->
+			<span ng-if="value.uploadResult.error != '0'">Error Code ({{value.uploadResult.error}}): {{value.uploadResult.errorMsg}}</span><br>
+		</div>
+		</upload>
+		</process>
+	</form>
+	
+</div>
+</div>
+</body>
+</html>

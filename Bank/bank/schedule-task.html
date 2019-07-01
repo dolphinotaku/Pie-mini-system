@@ -1,0 +1,411 @@
+<div id="page-wrapper" ng-controller="scheduleTaskController">
+	<div class="container-fluid">
+		<div class="row">
+				<div class="col-lg-12">
+						<h1 class="page-header">Schedule Task</h1>
+				</div>
+				<!-- /.col-lg-12 -->
+		</div>
+		<!-- /.row -->
+		<div class="row">
+			<div class="col-lg-12">
+				<message ng-model="processMsg" auto-close></message>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+                <h3>How to use</h3>
+				For Create task:<br>
+				- For Create task, click on the "Create Task" button, create a task<br>
+                - add the schedulable program which should include and execute in the task<br>
+                - double click on the added schedulable program, change the status to enable/disable the individual program<br>
+                - update the schedulable program config and setting<br>
+                - click save<br>
+				For Amend task:<br>
+				- For Amend record, click the edit button of the record, update the task and click update button or click delete to delete the task
+			</div>
+			<!-- /.col-lg-12 -->
+		</div>
+		<!-- /.row -->
+		
+		<hr>
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#list" aria-controls="list" role="tab" data-toggle="tab"><i class="fas fa-list fa-fw fa-lg"></i> List</a></li>
+            <li role="presentation"><a href="#create" ng-click="SwitchToCreate()" aria-controls="create" role="tab" data-toggle="tab"><i class="far fa-plus-square fa-fw fa-lg"></i> Create Task</a></li>
+        </ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="list">
+                <inquiry ng-model="inquiryModel" program-id="ci01scheduleTask" id="inquiryPanel">
+					<form class="form-horizontal" ng-submit="SubmitData()">
+						<fieldset>
+                                <legend>Schedule Tasks Inquiry</legend>
+                                <div class="form-group">
+                                    <label for="iName" class="col-sm-3 control-label">Schedule Task Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" ng-model="inquiryCtrl.ngModel.Record.Name" id="iName">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="iStatus" class="col-sm-3 control-label">Enable</label>
+                                    <div class="col-sm-9">
+                                        <input type="checkbox" ng-model="inquiryCtrl.ngModel.Record.Status" class="form-control" id="iStatus" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="SubmitData()">
+                                            <span class="fas fa-sync" aria-hidden="true"></span> Refresh
+                                        </button>
+                                    </div>
+                                </div>
+							<!-- <div class="form-group">
+                                <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="CreateScheduleTask()">
+                                    <span class="far fa-plus-square" aria-hidden="true"></span> Create Task
+                                </button>
+							</div> -->
+						</fieldset>
+					</form>
+					<screen></screen>
+                </inquiry>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="create">
+            </div>
+		</div>
+		
+		<entry ng-model="entryForm" program-id="ce01scheduleTask" edit-mode="create">
+			<form class="form-horizontal" ng-submit="SubmitData()">
+				<fieldset>
+					<legend>{{entryFormTitle}}</legend>
+					<div class="form-group">
+						<label for="inputStatus" class="col-sm-2 col-xs-4 control-label">Status</label>
+						<div class="col-sm-10 col-xs-8">
+                            <label class="switch">
+                                <input type="checkbox" ng-model="entryCtrl.ngModel.Status" ng-change="" ng-true-value="'Enabled'" ng-false-value="'Disabled'" id="inputStatus">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+					</div>
+					<div class="form-group">
+						<label for="inputScheduleID" class="col-sm-2 control-label">Schedule ID</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="inputScheduleID" ng-model="entryCtrl.ngModel.ScheduleID" readonly>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputName" class="col-sm-2 control-label">Name</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="inputName" ng-model="entryCtrl.ngModel.Name" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputActivityStartDate" class="col-sm-2 control-label">Activity Start Date</label>
+						<div class="col-sm-10">
+							<input type="datetime-local" class="form-control" id="inputActivityStartDate" ng-model="entryCtrl.ngModel.ActivityStartDate" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputFreqRepeatEvery" class="col-sm-2 control-label">Repeat Every</label>
+						<div class="col-sm-2">
+							<!--<input type="number" class="form-control" id="inputFreqRepeatEvery" ng-model="entryCtrl.ngModel.FreqRepeatEvery" min="1" max="1" required readonly>-->
+                            <p class="form-control-static">{{entryCtrl.ngModel.FreqRepeatEvery}}</p>
+						</div>
+						<div class="col-sm-8">
+                            <select class="form-control" name="inputOutCurrencyIDC" id="inputOutCurrencyIDC" ng-model="entryCtrl.ngModel.FreqType" required>
+                                <option ng-repeat="freqType in freqType.availableOptions" value="{{freqType.value}}">
+                                    {{freqType.label}}
+                                </option>
+                            </select>
+						</div>
+					</div>
+					<div class="form-group" ng-if="entryCtrl.ngModel.FreqType == freqType.availableOptions.Weekly.value">
+						<label for="inputFreqInterval" class="col-sm-2 control-label">Repeat on</label>
+						<div class="col-sm-10">
+							<label class="checkbox-inline" ng-repeat="weeklyOption in freqInterval.weeklyAvailableOptions">
+								<input type="checkbox" ng-model="freqInterval.weeklySelectedOptions[weeklyOption.value]" ng-change="FreqIntervalWeeklyChanged()"> {{weeklyOption.label}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group" ng-if="entryCtrl.ngModel.FreqType == freqType.availableOptions.Monthly.value">
+						<label for="inputFreqIntervalMonthly" class="col-sm-2 control-label">Repeat by</label>
+						<div class="col-sm-10">
+							<label class="radio-inline" ng-repeat="monthlyOption in freqInterval.monthlyAvailableOptions">
+								<input type="radio" ng-model="freqInterval.monthlySelectedOptions" ng-value="monthlyOption.value"  ng-change="FreqIntervalMonthlyChanged()" name="inputFreqIntervalMonthly"> {{monthlyOption.label}}
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputEndConditionType" class="col-sm-2 control-label">Ends</label>
+						<div class="col-sm-10">
+                            <!-- <div class="radio" ng-repeat="endCondition in endConditionType.availableOptions">
+                                <label>
+                                    <input type="radio" ng-model="entryCtrl.ngModel.EndConditionType" ng-value="endCondition.value" name="inputEndConditionType"> {{endCondition.label}}
+                                </label>
+                            </div> -->
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" ng-model="endConditionType.selectedOptions" ng-change="EndConditionTypeChanged()" ng-value="endConditionType.availableOptions.Never.value" name="inputEndConditionType"> {{endConditionType.availableOptions.Never.label}}
+                                </label>
+                            </div>
+                            <div class="radio form-inline">
+                                <label>
+                                    <input type="radio" ng-model="endConditionType.selectedOptions" ng-change="EndConditionTypeChanged()" ng-value="endConditionType.availableOptions.On.value" name="inputEndConditionType"> {{endConditionType.availableOptions.On.label}}
+                                </label>
+                                <input type="date" class="form-control" ng-model="entryCtrl.ngModel.EndOnSpecifyDate">
+                            </div>
+                            <div class="radio form-inline">
+                                <label>
+                                    <input type="radio" ng-model="endConditionType.selectedOptions" ng-change="EndConditionTypeChanged()" ng-value="endConditionType.availableOptions.After.value" name="inputEndConditionType"> {{endConditionType.availableOptions.After.label}} the number of times occurred
+                                </label>
+                                <input type="number" class="form-control" ng-model="entryCtrl.ngModel.EndOnSpecifyTimeOccurred">
+                            </div>
+						</div>
+                    </div>
+					<div class="form-group">
+						<label for="inputLastExecuteDate" class="col-sm-2 control-label">Last Execute Date</label>
+						<div class="col-sm-10">
+                            <div class="form-inline">
+                                <div class="form-group" style="margin-right: 0px; margin-left: 0px;">
+                                <input type="date" class="form-control" id="inputLastExecuteDate" ng-model="entryCtrl.ngModel.LastExecuteDate" readonly>
+                                </div>
+                                <label for="inputNextExecuteDate" class="control-label">Next Execute Date</label>
+                                <div class="form-group" style="margin-right: 0px; margin-left: 0px;">
+                                <input type="datetime-local" class="form-control" id="inputNextExecuteDate" ng-model="entryCtrl.ngModel.NextExecuteDate" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Estimated Further Execute Date</label>
+						<div class="col-sm-6" ng-if="entryCtrl.ngModel.ScheduleID">
+                            <div ng-repeat="nextDate in nextDateList track by $index">
+                                {{nextDate | date:"yyyy/MM/dd HH:dd"}}
+                                {{$index+1}}<span ng-if="$index==0">st</span><span ng-if="$index==1">nd</span><span ng-if="$index==2">rd</span><span ng-if="$index>=3">th</span>
+                            </div>
+                        </div>
+                    </div>
+					<!--
+					<div class="form-group">
+                        {{entryCtrl.ngModel | json}}
+                    </div>
+					-->
+					<div class="form-group" ng-hide="entryFormMode != 'amend'" style="display: none;">
+						<div class="col-sm-offset-2 col-sm-5">
+							<button type="button" class="btn btn-success" aria-label="Save" ng-click="UpdateData(); UpdateCurrencyData();">
+								<span class="fas fa-save" aria-hidden="true"></span> Save
+							</button>
+						</div>
+						<div class="col-sm-5">
+							<button type="button" class="btn btn-danger" aria-label="Delete" ng-click="DeleteData()">
+								<span class="fas fa-trash-alt" aria-hidden="true"></span> Delete
+							</button>
+						</div>
+					</div>
+					<div class="form-group" ng-hide="entryFormMode != 'create'" style="display: none;">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="button" class="btn btn-primary" aria-label="Create" ng-click="CreateData()">
+								<span class="far fa-plus-square" aria-hidden="true"></span> Create
+							</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</entry>
+				
+		<inquiry ng-model="inquiryNextDayModel" program-id="ci02scheduleTaskNextTime" style="display: none;">
+		<div>{{inquiryNextDayModel | json}}</div>
+		<div><button type="submit" ng-click="CalculateNextRunDateForScheduledTask();SubmitData();" class="btn btn-default">Calculate Next Date</button></div>
+		</inquiry>
+		
+		<process ng-model="processModel" program-id="bp32scheduletaskprogram">
+			<form class="form-horizontal" ng-submit="SubmitData()">
+                <fieldset>
+                    <legend>{{entryFormTitle}}</legend>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <editbox ng-model="providerEditBoxC" program-id="cw01schedulableProgram" id="schedulableProgramID">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inputSchedulableProgram" ng-model="providerEditBoxC.ProgramID" style="display:none;" readonly>
+                                <!--<span class="input-group-btn">-->
+                                <button type="button" class="btn btn-default" aria-label="Edit List" ng-click="OpenPageView()">
+                                    <span class="fas fa-plus" aria-hidden="true"></span> Add Program
+                                </button>
+                                <!--</span>-->
+                                <input type="text" class="form-control" ng-model="providerEditBoxC.Description" style="display:none;" readonly>
+                            </div>
+                            </editbox>
+						</div>
+                        <div class="col-md-6">
+							<div class="table-responsive">
+                                <table class="table table-condensed table-hover" ng-if="CountTaskPrograms(scheduleTaskProgram.TaskPrograms)>0">
+									<thead>
+										<tr>
+                                            <th>Program ID<br>
+                                            Description</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="taskProrgam in scheduleTaskProgram.TaskPrograms track by $index"
+										ng-click="CustomPointedToRecord(taskProrgam, $event, this)"
+                                        ng-dblclick="CustomSelectedToRecord(taskProrgam, $event, this)"
+                                        ng-if="taskProrgam.ProgramID!=''">
+                                            <td>{{taskProrgam.ProgramID}}<br>
+                                                {{taskProrgam.Description}}</td>
+											<td>
+                                                <button type="button" class="btn btn-default" ng-click="ShowProgramParameterSetting(taskProrgam)"><span class="fas fa-pencil-alt" aria-hidden="true"></span> Properties</button>
+                                                <button type="button" class="btn btn-default" ng-click="RemoveScheduleProgram(taskProrgam)"><span class="fas fa-times" aria-hidden="true"></span> Remove</button>
+                                            </td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+                        </div>
+                        <div class="col-md-6">
+							<label>{{programIdOnShow}}</label>
+							<div class="form-group">
+								<label for="inputProgramStatus" class="col-sm-2 col-xs-4 control-label">Status</label>
+								<div class="col-sm-10 col-xs-8">
+									<label class="switch">
+										<input type="checkbox" ng-model="selectedTaskProgram.Status" ng-change="" ng-true-value="'Enabled'" ng-false-value="'Disabled'" id="inputProgramStatus">
+										<span class="slider round"></span>
+									</label>
+								</div>
+							</div>
+                            <!-- https://stackoverflow.com/questions/15696416/what-is-the-best-way-to-conditionally-apply-attributes-in-angularjs -->
+                            <!-- https://docs.angularjs.org/guide/interpolation#-ngattr-for-binding-to-arbitrary-attributes -->
+							<div ng-repeat="controlSetting in selectedTaskProgram.programJsonDataStructure track by $index">
+                              <div class="form-group">
+                                <label for="input_{{$index}}" class="col-lg-2 control-label">{{controlSetting.label}}</label>
+                                <div class="col-lg-10">
+                                    <!-- text -->
+                                    <input type="text" class="form-control" id="input_{{$index}}" name="input_{{$index}}"
+                                    ng-if="controlSetting.dataType=='DATATYPE_STRING' && controlSetting.stringValidationType==0"
+									ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]"
+                                    ng-attr-maxlength="{{controlSetting.dataLength}}">
+                                    <!-- description -->
+                                    <textarea type="text" class="form-control" id="input_{{$index}}" name="input_{{$index}}"
+                                    ng-if="controlSetting.dataType=='DATATYPE_TEXT_AREA' && controlSetting.stringValidationType==0"
+									ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]"
+                                    ng-attr-maxlength="{{controlSetting.dataLength}}"></textarea>
+                                    <!-- radiobutton -->
+                                    <div class="radio"
+                                    ng-if="controlSetting.dataType=='DATATYPE_ARRAY' && controlSetting.stringValidationType=='VALID_STRING_RADIOLIST'">
+                                      <div ng-repeat="selectableOption in controlSetting.validOptionList">
+                                        <label>
+                                          <input type="radio" name="schedulable_program_radio_{{$parent.$index}}" id="radios_{{$index}}"
+										  ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]"
+										  ng-value="selectableOption">
+										  {{selectableOption}}
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <!-- checkbox -->
+                                    <div class="checkbox"
+                                    ng-if="controlSetting.dataType=='DATATYPE_ARRAY' && controlSetting.stringValidationType=='VALID_STRING_CHECKLIST'">
+                                      <div ng-repeat="selectableOption in controlSetting.validOptionList">
+                                        <label>
+                                          <input type="checkbox" 
+										  ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name][selectableOption]">
+                                          {{selectableOption}}
+                                        </label>
+                                      </div>
+                                    </div>
+                                    
+                                    <!-- numerical -->
+                                    <input type="number" class="form-control" id="input_{{$index}}" name="input_{{$index}}"
+                                    ng-if="controlSetting.dataType=='DATATYPE_INTEGER'" step="1"
+									ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]">
+                                    <input type="number" class="form-control" id="input_{{$index}}" name="input_{{$index}}"
+                                    ng-if="controlSetting.dataType=='DATATYPE_DOUBLE'"
+									ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]">
+                                    <!-- date -->
+                                    <input type="date" class="form-control" id="input_{{$index}}" name="input_{{$index}}"
+                                    ng-if="controlSetting.dataType=='DATATYPE_DATE'"
+									ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]">
+                                    <!-- datetime -->
+                                    <input type="datetime-local" class="form-control" id="input_{{$index}}" name="input_{{$index}}"
+                                    ng-if="controlSetting.dataType=='DATATYPE_DATETIME'"
+									ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]">
+                                    <!-- time -->
+                                    <input type="time" class="form-control" id="input_{{$index}}" name="input_{{$index}}"
+                                    ng-if="controlSetting.dataType=='DATATYPE_TIME'"
+									ng-model="selectedTaskProgram.ParameterJSONObj[controlSetting.name]">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                    <!-- <div class="form-group" style="display: none;"> -->
+                                control setting<br>
+                              {{controlSetting | json}}<br><br>
+                              </div>
+							</div>
+                            <div class="form-group">
+                                <!-- <div class="form-group" style="display: none;"> -->
+                                ParameterJSONObj<br>
+                                {{selectedTaskProgram.ParameterJSONObj | json}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-hide="entryFormMode != 'amend'">
+                      <div class="col-sm-offset-2 col-sm-5">
+                        <button type="button" class="btn btn-success" aria-label="Save" ng-click="UpdateScheduleTask();">
+                          <span class="fas fa-save" aria-hidden="true"></span> Save
+                        </button>
+                      </div>
+                      <div class="col-sm-5">
+                        <button type="button" class="btn btn-danger" aria-label="Delete" ng-click="DeleteScheduleTask()">
+                          <span class="fas fa-trash-alt" aria-hidden="true"></span> Delete
+                        </button>
+                      </div>
+                    </div>
+                    <div class="form-group" ng-hide="entryFormMode != 'create'">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-primary" aria-label="Create" ng-click="CreateScheduleTask()">
+                          <span class="far fa-plus-square" aria-hidden="true"></span> Create
+                        </button>
+                      </div>
+                    </div>
+				</fieldset>
+			</form>
+		</process>
+
+		<!--
+		<process ng-model="processModel" program-id="bp33bankAccount" ng-hide="entryFormMode != 'amend'">
+			<div class="form-group" style="display:none;">
+				<label for="BankAccountID">Bank Account ID</label>
+				<input type="text" ng-model="processCtrl.ngModel.Record.BankAccountID" class="form-control" id="BankAccountID" readonly>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-condensed table-hover">
+					<thead>
+					<tr>
+						<th>Alphabetic Code</th>
+						<th>Name</th>
+						<th>Chinese Name</th>
+						<th>Status</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="currencyRow in processCtrl.ngModel.ProcessRecord"
+							ng-click="PointedToRecord(currencyRow, $event, this); currencyRow.Status == 'Enabled' ? currencyRow.Status = 'Disabled' : currencyRow.Status = 'Enabled'"
+							ng-dblclick="SelectedToRecord(currencyRow, $event, this)">
+							<td>{{currencyRow.AlphabeticCode}}</td>
+							<td>{{currencyRow.Name}}</td>
+							<td>{{currencyRow.ChineseName}}</td>
+							<td>
+								<input type="checkbox" ng-model="currencyRow.Status" class="form-control" id="Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+							</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<button type="button" class="btn btn-success" ng-click="SubmitData()">
+				<span class="fas fa-save" aria-hidden="true"></span> Update Account Currency Only</button>
+		</process>
+		-->
+
+	</div>
+	<!-- /.container-fluid -->
+</div>

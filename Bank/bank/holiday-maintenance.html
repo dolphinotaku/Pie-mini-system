@@ -1,0 +1,177 @@
+<div id="page-wrapper" ng-controller="updateHolidayController">
+	<div class="container-fluid">
+			<div class="row">
+					<div class="col-lg-12">
+							<h1 class="page-header">Holiday Master</h1>
+					</div>
+					<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<message ng-model="processMsg" auto-close></message>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					How to use:<br>
+					- For Create record, click on the "Create Form" tab, create record and then click the "Create" button<br>
+					- For Amend record, Select a record on list, update or delete record
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			
+			<hr>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#list" aria-controls="list" role="tab" data-toggle="tab"><i class="fas fa-list fa-fw fa-lg"></i> List</a></li>
+				<li role="presentation"><a href="#create" aria-controls="create" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> Create Form</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="list">
+					<pageview
+							ng-model="holidayModel"
+							program-id="bw23holiday">
+						<screen></screen>
+					</pageview>
+					<entry ng-model="entryAmendForm" program-id="bs23holiday" edit-mode="amend">
+						<form class="form-horizontal" ng-submit="SubmitData()">
+							<fieldset>
+								<legend>Amend Holiday</legend>
+								<div class="form-group">
+									<label for="inputAutoID" class="col-sm-2 control-label">Holiday ID</label>
+									<div class="col-sm-10">
+										<input type="year" class="form-control" id="inputAutoID" ng-model="entryCtrl.ngModel.AutoID" readonly>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputCalendarYear" class="col-sm-2 control-label">Calendar Year</label>
+									<div class="col-sm-10">
+										<input type="year" class="form-control" id="inputCalendarYear" ng-model="entryCtrl.ngModel.CalendarYear" readonly>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputHolidayDate" class="col-sm-2 control-label">Holiday Date</label>
+									<div class="col-sm-10">
+										<input type="date" class="form-control" id="inputHolidayDate" ng-model="entryCtrl.ngModel.HolidayDate">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputType" class="col-sm-2 control-label">Type</label>
+									<div class="col-sm-10">
+										<div class="radio">
+											<label for="inputTypePublicHoliday">
+											<input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'Public Holiday'" class="" id="inputTypePublicHoliday">
+											Public Holiday</label>
+										</div>
+										<div class="radio">
+											<label for="inputTypeStatutoryHoliday">
+											<input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'Statutory Holiday'" class="" id="inputTypeStatutoryHoliday">
+											Statutory Holiday</label>
+										</div>
+										<div class="radio">
+											<label for="inputTypeCompanyHoliday">
+											<input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'Company Holiday'" class="" id="inputTypeCompanyHoliday">
+											Company Holiday</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputName" class="col-sm-2 control-label">Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputName" ng-model="entryCtrl.ngModel.Name">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputChineseName" class="col-sm-2 control-label">Chinese Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputChineseName" ng-model="entryCtrl.ngModel.ChineseName">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-5">
+										<button type="submit" class="btn btn-success" aria-label="Save">
+											<span class="fas fa-save" aria-hidden="true"></span> Save
+										</button>
+									</div>
+									<div class="col-sm-5">
+										<button type="button" class="btn btn-danger" aria-label="Delete" ng-click="DeleteData()">
+											<span class="fas fa-trash-alt" aria-hidden="true"></span> Delete
+										</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</entry>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="create">
+					<entry ng-model="entryCreateForm" program-id="bs23holiday" edit-mode="create">
+						<form class="form-horizontal" ng-submit="SubmitData()">
+							<fieldset>
+								<legend>Create Holiday</legend>
+								<div class="form-group">
+									<label for="inputCalendarYearC" class="col-sm-2 control-label">Calendar Year</label>
+									<div class="col-sm-10">
+										<p class="form-control-static" ng-bind="entryCtrl.ngModel.CalendarYear"></p>
+										<!--<input type="year" class="form-control" id="inputCalendarYearC" ng-model="entryCtrl.ngModel.CalendarYear" readonly>-->
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputHolidayDateC" class="col-sm-2 control-label">Holiday Date</label>
+									<div class="col-sm-10">
+										<input type="date" class="form-control" id="inputHolidayDateC" ng-model="entryCtrl.ngModel.HolidayDate">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputTypeC" class="col-sm-2 control-label">Type</label>
+									<div class="col-sm-10">
+										<!--<input type="text" class="form-control" id="inputTypeC" ng-model="entryCtrl.ngModel.Type">-->
+										<div class="radio">
+											<label for="inputTypePublicHolidayC">
+											<input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'Public Holiday'" class="" id="inputTypePublicHolidayC">
+											Public Holiday</label>
+										</div>
+										<div class="radio">
+											<label for="inputTypeStatutoryHolidayC">
+											<input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'Statutory Holiday'" class="" id="inputTypeStatutoryHolidayC">
+											Statutory Holiday</label>
+										</div>
+										<div class="radio">
+											<label for="inputTypeCompanyHolidayC">
+											<input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'Company Holiday'" class="" id="inputTypeCompanyHolidayC">
+											Company Holiday</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputNameC" class="col-sm-2 control-label">Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputNameC" ng-model="entryCtrl.ngModel.Name">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputChineseNameC" class="col-sm-2 control-label">Chinese Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputChineseNameC" ng-model="entryCtrl.ngModel.ChineseName">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary" aria-label="Create">
+											<span class="far fa-plus-square" aria-hidden="true"></span> Create
+										</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+
+					</entry>
+				</div>
+			</div>
+
+	</div>
+	<!-- /.container-fluid -->
+</div>

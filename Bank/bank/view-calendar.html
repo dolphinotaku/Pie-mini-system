@@ -1,0 +1,126 @@
+<link rel='stylesheet' href="../third-party/jQuery-plugins/fullcalendar-3.9.0/fullcalendar.min.css" />
+<script src='../third-party/jQuery-plugins/fullcalendar-3.9.0/lib/moment.min.js'></script>
+<script src='../third-party/jQuery-plugins/fullcalendar-3.9.0/fullcalendar.min.js'></script>
+<script src='../third-party/ics.js/ics.js-0.2.0/ics.min.js'></script>
+<div id="page-wrapper" ng-controller="viewCalendarController">
+	<div class="container-fluid">
+			<!-- <div class="row">
+					<div class="col-lg-12">
+							<h1 class="page-header">Calendar</h1>
+					</div>
+			</div> -->
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<message ng-model="processMsg" auto-close></message>
+				</div>
+			</div>
+			<!-- <div class="row">
+				<div class="col-lg-12">
+					How to use:<br>
+					- For Create record, click on the "Create Form" tab, create record and then click the "Create" button<br>
+					- For Amend record, Select a record on list, update or delete record
+				</div>
+			</div> -->
+			<!-- /.row -->
+			
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#list" aria-controls="list" role="tab" data-toggle="tab"><i class="fas fa-list fa-fw fa-lg"></i> Calendar</a></li>
+				<li role="presentation"><a href="#export" aria-controls="export" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> Export</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="list">
+                    <inquiry ng-model="calendarInquiry" program-id="bi44timedepositForCalendarView">
+                    </inquiry>
+                    <!-- <div style="display: flex; flex-flow: column; height: 100%;">
+                        <div style="flex:1 1 auto;"> -->
+                            <div id="parent">
+                                <div id='calendar'></div>
+                            </div>
+                        <!-- </div>
+                    </div> -->
+				</div>
+				<div role="tabpanel" class="tab-pane" id="export">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            How to use:<br>
+                            - This function can export the time deposit record as ics file<br>
+                            - You may import the ics file to the common calendar service, like Google calendar, Outlook<br>
+                            - For Google Calendar<br>
+                            <ol>
+                                <li>Go to <a href="https://calendar.google.com/calendar/r/settings/createcalendar" target="_blank">google calendar</a></li>
+                                <li>Create calendar for Time Deposit, you may skill this if you do it once
+                                    <ol>
+                                        <li>Click New calendar</li>
+                                        <li>Type the Name, Description(optional)</li>
+                                        <li>Click CREATE CALENDAR button</li>
+                                    </ol>
+                                </li>
+                                <li>Click "Import & Export"</li>
+                                <li>Click Export</li>
+                                <li>Click "Select file from your computer"</li>
+                                <li>Select the Time Deposit calendar in "Add to calendar" drop down list</li>
+                            </ol>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <process ng-model="calendarProcess" program-id="bu04timedepositInICS" ng-init="processCtrl.ngModel.ProcessCriteria.ExportType = exportCalendarOption.availableOptions[0]">
+                        <form class="" ng-submit="SubmitData()">
+                            <div class="form-group">
+                                <div class="radio">
+                                    <p class="form-control-static">Export Time Deposit</p>
+                                    <label>
+                                    <input type="radio" ng-model="processCtrl.ngModel.ProcessCriteria.ExportType" ng-value="exportCalendarOption.availableOptions[0]">
+                                    {{exportCalendarOption.availableOptions[0].name}}
+                                    </label>
+                                    <label>
+                                    <input type="radio" ng-model="processCtrl.ngModel.ProcessCriteria.ExportType" ng-value="exportCalendarOption.availableOptions[1]">
+                                    {{exportCalendarOption.availableOptions[1].name}}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-success" aria-label="Save">
+                                        <span class="fas fa-save" aria-hidden="true"></span> Download
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </process>
+				</div>
+			</div>
+
+	</div>
+	<!-- /.container-fluid -->
+    <!-- Modal -->
+    <div class="modal fade" id="depositModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">({{dialog.depositObj.BankCode}})
+                {{dialog.depositObj.PrincipalCurrency}} <span class="currency-flag currency-flag-{{dialog.depositObj.PrincipalCurrency | lowercase}}"></span>
+                {{dialog.depositObj.Principal}} + {{dialog.depositObj.AdjustedInterest}}</h4>
+        </div>
+        <div class="modal-body">
+            TimeDepositTranID: {{dialog.depositObj.TimeDepositTranID}}<br>
+            Bank: {{dialog.depositObj.BankCode}}<br>
+            <br>
+            Currency: {{dialog.depositObj.PrincipalCurrency}} <span class="currency-flag currency-flag-{{dialog.depositObj.PrincipalCurrency | lowercase}} currency-flag-sm"></span><br>
+            Principal: {{dialog.depositObj.Principal}}, Interest: {{dialog.depositObj.AdjustedInterest}}<br>
+            Principal + Interest = {{dialog.depositObj.AdjustedCredit}}<br>
+            <br>
+            Effective Date: {{dialog.depositObj.EffectiveDate}}<br>
+            Maturity Date: {{dialog.depositObj.AdjustedMaturityDate}}<br>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+      </div>
+    </div>
+</div>

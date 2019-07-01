@@ -1,0 +1,691 @@
+<style>
+.trade_order_earn {
+color: green;
+}
+.trade_order_lose {
+color: red;
+}
+</style>
+<div id="page-wrapper" ng-controller="homeController">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">Dashboard</h1>
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-3 col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-xs-3">
+                            <span class="fa-layers fa-wa fa-5x">
+                                <i class="fas fas fa-university"></i>
+                                <i class="fas fas fa-dollar-sign" data-fa-transform="shrink-7 down-6 right-7 rotate-25" style="color:#191919"></i>
+                            </span>
+						</div>
+						<div class="col-xs-9 text-right">
+							<div class="huge">
+                                <inquiry ng-model="inquiryModel" program-id="bi47getTotalAssets">
+                                        {{totalAssetsPanelData.TimeDepositCurrentValue | currency:inquiryModel.ExchangeToCurrency+" ":2}}
+                                </inquiry>
+                            </div>
+							<div>Time Deposit
+                            </div>
+						</div>
+					</div>
+				</div>
+				<a href="#">
+					<div class="panel-footer">
+						<span class="pull-left">View Details</span>
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6">
+			<div class="panel panel-green">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-xs-3">
+							<i class="far fa-money-bill-alt fa-5x"></i>
+						</div>
+						<div class="col-xs-9 text-right">
+							<div class="huge">
+                                {{totalAssetsPanelData.Saving | currency:inquiryModel.ExchangeToCurrency+" ":2}}
+                            </div>
+							<div>Free Cash Flow</div>
+                        </div>
+					</div>
+				</div>
+				<a href="#">
+					<div class="panel-footer">
+						<span class="pull-left">View Details</span>
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6">
+			<div class="panel panel-yellow">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-xs-3">
+							<i class="fas fa-piggy-bank fa-5x"></i>
+						</div>
+						<div class="col-xs-9 text-right">
+                            <!-- <inquiry ng-model="currentMonthInquiryModel" program-id="bi49currentMonthIncome" id="inquiryCurrentMonthIncome">
+							<div class="huge">{{CurrentMonthIncomePanelData.Income | currency:inquiryModel.ExchangeToCurrency+" ":2}}
+                            </div>
+							<div>{{currentMonthInquiryModel.AsAtDate | date :'MMM yyyy'}} Income</div>
+                            </inquiry> -->
+							<div class="huge">{{CurrentMonthIncomePanelData.Income | currency:inquiryModel.ExchangeToCurrency+" ":2}}
+                            </div>
+							<div>{{currentMonthInquiryModel.AsAtDate | date :'MMM yyyy'}} Income</div>
+						</div>
+					</div>
+				</div>
+				<a href="#">
+					<div class="panel-footer">
+						<span class="pull-left">View Details</span>
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6">
+			<div class="panel panel-red">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-xs-3">
+							<i class="fas fa-hand-holding-usd fa-5x"></i>
+						</div>
+						<div class="col-xs-9 text-right">
+                            <inquiry ng-model="assetsInquiryModel" program-id="bi36AssetsLiabilities">
+                                <div class="huge">
+                                    {{totalAssetsPanelData.Liabilities | currency:inquiryModel.ExchangeToCurrency+" ":2}}
+                                </div>
+                                <form class="form-horizontal" style="display:none;">
+                                    <div class="form-group">
+                                        <div class="col-sm-2">
+                                            <p class="form-control-static">Record Type</p>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div class="radio-inline">
+                                                <label for="inquiryTypeALL">
+                                                <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.InquiryType" ng-value="'ALL'" id="inquiryTypeALL">
+                                                All</label>
+                                            </div>
+                                            <div class="radio-inline">
+                                                <label for="inquiryTypeEffective">
+                                                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.InquiryType" ng-value="'Effective'" id="inquiryTypeEffective">
+                                                Effective</label>
+                                            </div>
+                                            <div class="radio-inline">
+                                                <label for="inquiryTypeHistory">
+                                                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.InquiryType" ng-value="'History'" id="inquiryTypeHistory">
+                                                History</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="button" class="btn btn-primary" aria-label="Create" ng-click="SubmitData()">
+                                                <span class="fas fa-sync" aria-hidden="true"></span> Refresh
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </inquiry>
+							<div>Liabilities</div>
+						</div>
+					</div>
+				</div>
+				<a href="#">
+					<div class="panel-footer">
+						<span class="pull-left">View Details</span>
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                    <inquiry ng-model="areaChartModel" program-id="bi48getTotalInAreaChart" style="display:none;">
+                    </inquiry>
+					<div class="pull-right">
+						<div class="btn-group">
+							<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+								Actions
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu pull-right" role="menu">
+								<li><a href="#">Action</a>
+								</li>
+								<li><a href="#">Another action</a>
+								</li>
+								<li><a href="#">Something else here</a>
+								</li>
+								<li class="divider"></li>
+								<li><a href="#">Separated link</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div id="morris-area-chart"></div>
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fas fa-percent fa-fw"></i> Trade Order
+                    <inquiry ng-model="tradeOrderModel" program-id="bi49tradeOrder" style="display:none;">
+                    </inquiry>
+					<div class="pull-right" style="display:none;">
+						<div class="btn-group">
+							<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+								Actions
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu pull-right" role="menu">
+								<li><a href="#">Action</a>
+								</li>
+								<li><a href="#">Another action</a>
+								</li>
+								<li><a href="#">Something else here</a>
+								</li>
+								<li class="divider"></li>
+								<li><a href="#">Separated link</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="table-responsive">
+								<table class="table table-bordered table-hover table-striped">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Date</th>
+											<th>Out {{baseCurrencyCode}}</th>
+											<th>In Currency</th>
+											<th>In Amount</th>
+											<th>{{baseCurrencyCode}} value</th>
+											<th>%</th>
+										</tr>
+                                    </thead>
+									<tbody>
+										<tr ng-repeat="row in TradeOrderPanelData.ForeignCurrencyTran track by $index">
+											<td>{{row.ExchangeTranID}}</td>
+											<td>{{row.ExchangeDate}}</td>
+                                            <!-- <td>{{row.InCurrencyID}}</td> -->
+											<td>{{row.tradeOrderRemindersOutAmount | currency:"$":0}}</td>
+                                            <td><span class="currency-flag currency-flag-{{row.InCurrencyID | lowercase}} currency-flag-sm"></span></td>
+											<td>{{row.tradeOrderRemindersInAmount | currency:"$":0}}</td>
+                                            <td style="text-align: right;">{{row.tradeOrderCurrentValue | currency:"$":0}}</td>
+                                            <td style="text-align: right;"><span ng-class="{trade_order_earn:(row.tradeOrderRate>0), trade_order_lose:(row.tradeOrderRate<0)}">
+											<i class="fas fa-caret-up" ng-show="row.tradeOrderRate>0"></i>
+											<i class="fas fa-caret-down" ng-show="row.tradeOrderRate<0"></i>
+											{{row.tradeOrderRate | number : 4}}</span></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- /.table-responsive -->
+						</div>
+						<!-- /.col-lg-4 (nested) -->
+						<div class="col-lg-12">
+							<div id="morris-bar-chart"></div>
+						</div>
+						<!-- /.col-lg-8 (nested) -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+			<div class="panel panel-default" style="display:none;">
+				<div class="panel-heading">
+					<i class="fa fa-clock-o fa-fw"></i> Responsive Timeline
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<ul class="timeline">
+						<li>
+							<div class="timeline-badge"><i class="fa fa-check"></i>
+							</div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h4 class="timeline-title">Lorem ipsum dolor</h4>
+									<p><small class="text-muted"><i class="fa fa-clock-o"></i> 11 hours ago via Twitter</small>
+									</p>
+								</div>
+								<div class="timeline-body">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero laboriosam dolor perspiciatis omnis exercitationem. Beatae, officia pariatur? Est cum veniam excepturi. Maiores praesentium, porro voluptas suscipit facere rem dicta, debitis.</p>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-inverted">
+							<div class="timeline-badge warning"><i class="fa fa-credit-card"></i>
+							</div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h4 class="timeline-title">Lorem ipsum dolor</h4>
+								</div>
+								<div class="timeline-body">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem dolorem quibusdam, tenetur commodi provident cumque magni voluptatem libero, quis rerum. Fugiat esse debitis optio, tempore. Animi officiis alias, officia repellendus.</p>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium maiores odit qui est tempora eos, nostrum provident explicabo dignissimos debitis vel! Adipisci eius voluptates, ad aut recusandae minus eaque facere.</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="timeline-badge danger"><i class="fa fa-bomb"></i>
+							</div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h4 class="timeline-title">Lorem ipsum dolor</h4>
+								</div>
+								<div class="timeline-body">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus numquam facilis enim eaque, tenetur nam id qui vel velit similique nihil iure molestias aliquam, voluptatem totam quaerat, magni commodi quisquam.</p>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-inverted">
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h4 class="timeline-title">Lorem ipsum dolor</h4>
+								</div>
+								<div class="timeline-body">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates est quaerat asperiores sapiente, eligendi, nihil. Itaque quos, alias sapiente rerum quas odit! Aperiam officiis quidem delectus libero, omnis ut debitis!</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="timeline-badge info"><i class="fa fa-save"></i>
+							</div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h4 class="timeline-title">Lorem ipsum dolor</h4>
+								</div>
+								<div class="timeline-body">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis minus modi quam ipsum alias at est molestiae excepturi delectus nesciunt, quibusdam debitis amet, beatae consequuntur impedit nulla qui! Laborum, atque.</p>
+									<hr>
+									<div class="btn-group">
+										<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+											<i class="fa fa-gear"></i> <span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="#">Action</a>
+											</li>
+											<li><a href="#">Another action</a>
+											</li>
+											<li><a href="#">Something else here</a>
+											</li>
+											<li class="divider"></li>
+											<li><a href="#">Separated link</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h4 class="timeline-title">Lorem ipsum dolor</h4>
+								</div>
+								<div class="timeline-body">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi fuga odio quibusdam. Iure expedita, incidunt unde quis nam! Quod, quisquam. Officia quam qui adipisci quas consequuntur nostrum sequi. Consequuntur, commodi.</p>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-inverted">
+							<div class="timeline-badge success"><i class="fa fa-graduation-cap"></i>
+							</div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h4 class="timeline-title">Lorem ipsum dolor</h4>
+								</div>
+								<div class="timeline-body">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt obcaecati, quaerat tempore officia voluptas debitis consectetur culpa amet, accusamus dolorum fugiat, animi dicta aperiam, enim incidunt quisquam maxime neque eaque.</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+		<!-- /.col-lg-8 -->
+		<div class="col-lg-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+                    <i class="far fa-clock fa-fw"></i> Time Deposit - Income
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                {{timeDepositPanelSelectedOption}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href="#" ng-click="timeDepositPanelSelectedOption=timeDepositPanelOptions.currentMonth;">{{timeDepositPanelOptions.currentMonth}}</a>
+                                </li>
+                                <li><a href="#" ng-click="timeDepositPanelSelectedOption=timeDepositPanelOptions.currentToNext;">{{timeDepositPanelOptions.currentToNext}}</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#" ng-click="timeDepositPanelSelectedOption=timeDepositPanelOptions.nextMonth;">{{timeDepositPanelOptions.nextMonth}}</a>
+                                </li>
+                                <li><a href="#" ng-click="timeDepositPanelSelectedOption=timeDepositPanelOptions.next3Months;">{{timeDepositPanelOptions.next3Months}}</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#" ng-click="timeDepositPanelSelectedOption=timeDepositPanelOptions.lastMonth;">{{timeDepositPanelOptions.lastMonth}}</a>
+                                </li>
+                                <li><a href="#" ng-click="timeDepositPanelSelectedOption=timeDepositPanelOptions.last3Months;">{{timeDepositPanelOptions.last3Months}}</a>
+                                </li>
+                                <li><a href="#" ng-click="timeDepositPanelSelectedOption=timeDepositPanelOptions.last12Months;">{{timeDepositPanelOptions.last12Months}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<inquiry ng-model="inquiryModel" program-id="bi43timedepositHistoryInYearMonth">
+						<!-- <div class="list-group" ng-repeat="row in inquiryModel.Data">
+							<div class="list-group-item">
+                                <div>{{row.Period}}</div>
+                                <div>
+                                    <span class="text-muted">{{row.PrincipalCurrency}}</span>
+                                    <span class="currency-flag currency-flag-{{row.PrincipalCurrency | lowercase}} currency-flag-sm"></span>
+                                    <span class="pull-right text-muted">{{row.Interest | currency:"$":0}}</span>
+                                </div>
+							</div>
+                        </div> -->
+                        <div class="list-group" ng-repeat="(period, rows) in timeDepositPanelData">
+							<div class="list-group-item">
+                                <div>{{period}}</div>
+                                <div ng-repeat="row in rows">
+                                    <span class="text-muted">{{row.PrincipalCurrency}}</span>
+                                    <span class="currency-flag currency-flag-{{row.PrincipalCurrency | lowercase}} currency-flag-sm"></span>
+                                    <span class="pull-right text-muted">{{row.Interest | currency:"$":0}}</span>
+                                </div>
+							</div>
+						</div>
+					</inquiry>
+					<!-- /.list-group -->
+					<a href="http://192.168.0.190/Develop/bank/#!/Home/time-deposit-entry" class="btn btn-default btn-block">View All Time Deposit Record</a>
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fas fa-chart-pie fa-fw"></i> Total Assets Ratio
+				</div>
+				<div class="panel-body">
+					<div id="total-assets-ratio-donut-chart"></div>
+					<a href="#" class="btn btn-default btn-block">View Details</a>
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fas fa-chart-pie fa-fw"></i> Time Deposit Ratio
+				</div>
+				<div class="panel-body">
+					<div id="timedeposit-ratio-donut-chart"></div>
+					<a href="#" class="btn btn-default btn-block">View Details</a>
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+			<div class="chat-panel panel panel-default" style="display:none;">
+				<div class="panel-heading">
+					<i class="fa fa-comments fa-fw"></i> Chat
+					<div class="btn-group pull-right">
+						<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+							<i class="fa fa-chevron-down"></i>
+						</button>
+						<ul class="dropdown-menu slidedown">
+							<li>
+								<a href="#">
+									<i class="fa fa-refresh fa-fw"></i> Refresh
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fa fa-check-circle fa-fw"></i> Available
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fa fa-times fa-fw"></i> Busy
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fa fa-clock-o fa-fw"></i> Away
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="#">
+									<i class="fa fa-sign-out fa-fw"></i> Sign Out
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<ul class="chat">
+						<li class="left clearfix">
+							<span class="chat-img pull-left">
+								<img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+							</span>
+							<div class="chat-body clearfix">
+								<div class="header">
+									<strong class="primary-font">Jack Sparrow</strong>
+									<small class="pull-right text-muted">
+										<i class="fa fa-clock-o fa-fw"></i> 12 mins ago
+									</small>
+								</div>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+								</p>
+							</div>
+						</li>
+						<li class="right clearfix">
+							<span class="chat-img pull-right">
+								<img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
+							</span>
+							<div class="chat-body clearfix">
+								<div class="header">
+									<small class=" text-muted">
+										<i class="fa fa-clock-o fa-fw"></i> 13 mins ago</small>
+									<strong class="pull-right primary-font">Bhaumik Patel</strong>
+								</div>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+								</p>
+							</div>
+						</li>
+						<li class="left clearfix">
+							<span class="chat-img pull-left">
+								<img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+							</span>
+							<div class="chat-body clearfix">
+								<div class="header">
+									<strong class="primary-font">Jack Sparrow</strong>
+									<small class="pull-right text-muted">
+										<i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
+								</div>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+								</p>
+							</div>
+						</li>
+						<li class="right clearfix">
+							<span class="chat-img pull-right">
+								<img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
+							</span>
+							<div class="chat-body clearfix">
+								<div class="header">
+									<small class=" text-muted">
+										<i class="fa fa-clock-o fa-fw"></i> 15 mins ago</small>
+									<strong class="pull-right primary-font">Bhaumik Patel</strong>
+								</div>
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+								</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!-- /.panel-body -->
+				<div class="panel-footer">
+					<div class="input-group">
+						<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+						<span class="input-group-btn">
+							<button class="btn btn-warning btn-sm" id="btn-chat">
+								Send
+							</button>
+						</span>
+					</div>
+				</div>
+				<!-- /.panel-footer -->
+			</div>
+			<!-- /.panel .chat-panel -->
+		</div>
+		<!-- /.col-lg-4 -->
+	</div>
+	<!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+<script>
+		$(function() {
+	/*
+	Morris.Area({
+		element: 'morris-area-chart',
+		data: [{
+			period: '2010 Q1',
+			iphone: 2666,
+			ipad: null,
+			itouch: 2647
+		}, {
+			period: '2010 Q2',
+			iphone: 2778,
+			ipad: 2294,
+			itouch: 2441
+		}, {
+			period: '2010 Q3',
+			iphone: 4912,
+			ipad: 1969,
+			itouch: 2501
+		}, {
+			period: '2010 Q4',
+			iphone: 3767,
+			ipad: 3597,
+			itouch: 5689
+		}, {
+			period: '2011 Q1',
+			iphone: 6810,
+			ipad: 1914,
+			itouch: 2293
+		}, {
+			period: '2011 Q2',
+			iphone: 5670,
+			ipad: 4293,
+			itouch: 1881
+		}, {
+			period: '2011 Q3',
+			iphone: 4820,
+			ipad: 3795,
+			itouch: 1588
+		}, {
+			period: '2011 Q4',
+			iphone: 15073,
+			ipad: 5967,
+			itouch: 5175
+		}, {
+			period: '2012 Q1',
+			iphone: 10687,
+			ipad: 4460,
+			itouch: 2028
+		}, {
+			period: '2012 Q2',
+			iphone: 8432,
+			ipad: 5713,
+			itouch: 1791
+		}],
+		xkey: 'period',
+		ykeys: ['iphone', 'ipad', 'itouch'],
+		labels: ['iPhone', 'iPad', 'iPod Touch'],
+		pointSize: 2,
+		hideHover: 'auto',
+        resize: true,
+        behaveLikeLine: true // Set to true to overlay the areas on top of each other instead of stacking them.
+    });
+    */
+	
+	Morris.Bar({
+		element: 'morris-bar-chart',
+		data: [{
+			y: '2006',
+			a: 100,
+			b: 90
+		}, {
+			y: '2007',
+			a: 75,
+			b: 65
+		}, {
+			y: '2008',
+			a: 50,
+			b: 40
+		}, {
+			y: '2009',
+			a: 75,
+			b: 65
+		}, {
+			y: '2010',
+			a: 50,
+			b: 40
+		}, {
+			y: '2011',
+			a: 75,
+			b: 65
+		}, {
+			y: '2012',
+			a: 100,
+			b: 90
+		}],
+		xkey: 'y',
+		ykeys: ['a', 'b'],
+		labels: ['Series A', 'Series B'],
+		hideHover: 'auto',
+		resize: true
+	});
+	
+	});
+	
+		</script>

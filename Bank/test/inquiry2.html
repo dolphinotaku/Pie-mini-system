@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>How to automatically create heading anchors for links</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+    <script type="text/javascript" src="../third-party/jQuery/jquery-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../third-party/jQuery/jquery.cookie-1.4.1.min.js"></script>
+    
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.7.2/angular.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.7.2/angular-animate.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.7.2/angular-aria.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.7.2/angular-route.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.7.2/angular-touch.min.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.7.2/angular-messages.js"></script>
+    <script type="text/javascript" src="../third-party/angularjs/angular-1.7.2/angular-cookies.min.js"></script>
+    
+	<script type="text/javascript" src="../third-party/angularjs-modules-plugins/ui-router/ui-router-1.0.15.js"></script>
+    <script type="text/javascript" src="../third-party/ocLazyLoad/ocLazyLoad.js"></script>
+	
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="app.config.js"></script>
+    <script type="text/javascript" src="../js/directive.inquiry.20180811.js"></script>
+    <script type="text/javascript" src="service.js"></script>
+	
+    <script type="text/javascript" src="../third-party/Blob.js-master/Blob.js"></script>
+    <script type="text/javascript" src="../third-party/FileSaver.js/FileSaver.js-1.3.2/FileSaver.min.js"></script>
+    <script src="../third-party/angularjs-modules-plugins/ng-file-upload-12.2.12/demo/src/main/webapp/js/ng-file-upload-shim.js"></script>
+    <script src="../third-party/angularjs-modules-plugins/ng-file-upload-12.2.12/demo/src/main/webapp/js/ng-file-upload.js"></script>
+	
+    
+	<style>
+		.anchorBtn {
+			margin-left: 15px;
+		}
+	</style>
+<script>
+app.run(function($rootScope, $timeout, $q, Security){
+	//Security.RequiresAuthorization();
+	//Security.GoToMenuIfSessionExists();
+})
+app.controller('tryCtrl', ['$scope', '$rootScope', 'EntryBase', 'InquiryBase', 'NavigationBase', function ($scope, $rootScope, EntryBase, InquiryBase, NavigationBase) {
+    function Initialize(){
+        var entryForm = {
+			customValue: "try catch",
+			customValue2: "try catch"
+		};
+
+		$scope.entryForm = {
+			customValue: "try catch",
+			customValue2: "try catch"
+		};
+		$scope.entryForm2 = {
+			customValue: "try catch2",
+			customValue2: "try catch2"
+		};
+    }
+    Initialize();
+	
+	var inquiryFlow = InquiryBase.GetFlowObj();
+	//console.dir(inquiryFlow);
+
+	inquiryFlow.EventListener = function(scope, iElement, iAttrs, controller){
+        iElement.ready(function() {
+			/*
+			console.dir(scope)
+			console.dir(iElement)
+			console.dir(iAttrs)
+			console.dir(controller)
+			*/
+        })
+    }
+	inquiryFlow.SetDefaultValue = function(scope, iElement, iAttrs, controller){
+		controller.ngModel.customValue2 = "override";
+	}
+
+    $scope.SetDefaultValue = function(scope, iElement, iAttrs, controller){
+        // controller.ngModel.DepartmentCode = "ABC"
+        //controller.ngModel.DepartmentCode = 125
+		
+		//var ctrl = controller.ngModel;
+		
+		//console.dir(scope.inquiryCtrl);
+		//console.dir(controller.ngModel);
+				
+		controller.ngModel.customValue2 = "override";
+		//console.log("called set default value")
+    }
+
+    $scope.StatusChange = function(fieldName, newValue, newObj, scope, iElement, iAttrs, controller){
+        if(fieldName == "DepartmentCode")
+            newObj.DepartmentCode = newObj.DepartmentCode.toUpperCase(); 
+    }
+
+    $scope.ValidateBuffer = function(scope, iElement, iAttrs, controller){
+        return true;
+    }
+}]);
+</script>
+  </head>
+<body ng-app="myApp">
+<div class="container">
+
+	use module crud<br>
+	<div ng-controller="tryCtrl">
+	<inquiry program-id="re" ng-model="entryForm" edit-mode="fulllist">
+
+				entryForm<br>
+				<input type="text" ng-model="entryForm.customValue"><br>
+				<input type="text" ng-model="entryForm.customValue2"><br><br>
+				inquiryCtrl.ngModel<br>
+				<input type="text" ng-model="inquiryCtrl.ngModel.customValue"><br>
+				<input type="text" ng-model="inquiryCtrl.ngModel.customValue2"><br><br>
+				entryForm<br>
+				{{entryForm | json}}<br><br>
+				inquiryCtrl<br>
+				{{inquiryCtrl | json}}<br>
+			<div navigation tool="search display navarrow" ng-model="inquiryCtrl.records"></div>
+	</inquiry>
+
+	<!--
+	<div inquiry program-id="re2" ng-model="entryForm2" edit-mode="fulllist">
+	entryForm2<br>
+	<input type="text" ng-model="entryForm2.customValue"><br>
+	<input type="text" ng-model="entryForm2.customValue2"><br><br>
+	inquiryCtrl.ngModel<br>
+	<input type="text" ng-model="inquiryCtrl.ngModel.customValue"><br>
+	<input type="text" ng-model="inquiryCtrl.ngModel.customValue2"><br><br>
+	entryForm2<br>
+	{{entryForm2 | json}}<br><br>
+	inquiryCtrl<br>
+	{{inquiryCtrl | json}}<br>
+	</div>
+	-->
+	</div>
+	
+</div>
+</body>
+</html>

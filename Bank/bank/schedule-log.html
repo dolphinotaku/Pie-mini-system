@@ -1,0 +1,114 @@
+<div id="page-wrapper" ng-controller="scheduleLogController">
+	<div class="container-fluid">
+			<div class="row">
+					<div class="col-lg-12">
+							<h1 class="page-header">Schedule Log</h1>
+					</div>
+					<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<message ng-model="processMsg" auto-close></message>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					How to use:<br>
+					- For Create record, click on the "Create Form" tab, create record and then click the "Create" button<br>
+					- For Amend record, Select a record on list, update or delete record
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			
+			<hr>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#list" aria-controls="list" role="tab" data-toggle="tab"><i class="fas fa-list fa-fw fa-lg"></i> List</a></li>
+				<!-- <li role="presentation"><a href="#create" aria-controls="view" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> View Form</a></li> -->
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="list">
+					<inquiry
+							ng-model="scheduleLogModel"
+                            program-id="ci03scheduleLog">
+                        <form class="form-horizontal" ng-submit="SubmitData()">
+                            <fieldset>
+                                <legend>Schedule Log Inquiry</legend>
+                                <div class="form-group">
+                                    <label for="iScheduleID" class="col-sm-3 control-label">Schedule Task ID</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" ng-model="inquiryCtrl.ngModel.Record.ScheduleID" id="iScheduleID">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="iScheduleName" class="col-sm-3 control-label">Schedule Task Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" ng-model="inquiryCtrl.ngModel.Record.Name" id="iScheduleName">
+                                    </div>
+                                </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="SubmitData()">
+                                                <span class="fas fa-sync" aria-hidden="true"></span> Refresh
+                                            </button>
+                                        </div>
+                                    </div>
+                                <!-- <div class="form-group">
+                                    <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="CreateScheduleTask()">
+                                        <span class="far fa-plus-square" aria-hidden="true"></span> Create Task
+                                    </button>
+                                </div> -->
+                            </fieldset>
+                        </form>
+						<screen></screen>
+					</inquiry>
+					<entry ng-model="entryViewForm" program-id="ce03scheduleLog" edit-mode="view">
+						<form class="form-horizontal" ng-submit="SubmitData()">
+							<fieldset>
+								<legend>View Log</legend>
+								<div class="form-group">
+									<label for="inputLogID" class="col-sm-2 control-label">Log ID</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputLogID" ng-model="entryCtrl.ngModel.LogID">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputScheduleID" class="col-sm-2 control-label">Schedule ID</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputScheduleID" ng-model="entryCtrl.ngModel.ScheduleID">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputProgramID" class="col-sm-2 control-label">Program ID</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputProgramID" ng-model="entryCtrl.ngModel.ProgramID">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputExecuteDate" class="col-sm-2 control-label">Execute Date</label>
+									<div class="col-sm-10">
+										<input type="date" class="form-control" id="inputExecuteDate" ng-model="entryCtrl.ngModel.ExecuteDate">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputResultStatus" class="col-sm-2 control-label">Result Status</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputResultStatus" ng-model="entryCtrl.ngModel.ResultStatus">
+									</div>
+								</div>
+							</fieldset>
+						</form>
+
+					</entry>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="view">
+				</div>
+			</div>
+
+	</div>
+	<!-- /.container-fluid -->
+</div>

@@ -1,0 +1,88 @@
+<div id="page-wrapper" ng-controller="imForeignCurrencyController">
+		<div class="container-fluid">
+				<div class="row">
+						<div class="col-lg-12">
+								<h1 class="page-header">Import Export Foreign Currency Transaction</h1>
+						</div>
+						<!-- /.col-lg-12 -->
+				</div>
+				<!-- /.row -->
+				<!-- <div class="row">
+					<div class="col-lg-12">
+						<message ng-model="processMsg" auto-close></message>
+					</div>
+				</div> -->
+				<div class="row">
+					<div class="col-lg-12">
+						How to use:<br>
+						- For export records, click on the "Export" tab, select template format and then click the "Export" button<br>
+                        - For import records, click on the "Import" tab, create the records in excel template<br>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+				<!-- /.row -->
+				<hr>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#import" aria-controls="import" role="tab" data-toggle="tab"><i class="fas fa-list fa-fw fa-lg"></i> Import</a></li>
+					<li role="presentation"><a href="#export" aria-controls="export" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> Export</a></li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="import">
+                        <import ng-model="importModel" program-id="bu06foreigncurrencytran">
+                            <form name="myForm">
+                                Upload excel file: 
+                                <upload ng-model="uploadFileInfo">
+                                <button type="file" class="btn btn-default" ngf-select="UploadData($file)"
+                                    accept=".xls, .xlsx" ngf-max-size="10MB">Select Single File</button><br>
+                                <div ng-repeat="(key, value) in uploadInfo track by $index">
+                                    File name: {{value.name}}<br>
+                                    Size: {{value.size}} ({{value.uploadProgress}}%)<br>
+                                    <!-- <div style="font-size: smaller; background: orange; width:{{value.uploadProgress}}%" ng-bind="value.uploadProgress + '%'"></div> -->
+                                    <span ng-if="value.uploadResult.error != '0'">Error Code ({{value.uploadResult.error}}): {{value.uploadResult.errorMsg}}</span><br>
+                                </div>
+                                </upload>
+                                <button class="btn btn-default" ng-click="SubmitData(uploadFileInfo)">Submit</button>
+                            </form>
+                        </import>
+                        <hr>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Process Message</div>
+                            <div class="panel-body">
+                            <message ng-model="processMsg" type="block">
+                                <div class="well well-sm" ng-if="msgCtrl.ngModel.length > 0">
+                                <div ng-repeat="dspMsg in msgCtrl.ngModel track by $index" ng-bind="dspMsg"></div>
+                                </div>
+                            </message>
+                            </div>
+                        </div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="export">
+                        <export ng-model="imExModel" program-id="bu06foreigncurrencytran" ng-init="exportCtrl.ExportFileTypeAs.selectedOption = exportCtrl.ExportFileTypeAs.availableOptions[0]">
+                            <div class="radio">
+                                <p class="form-control-static">Export Excel Format</p>
+                                <label>
+                                <input type="radio" ng-model="exportCtrl.ExportFileTypeAs.selectedOption" ng-value="exportCtrl.ExportFileTypeAs.availableOptions[0]">
+                                {{exportCtrl.ExportFileTypeAs.availableOptions[0].name}}
+                                </label>
+                                <label>
+                                <input type="radio" ng-model="exportCtrl.ExportFileTypeAs.selectedOption" ng-value="exportCtrl.ExportFileTypeAs.availableOptions[1]">
+                                {{exportCtrl.ExportFileTypeAs.availableOptions[1].name}}
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                <input type="checkbox" ng-model="exportCtrl.IsTemplate">Generate as Template?
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" ng-click="SubmitData()">Export</button>
+                            </div>
+                        </export>
+					</div>
+				</div>
+	
+		</div>
+		<!-- /.container-fluid -->
+	</div>

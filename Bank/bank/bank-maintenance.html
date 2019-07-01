@@ -1,0 +1,117 @@
+<div id="page-wrapper" ng-controller="updateBankController">
+	<div class="container-fluid">
+			<div class="row">
+					<div class="col-lg-12">
+							<h1 class="page-header">Bank Master</h1>
+					</div>
+					<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<message ng-model="processMsg" auto-close></message>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					How to use:<br>
+					- For Create record, click on the "Create Form" tab, create record and then click the "Create" button<br>
+					- For Amend record, Select a record on list, update or delete record
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			
+			<hr>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#list" aria-controls="list" role="tab" data-toggle="tab"><i class="fas fa-list fa-fw fa-lg"></i> List</a></li>
+				<li role="presentation"><a href="#create" aria-controls="create" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> Create Form</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="list">
+					<pageview
+							ng-model="bankModel"
+							program-id="bw21bank">
+						<screen></screen>
+					</pageview>
+					<entry ng-model="entryAmendForm" program-id="bs21bank" edit-mode="amend">
+						<form class="form-horizontal" ng-submit="SubmitData()">
+							<fieldset>
+								<legend>Amend Bank</legend>
+								<div class="form-group">
+									<label for="inputBankCode" class="col-sm-2 control-label">Bank Code</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputBankCode" ng-model="entryCtrl.ngModel.BankCode" readonly>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputBankEnglishName" class="col-sm-2 control-label">English Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputBankEnglishName" ng-model="entryCtrl.ngModel.BankEnglishName">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputBankChineseName" class="col-sm-2 control-label">Chinese Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputBankChineseName" ng-model="entryCtrl.ngModel.BankChineseName">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-5">
+										<button type="submit" class="btn btn-success" aria-label="Save">
+											<span class="fas fa-save" aria-hidden="true"></span> Save
+										</button>
+									</div>
+									<div class="col-sm-5">
+										<button type="button" class="btn btn-danger" aria-label="Delete" ng-click="DeleteData()">
+											<span class="fas fa-trash-alt" aria-hidden="true"></span> Delete
+										</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</entry>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="create">
+					<entry ng-model="entryCreateForm" program-id="bs21bank" edit-mode="create">
+						<form class="form-horizontal" ng-submit="SubmitData()">
+							<fieldset>
+								<legend>Create Bank</legend>
+								<div class="form-group">
+									<label for="inputBankCodeC" class="col-sm-2 control-label">Bank Code</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputBankCodeC" ng-model="entryCtrl.ngModel.BankCode">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputBankEnglishNameC" class="col-sm-2 control-label">English Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputBankEnglishNameC" ng-model="entryCtrl.ngModel.BankEnglishName">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputBankChineseNameC" class="col-sm-2 control-label">Chinese Name</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputBankChineseNameC" ng-model="entryCtrl.ngModel.BankChineseName">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-primary" aria-label="Create">
+											<span class="far fa-plus-square" aria-hidden="true"></span> Create
+										</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+
+					</entry>
+				</div>
+			</div>
+
+	</div>
+	<!-- /.container-fluid -->
+</div>

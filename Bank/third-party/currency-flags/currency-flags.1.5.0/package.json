@@ -1,0 +1,94 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "https://github.com/transferwise/currency-flags.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "https://github.com/transferwise/currency-flags.git",
+        "spec": "git+https://github.com/transferwise/currency-flags.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:transferwise/currency-flags.git",
+          "sshUrl": "git+ssh://git@github.com/transferwise/currency-flags.git",
+          "httpsUrl": "git+https://github.com/transferwise/currency-flags.git",
+          "gitUrl": "git://github.com/transferwise/currency-flags.git",
+          "shortcut": "github:transferwise/currency-flags",
+          "directUrl": "https://raw.githubusercontent.com/transferwise/currency-flags/master/package.json"
+        }
+      },
+      "D:\\Desktop\\New folder"
+    ]
+  ],
+  "_from": "git+https://github.com/transferwise/currency-flags.git",
+  "_id": "currency-flags@1.5.0",
+  "_inCache": true,
+  "_location": "/currency-flags",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "https://github.com/transferwise/currency-flags.git",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "https://github.com/transferwise/currency-flags.git",
+    "spec": "git+https://github.com/transferwise/currency-flags.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:transferwise/currency-flags.git",
+      "sshUrl": "git+ssh://git@github.com/transferwise/currency-flags.git",
+      "httpsUrl": "git+https://github.com/transferwise/currency-flags.git",
+      "gitUrl": "git://github.com/transferwise/currency-flags.git",
+      "shortcut": "github:transferwise/currency-flags",
+      "directUrl": "https://raw.githubusercontent.com/transferwise/currency-flags/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/transferwise/currency-flags.git#432be37e74015cc9875c50c9cbd3586528d37d89",
+  "_shasum": "6dc96195981c808eaba27b6b8bd20761c419f3c1",
+  "_shrinkwrap": null,
+  "_spec": "https://github.com/transferwise/currency-flags.git",
+  "_where": "D:\\Desktop\\New folder",
+  "author": {
+    "name": "oliverviljamaa"
+  },
+  "bugs": {
+    "url": "https://github.com/transferwise/currency-flags/issues"
+  },
+  "dependencies": {},
+  "description": "Flags for currency codes.",
+  "devDependencies": {
+    "clean-css-cli": "^4.1.6",
+    "imacss": "^1.0.0",
+    "imagemin-cli": "^3.0.0"
+  },
+  "files": [
+    "dist/currency-flags.css",
+    "dist/currency-flags.min.css"
+  ],
+  "gitHead": "432be37e74015cc9875c50c9cbd3586528d37d89",
+  "homepage": "https://github.com/transferwise/currency-flags#readme",
+  "license": "MIT",
+  "name": "currency-flags",
+  "optionalDependencies": {},
+  "readme": "# currency-flags\r\n\r\nThis package outputs two CSS files (minified and unminified) with classes for currency codes using base64 background images inlined.\r\n\r\n## How to use\r\n\r\n**1. Install**\r\n\r\n`npm install --save https://github.com/transferwise/currency-flags.git`\r\n\r\n**2. Add CSS to page**\r\n\r\n**3. Use**\r\n\r\n```html\r\n<div class=\"currency-flag currency-flag-usd\"></div>\r\n```\r\n\r\n<img src=\"http://i.imgur.com/Fdd5VLp.png\">\r\n\r\nThe `currency-flag` selector has a default `display` of `inline-block`, size of `24x16` and a `background-size` of `cover`.\r\n`currency-flag-sm`, `currency-flag-lg` and `currency-flag-xl` modifiers are available.\r\n\r\n## How to add flags\r\n\r\n1. Clone repo\r\n1. Run `npm install`\r\n1. Add correctly sized (`48x32`) `png` files to `src/flags`\r\n1. Run `npm run build`\r\n1. Commit to a new branch, include css files changed by build process\r\n1. Open a pull request\r\n1. Draft a release on GitHub with the same version as specified in `package.json`\r\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/transferwise/currency-flags.git"
+  },
+  "scripts": {
+    "add-default-styles": "cat 'src/styles.css' 'build/currency-flags-backgrounds.css' > 'dist/currency-flags.css'",
+    "build": "npm run minify-images && npm run inline-images && npm run change-class-names && npm run add-default-styles && npm run minify-css && rm -rf build && echo 'Done.'",
+    "change-class-names": "sed -i.bak 's/imacss/currency-flag/g' build/currency-flags-backgrounds.css",
+    "inline-images": "imacss 'build/flags/*.png' > 'build/currency-flags-backgrounds.css'",
+    "minify-css": "cleancss -o 'dist/currency-flags.min.css' 'dist/currency-flags.css'",
+    "minify-images": "imagemin 'src/flags/*' --out-dir='build/flags'"
+  },
+  "version": "1.5.0"
+}

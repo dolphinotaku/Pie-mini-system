@@ -1,0 +1,58 @@
+<div id="page-wrapper" ng-controller="exPIMSDatabaseController">
+		<div class="container-fluid">
+				<div class="row">
+						<div class="col-lg-12">
+								<h1 class="page-header">Archive Database</h1>
+						</div>
+						<!-- /.col-lg-12 -->
+				</div>
+				<!-- /.row -->
+				<!-- <div class="row">
+					<div class="col-lg-12">
+						<message ng-model="processMsg" auto-close></message>
+					</div>
+				</div> -->
+				<div class="row">
+					<div class="col-lg-12">
+						How to use:<br>
+						- For archive PIMS database, on the "Export" tab, click the "Export" button<br>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+				<!-- /.row -->
+				<hr>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#export" aria-controls="export" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> Export</a></li>
+				</ul>
+	
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="export">
+                        <export ng-model="imExModel" program-id="bu10ArchiveDatabase" ng-init="exportCtrl.ExportFileTypeAs.selectedOption = exportCtrl.ExportFileTypeAs.availableOptions[0]">
+                            <div class="radio" style="display: none;">
+                                <p class="form-control-static">Export Excel Format</p>
+                                <label>
+                                <input type="radio" ng-model="exportCtrl.ExportFileTypeAs.selectedOption" ng-value="exportCtrl.ExportFileTypeAs.availableOptions[0]">
+                                {{exportCtrl.ExportFileTypeAs.availableOptions[0].name}}
+                                </label>
+                                <label>
+                                <input type="radio" ng-model="exportCtrl.ExportFileTypeAs.selectedOption" ng-value="exportCtrl.ExportFileTypeAs.availableOptions[1]">
+                                {{exportCtrl.ExportFileTypeAs.availableOptions[1].name}}
+                                </label>
+                            </div>
+                            <div class="checkbox" style="display: none;">
+                                <label>
+                                <input type="checkbox" ng-model="exportCtrl.IsTemplate">Generate as Template?
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" ng-click="SubmitData()">Export</button>
+                            </div>
+                        </export>
+					</div>
+				</div>
+	
+		</div>
+		<!-- /.container-fluid -->
+	</div>
