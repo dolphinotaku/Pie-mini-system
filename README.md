@@ -1,4 +1,4 @@
-# Passive-Investment-Management-System
+# Passive Investment Management System
 The lite system to manage your certificate deposit, foreign exchange. Provide overview on dashboard, generate balance sheet, protfolio to review how good or bad you are.
 
 ## Abstract
@@ -6,10 +6,13 @@ I want to earn more money then I go to invest. I was using excel at the very bei
 
 ## Technologies
 In brief, this project develop in several computer languages, markup language and involves more than than 10 open source project used.
-The web site builded in HTML/CSS/JS/PHP,
-The scheduler builded in Java,
+- The web site builded in HTML/CSS/JS/PHP,
+- The scheduler builded in Java,
+
 The most contributed open sources that supporting the features in both server and client are:
+
 Client: AngularJS, jQuery, ics.js, FileSaver.js, Blob.js, ng-file-upload, FullCalendar, Bootstrap, Font Awesome, currency-flag
+
 Server: PDF engine (TCPDF/MPDF/DomPDF), PHPExcel, dumper.php
 
 ## Installation and Config
@@ -19,3 +22,7 @@ Please read the documentation at Core project first.
 
 ## Release
 This project planning in three phases, the first phase has been released on GitHub, the project is still in development for further escalation of business functionality to achieve to the final phase.
+
+## License
+This project is licensed under the MIT license. [View license file](https://github.com/keithbox/Passive-Investment-Management-System/blob/master/LICENSE)
+=]
