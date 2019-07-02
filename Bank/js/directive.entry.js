@@ -78,7 +78,7 @@ app.directive('entry', ['$rootScope',
         })();
 
         function InitializeEntry() {
-            $scope.tableStructure = {};
+            $scope.entryTableStructure = {};
             
             DirectiveProperties.getEditMode();
             DirectiveProperties.getProgramID();
@@ -135,8 +135,8 @@ app.directive('entry', ['$rootScope',
 		}
 
         function SetNgModel(dataJson){
-            var dataColumns = $scope.tableStructure.DataColumns;
-            var keyColumns = $scope.tableStructure.KeyColumns;
+            var dataColumns = $scope.entryTableStructure.DataColumns;
+            var keyColumns = $scope.entryTableStructure.KeyColumns;
 
             // var dataRecord = dataJson.ActionResult.data[0];
             var dataRecord = dataJson;
@@ -216,17 +216,17 @@ app.directive('entry', ['$rootScope',
         }
         function SetTableStructure(dataJson){
             console.dir("entry SetTableStructure")
-            console.dir($scope.tableStructure)
-            $scope.tableStructure.DataColumns = dataJson.DataColumns;
-            $scope.tableStructure.KeyColumns = dataJson.KeyColumns;
+            console.dir($scope.entryTableStructure)
+            $scope.entryTableStructure.DataColumns = dataJson.DataColumns;
+            $scope.entryTableStructure.KeyColumns = dataJson.KeyColumns;
             $scope.tableSchema = dataJson.TableSchema;
-            var itemsColumn = $scope.tableStructure.DataColumns;
+            var itemsColumn = $scope.entryTableStructure.DataColumns;
             
             // 20190630,
             // bug:: sometime the table Structure will be updated by the child directive.
             // e.g time deposit entry's table Structure mandatory field will be turn into BankCode only
             console.dir(dataJson)
-            console.dir($scope.tableStructure)
+            console.dir($scope.entryTableStructure)
 
 
             if($ctrl.ngModel == null)
@@ -291,7 +291,7 @@ app.directive('entry', ['$rootScope',
             var isKeyValid = true;
             var upperRecordObj = {};
 
-            var tbStructure = $scope.tableStructure;
+            var tbStructure = $scope.entryTableStructure;
             var itemsColumn = tbStructure.DataColumns;
 
             if(typeof(itemsColumn) == "undefined"){
@@ -585,7 +585,7 @@ app.directive('entry', ['$rootScope',
                         console.dir("DeleteData response: "+responseObj.status+", reset form")
                         $scope.ResetForm();
                     }
-                    SetTableStructure($scope.tableStructure);
+                    SetTableStructure($scope.entryTableStructure);
                 }, function(reason) {
                   console.error(tagName + ":"+$scope.programId + " - Fail in DeleteData()")
                   throw reason;
@@ -767,7 +767,7 @@ app.directive('entry', ['$rootScope',
         function ValidateTableStructure(){
             var isTbStructureValid = true;
 
-            var tbStructure = $scope.tableStructure;
+            var tbStructure = $scope.entryTableStructure;
             var itemsColumn = tbStructure.DataColumns;
 
             if(typeof(itemsColumn) == "undefined"){
@@ -793,7 +793,7 @@ app.directive('entry', ['$rootScope',
          * @return {bool} - true if key columns are exists, not null and empty. false otherwise
          */
         function IsKeyInDataRow(recordObj){
-            var tbStructure = $scope.tableStructure;
+            var tbStructure = $scope.entryTableStructure;
             var itemsColumn = tbStructure.DataColumns;
             var keyColumn = tbStructure.KeyColumns;
 
@@ -840,7 +840,7 @@ app.directive('entry', ['$rootScope',
          * @return {Object} strictObj - a new record row strict with the table schema
          */
         function ConvertEntryModelStrictWithSchema(recordObj, editMode){
-            var tbStructure = $scope.tableStructure;
+            var tbStructure = $scope.entryTableStructure;
             var itemsColumn = tbStructure.DataColumns;
             var keyColumns = tbStructure.KeyColumns;
 
@@ -904,7 +904,9 @@ app.directive('entry', ['$rootScope',
 
         function UpdateData(recordObj){
         	var clientID = Security.GetSessionID();
-        	var programId = $scope.programId.toLowerCase();
+            var programId = $scope.programId.toLowerCase();
+            
+            console.dir($scope.entryTableStructure)
 
             var isAllKeyExists = IsKeyInDataRow(recordObj);
             if(!isAllKeyExists){
@@ -917,7 +919,7 @@ app.directive('entry', ['$rootScope',
         	}
         	updateObj.Header[1] = {};
             //updateObj.Header[1] = recordObj;
-            // updateObj.Header[1] = ConvertEntryModelStrictWithSchema(recordObj, $scope.editMode);
+            updateObj.Header[1] = ConvertEntryModelStrictWithSchema(recordObj, $scope.editMode);
 
         	var isRowEmpty = jQuery.isEmptyObject(updateObj.Header[1])
         	if(isRowEmpty){

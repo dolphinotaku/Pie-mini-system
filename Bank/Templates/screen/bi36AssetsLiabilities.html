@@ -1,0 +1,32 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+		<tr>
+				<th>#</th>
+				<th>Effective Date</th>
+				<th>Type</th>
+				<th>Item</th>
+				<th>Description</th>
+				<th>Amount</th>
+				<th></th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="currencyRow in inquiryCtrl.ngModel.InquiryResult.Data"
+				ng-click="PointedToRecord(currencyRow, $event, this)"
+				ng-dblclick="SelectedToRecord(currencyRow, $event, this)">
+				<td>{{currencyRow.ALTransactionID}}</td>
+				<td>{{currencyRow.EffectiveDate | date:'yyyy/MM/dd'}}</td>
+				<td>{{currencyRow.Type}}</td>
+				<td>{{currencyRow.Item}}</td>
+				<td>{{currencyRow.Description}}</td>
+				<td>{{currencyRow.Amount}}</td>
+				<td>
+					<button type="button" class="btn btn-link" aria-label="Edit" ng-click="PointedToRecord(currencyRow, $event, this); SelectedToRecord(currencyRow, $event, this);">
+						<i class="fas fa-pen" aria-hidden="true"></i>
+					</button>
+				</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

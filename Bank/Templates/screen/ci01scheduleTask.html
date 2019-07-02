@@ -1,0 +1,38 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+		<tr>
+				<th>Schedule ID</th>
+				<th>Name</th>
+				<th>Last Execute Date</th>
+				<th>NextExecuteDate</th>
+				<th>Status</th>
+				<th></th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="taskRow in inquiryCtrl.ngModel.InquiryResult.Data"
+				ng-click="PointedToRecord(taskRow, $event, this)"
+				ng-dblclick="SelectedToRecord(taskRow, $event, this)">
+				<td>{{taskRow.ScheduleID}}</td>
+				<td>{{taskRow.Name}}</td>
+				<td>{{taskRow.LastExecuteDate}}</td>
+				<td>{{taskRow.NextExecuteDate}}</td>
+				<td>
+					<label class="switch" style="display: none;>
+						<input type="checkbox" ng-model="taskRow.Status" ng-change="" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+						<span class="slider round"></span>
+					</label>
+                    <span ng-if="taskRow.Status=='Enabled'"><i class="fas fa-toggle-on"></i></span>
+                    <span ng-if="taskRow.Status=='Disabled'"><i class="fas fa-toggle-off"></i> </span>
+                    {{taskRow.Status}}
+				</td>
+				<td>
+					<button type="button" class="btn btn-link" aria-label="Details" ng-click="ViewScheduleTaskRecord(taskRow);" ng-show="taskRow.Status">
+						<i class="fas fa-angle-right" aria-hidden="true"></i>
+					</button>
+				</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

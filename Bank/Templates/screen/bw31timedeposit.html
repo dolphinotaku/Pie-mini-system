@@ -1,0 +1,27 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+		<tr>
+			<th>Currency</th>
+			<th>Principal</th>
+			<th>Deposit Rate</th>
+			<th>Interest</th>
+			<th>Effective Date</th>
+			<th>Maturity Date</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="timeDepositRow in pageviewCtrl.ngModel"
+				ng-click="PointedToRecord(timeDepositRow, $event, this)"
+				ng-dblclick="SelectedToRecord(timeDepositRow, $event, this)">
+				<td><span class="currency-flag currency-flag-{{timeDepositRow.PrincipalCurrency | lowercase}} currency-flag-sm"></span>
+				{{timeDepositRow.PrincipalCurrency}}</td>
+				<td>$<span class="pull-right">{{timeDepositRow.Principal | currency:"":2}}</span></td>
+				<td style="text-align:right;">{{timeDepositRow.DepositRate | number:2}} % (p.a.)</td>
+				<td>$<span class="pull-right">{{timeDepositRow.AdjustedInterest | currency:"":2}}</span></td>
+				<td>{{timeDepositRow.EffectiveDate | date:'yyyy/MM/dd'}}</td>
+				<td>{{timeDepositRow.AdjustedMaturityDate | date:'yyyy/MM/dd'}}</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

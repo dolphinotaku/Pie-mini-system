@@ -21,10 +21,10 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 		$scope.directiveScopeDict[hashID].ResetForm();
 		$scope.ShowEntryForm();
 	}
-	$scope.SwitchToAmend = function(sRecord){
+	$scope.SwitchToAmend = function(){
 		$scope.entryFormMode = "amend"
-		$scope.entryFormTitle = "Amend Time Deposit";
-		// $scope.entryCreateForm.BankCode = sRecord.BankCode;
+        $scope.entryFormTitle = "Amend Time Deposit";
+        
 		$scope.ShowEntryForm();
 	}
 	$scope.HideEntryForm = function(){
@@ -188,16 +188,16 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
         var tagName = iElement[0].tagName.toLowerCase();
         var prgmID = scope.programId.toLowerCase();
         var scopeID = scope.$id;
-		var hashID = tagName + '_' + prgmID;
-
-		// if(typeof $scope.directiveScopeDict[hashID].SetEditboxNgModel != "undefined")
+        var hashID = tagName + '_' + prgmID;
+        
         if(typeof $scope.directiveScopeDict[hashID].SetEditboxNgModel == "function"){
 			if(prgmID == "bw21bank")
             	CustomSelectedToRecordUnderEditbox(sRecord, rowScope, scope, iElement, controller);
 		}else{
             hashID = "editbox_bw21bank";
             $scope.SwitchToAmend(sRecord);
-            
+
+            $scope.entryCreateForm = sRecord;
             $scope.directiveCtrlDict[hashID].ngModel.BankCode = sRecord.BankCode;
             $scope.directiveScopeDict[hashID].FindData();
 		}

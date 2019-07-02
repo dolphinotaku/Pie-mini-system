@@ -15,6 +15,7 @@ app.directive('editbox', ['Core', 'Security', '$rootScope', '$compile', 'ThemeSe
         var $ctrl = $scope.editboxCtrl;
 
     	function InitializeEditBox() {
+            $scope.editboxTableStructure = {};
             $scope.editboxDataList = [];
             if(typeof($ctrl.ngModel) == "undefined" || $ctrl.ngModel == null)
                 $ctrl.ngModel = {};
@@ -102,8 +103,8 @@ app.directive('editbox', ['Core', 'Security', '$rootScope', '$compile', 'ThemeSe
 		}
 
         function SetNgModel(dataJson){
-            var dataColumns = $scope.tableStructure.DataColumns;
-            var keyColumns = $scope.tableStructure.KeyColumns;
+            var dataColumns = $scope.editboxTableStructure.DataColumns;
+            var keyColumns = $scope.editboxTableStructure.KeyColumns;
 
             // var dataRecord = dataJson.ActionResult.data[0];
             var dataRecord = dataJson;
@@ -184,14 +185,14 @@ app.directive('editbox', ['Core', 'Security', '$rootScope', '$compile', 'ThemeSe
         }
         function SetTableStructure(dataJson){
             // console.dir("editbox SetTableStructure")
-            // console.dir($scope.tableStructure)
-            $scope.tableStructure.DataColumns = dataJson.DataColumns;
-            $scope.tableStructure.KeyColumns = dataJson.KeyColumns;
+            // console.dir($scope.editboxTableStructure)
+            $scope.editboxTableStructure.DataColumns = dataJson.DataColumns;
+            $scope.editboxTableStructure.KeyColumns = dataJson.KeyColumns;
             $scope.tableSchema = dataJson.TableSchema;
-            var itemsColumn = $scope.tableStructure.DataColumns;
+            var itemsColumn = $scope.editboxTableStructure.DataColumns;
             
             // console.dir(dataJson)
-            // console.dir($scope.tableStructure)
+            // console.dir($scope.editboxTableStructure)
 
             if($ctrl.ngModel == null)
                 $ctrl.ngModel = {};
@@ -255,7 +256,7 @@ app.directive('editbox', ['Core', 'Security', '$rootScope', '$compile', 'ThemeSe
             var isKeyValid = true;
             var upperRecordObj = {};
 
-            var tbStructure = $scope.tableStructure;
+            var tbStructure = $scope.editboxTableStructure;
             var itemsColumn = tbStructure.DataColumns;
 
             if(typeof(itemsColumn) == "undefined"){
@@ -496,7 +497,7 @@ app.directive('editbox', ['Core', 'Security', '$rootScope', '$compile', 'ThemeSe
         }
 
         function IsKeyInDataRow(recordObj){
-            var tbStructure = $scope.tableStructure;
+            var tbStructure = $scope.editboxTableStructure;
             var itemsColumn = tbStructure.DataColumns;
             var keyColumn = tbStructure.KeyColumns;
 

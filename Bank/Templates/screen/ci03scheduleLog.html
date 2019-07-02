@@ -1,0 +1,25 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Schedule ID</th>
+				<th>Program ID</th>
+				<th>Execute Date</th>
+				<th>Result Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="logRow in inquiryCtrl.ngModel.InquiryResult.Data"
+			ng-click="PointedToRecord(logRow, $event, this)"
+			ng-dblclick="SelectedToRecord(logRow, $event, this)">
+				<td>{{logRow.LogID}}</td>
+				<td>{{logRow.ScheduleID}}</td>
+				<td>{{logRow.ProgramID}}</td>
+				<td>{{logRow.ExecuteDate | date:date:"yyyy/MM/dd HH:dd"}}</td>
+				<td>{{logRow.ResultStatus}}</td>
+			</tr>
+		</tbody>
+        
+	</table>
+</div>

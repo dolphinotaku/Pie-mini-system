@@ -78,7 +78,7 @@ class ScheduleTaskManager extends DatabaseManager {
                         );
                 }
             break;
-            case "Weekly":
+            case "Daily":
                 if($activityStartDate <= $_current_datetime){
                     // $activityStartDate = $_current_datetime;
                     // 20190627, fixed: don't overwrite the time
@@ -108,7 +108,7 @@ class ScheduleTaskManager extends DatabaseManager {
             case "Daily":
                 $cron_min = $activityStartDate->format('i');
                 $cron_hour = $activityStartDate->format('H');
-                $cron_dayOfMonth = $dayOfMonth."/".$this->FreqRepeatEvery;
+                // $cron_dayOfMonth = $dayOfMonth."/".$this->FreqRepeatEvery;
             break;
             case"Weekly":
 

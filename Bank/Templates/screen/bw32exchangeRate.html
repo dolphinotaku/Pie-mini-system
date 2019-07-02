@@ -1,0 +1,36 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Out Currency</th>
+				<th>Out Amount</th>
+				<th>In Currency</th>
+				<th>In Amount</th>
+				<th>Exchange Rate</th>
+				<th>Effective Date</th>
+				<th>Effective Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="rateRow in pageviewCtrl.ngModel track by rateRow.ExchangeRateID"
+			ng-click="PointedToRecord(rateRow, $event, this)"
+			ng-dblclick="SelectedToRecord(rateRow, $event, this)">
+				<td>{{rateRow.ExchangeRateID}}</td>
+				<td>
+				<span class="currency-flag currency-flag-{{rateRow.OutCurrencyID | lowercase}} currency-flag-sm"></span>
+				{{rateRow.OutCurrencyID}}
+				</td>
+				<td>{{rateRow.OutAmount}}</td>
+				<td>
+				<span class="currency-flag currency-flag-{{rateRow.InCurrencyID | lowercase}} currency-flag-sm"></span>
+				{{rateRow.InCurrencyID}}
+				</td>
+				<td>{{rateRow.InAmount}}</td>
+				<td>{{rateRow.Rate}}</td>
+				<td>{{rateRow.EffectiveDate | date:'yyyy/MM/dd'}}</td>
+				<td>{{rateRow.IsEffective}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

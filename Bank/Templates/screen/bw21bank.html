@@ -1,0 +1,20 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>Bank Code</th>
+				<th>English Name</th>
+				<th>Chinese Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="deptRow in pageviewCtrl.ngModel track by deptRow.BankCode"
+			ng-click="PointedToRecord(deptRow, $event, this)"
+			ng-dblclick="SelectedToRecord(deptRow, $event, this)">
+				<td>{{deptRow.BankCode}}</td>
+				<td>{{deptRow.BankEnglishName}}</td>
+				<td>{{deptRow.BankChineseName}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

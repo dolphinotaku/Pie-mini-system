@@ -1,0 +1,18 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+		<tr>
+				<th>ProgramID</th>
+				<th>Description</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="taskProgramRow in pageviewCtrl.ngModel track by taskProgramRow.ProgramID"
+			ng-click="PointedToRecord(taskProgramRow, $event, this)"
+			ng-dblclick="SelectedToRecord(taskProgramRow, $event, this)">
+				<td>{{taskProgramRow.ProgramID}}</td>
+				<td>{{taskProgramRow.Description}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

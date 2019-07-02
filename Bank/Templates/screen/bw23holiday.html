@@ -1,0 +1,24 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>Calendar Year</th>
+				<th>Holiday Date</th>
+				<th>Type</th>
+				<th>Name</th>
+				<th>Chinese Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="deptRow in pageviewCtrl.ngModel track by deptRow.AutoID"
+			ng-click="PointedToRecord(deptRow, $event, this)"
+			ng-dblclick="SelectedToRecord(deptRow, $event, this)">
+				<td>{{deptRow.CalendarYear}}</td>
+				<td>{{deptRow.HolidayDate | date:'yyyy-MM-dd'}}</td>
+				<td>{{deptRow.Type}}</td>
+				<td>{{deptRow.Name}}</td>
+				<td>{{deptRow.ChineseName}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
