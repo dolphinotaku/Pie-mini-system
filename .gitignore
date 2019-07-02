@@ -1,15 +1,18 @@
 # Ignoring third-party source
-third-party-source/
+Bank/third-party-source/
 
 # svn folder
 .svn/
 
 # Ignoring resourse folder which store the word-template
-resourse/
+Bank/resourse/
+
+# logs/schedule_task/api_calls
+Bank/logs/schedule_task/api_calls/*.txt
 
 # Ignoring temp folder which stores the uploaded files, export templates
-temp/export/*.*
-temp/upload/*.*
+Bank/temp/export/*.*
+Bank/temp/upload/*.*
 
 # Windows image file caches
 Thumbs.db
