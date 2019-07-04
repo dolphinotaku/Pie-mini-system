@@ -215,20 +215,11 @@ app.directive('entry', ['$rootScope',
             return tbResult;
         }
         function SetTableStructure(dataJson){
-            console.dir("entry SetTableStructure")
-            console.dir($scope.entryTableStructure)
             $scope.entryTableStructure.DataColumns = dataJson.DataColumns;
             $scope.entryTableStructure.KeyColumns = dataJson.KeyColumns;
             $scope.tableSchema = dataJson.TableSchema;
             var itemsColumn = $scope.entryTableStructure.DataColumns;
             
-            // 20190630,
-            // bug:: sometime the table Structure will be updated by the child directive.
-            // e.g time deposit entry's table Structure mandatory field will be turn into BankCode only
-            console.dir(dataJson)
-            console.dir($scope.entryTableStructure)
-
-
             if($ctrl.ngModel == null)
                 $ctrl.ngModel = {};
 
@@ -905,8 +896,6 @@ app.directive('entry', ['$rootScope',
         function UpdateData(recordObj){
         	var clientID = Security.GetSessionID();
             var programId = $scope.programId.toLowerCase();
-            
-            console.dir($scope.entryTableStructure)
 
             var isAllKeyExists = IsKeyInDataRow(recordObj);
             if(!isAllKeyExists){

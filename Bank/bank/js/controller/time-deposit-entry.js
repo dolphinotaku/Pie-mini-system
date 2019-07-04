@@ -149,8 +149,8 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
             isValid = false;
 		}
 
-		if(record.DepositPeriodAmt <=0){
-            errorMsgList.push("Period Amount is required and greated than zero.");
+		if(!record.DepositPeriodAmt || record.DepositPeriodAmt <=0){
+            errorMsgList.push("Period Amount is required and greater than zero.");
             isValid = false;
 		}
 
@@ -169,10 +169,11 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 		if(record.PrincipalCurrency == ""){
             errorMsgList.push("Principal Currency is required.");
             isValid = false;
-		}
-
-		if(record.Principal <=0 ){
-            errorMsgList.push("Principal is required and greated than zero.");
+        }
+        
+        // 20190703, ketihpoon, fixed: allowed to create record with empty Principal after delete/backspace the value
+		if(!record.Principal || record.Principal <=0 ){
+            errorMsgList.push("Principal is required and greater than zero.");
             isValid = false;
         }
 		
@@ -246,44 +247,55 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 
 		switch (periodUnit) {
 			case "D":
-                // periodUnitDivisionAmt = 1;
-				// checkMaturityDate.setDate(effectiveDate.getDate()+periodUnitDivisionAmt);
                 periodUnitDivisionAmt = 1 * periodAmt;
 				checkMaturityDate.setDate(effectiveDate.getDate()+periodUnitDivisionAmt);
 				break;
 			case "M":
-				// periodUnitDivisionAmt = 12;
-				// checkMaturityDate.setMonth(effectiveDate.getMonth()+periodUnitDivisionAmt);
-                periodUnitDivisionAmt = 12 * periodAmt;
-				checkMaturityDate.setDate(effectiveDate.getDate()+periodUnitDivisionAmt);
+                // periodUnitDivisionAmt = 12 * periodAmt;
+				checkMaturityDate.setMonth(effectiveDate.getMonth()+periodAmt);
+                // checkMaturityDate.setDate(effectiveDate.getDate()+periodUnitDivisionAmt);
+                // periodUnitDivisionAmt = dateDiffInDays(effectiveDate, checkMaturityDate);
 				break;
 			case "Y":
-                // periodUnitDivisionAmt = 365;
+                // in general, Bank define one year as 365 days, instead of adding 1 into the years.
                 // checkMaturityDate.setFullYear(effectiveDate.getFullYear()+periodUnitDivisionAmt);
                 periodUnitDivisionAmt = 365 * periodAmt;
 				checkMaturityDate.setDate(effectiveDate.getDate()+periodUnitDivisionAmt);
 				break;
 			default:
-		}
+        }
             
 		// if the date is Saturday or Sunday, extend to next working day
 		var weekDayIndicator = checkMaturityDate.getDay(); //  Sunday is 0, Monday is 1, and so on.
+        var satSunSteps = 0;
 		if(weekDayIndicator == 6 || weekDayIndicator == 0){
-            var satSunSteps = 0;
 			if(weekDayIndicator == 6){
-				periodUnitDivisionAmt += 2
+                periodUnitDivisionAmt += 2;
+                satSunSteps += 2;
 			}
 			if(weekDayIndicator == 0){
-				periodUnitDivisionAmt += 1
+				periodUnitDivisionAmt += 1;
+                satSunSteps += 1;
 			}
 		}
-        maturityDate.setDate(effectiveDate.getDate()+periodUnitDivisionAmt);
+        // maturityDate.setDate(effectiveDate.getDate()+periodUnitDivisionAmt);
+        // maturityDate.setDate(checkMaturityDate.getDate()+satSunSteps);
+        maturityDate = new Date(checkMaturityDate);
+        maturityDate.setDate(checkMaturityDate.getDate()+satSunSteps);
+
+        
+
+        console.dir(periodUnitDivisionAmt)
+        console.dir(checkMaturityDate)
+        console.dir(maturityDate)
+
 
         // if the date is holiday, extend to next working day
         //        ...
         // 20190613, keithpoon, fixed: days difference calculation incorrect
 		// var timeDiff = Math.abs(maturityDate.getTime() - effectiveDate.getTime());
         // var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        // var diffDays = dateDiffInDays(effectiveDate, maturityDate);
         var diffDays = dateDiffInDays(effectiveDate, maturityDate);
 		return diffDays;
     }

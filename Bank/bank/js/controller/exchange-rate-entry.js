@@ -109,8 +109,28 @@ app.controller('updateExchangeRateController', ['$scope', 'Core', 'MessageServic
 		if(!Core.IsDateInvalid(record.EffectiveDate)){
             errorMsgList.push("Effective Date is required or the format incorrect, the year must greater than 1970.");
             isValid = false;
-		}
-		
+        }
+
+        if(!record.OutAmount || record.OutAmount <=0 ){
+            errorMsgList.push("Out Amount is required and greater than zero.");
+            isValid = false;
+        }
+
+        if(!record.InAmount || record.InAmount <=0 ){
+            errorMsgList.push("In Amount is required and greater than zero.");
+            isValid = false;
+        }
+
+		if(record.OutCurrencyID == ""){
+            errorMsgList.push("Out Currency is required.");
+            isValid = false;
+        }
+
+		if(record.InCurrencyID == ""){
+            errorMsgList.push("In Currency is required.");
+            isValid = false;
+        }
+
         if(!isValid){
             MessageService.setPostponeMsg(errorMsgList);
         }
