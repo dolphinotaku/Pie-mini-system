@@ -127,13 +127,14 @@ app.controller('updateHolidayController', ['$scope', '$timeout', 'Core', 'Messag
 		var tagName = iElement[0].tagName.toLowerCase();
 		var prgmID = scope.programId;
 		var scopeID = scope.$id;
-		var hashID = 'inquiry_bi22currency';
-		
-		if(prgmID == "bs01currency"){
+		var hashID = 'pageview_bw23holiday';
+        
+		if(prgmID == "bs23holiday"){
 		//   $scope.directiveScopeDict[hashID].SubmitData();
-			$timeout(function(){
-        		$scope.directiveScopeDict[hashID].SubmitData();
-			  	}, 1000); // (milliseconds),  1s = 1000ms
+			// $timeout(function(){
+        	// 	$scope.directiveScopeDict[hashID].SubmitData();
+            //   	}, 1000); // (milliseconds),  1s = 1000ms
+            $scope.directiveScopeDict[hashID].ClearNRefreshData();
 		}
 	}
 

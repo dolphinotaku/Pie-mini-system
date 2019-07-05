@@ -82,8 +82,8 @@ app.controller('updateBankController', ['$scope', 'MessageService', function ($s
 		var prgmID = scope.programId;
 		var scopeID = scope.$id;
 		var hashID = 'pageview_bw21bank';
-		
-		if(prgmID == "bs01bank"){
+        
+		if(prgmID == "bs21bank"){
 		  $scope.directiveScopeDict[hashID].ClearNRefreshData();
 		}
 	}

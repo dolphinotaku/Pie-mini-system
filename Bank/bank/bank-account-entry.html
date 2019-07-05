@@ -126,32 +126,40 @@
                 <input type="checkbox" ng-model="processCtrl.ngModel.Record.Status" class="form-control" id="Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
             </div> -->
             <!-- <button type="button" class="btn btn-default" ng-click="InquiryData()">Inquiry Account Currency</button> -->
-            <div class="table-responsive">
-                <table class="table table-condensed table-hover">
-                    <thead>
-                    <tr>
-                        <th>Alphabetic Code</th>
-                        <th>Name</th>
-                        <th>Chinese Name</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="currencyRow in processCtrl.ngModel.ProcessRecord"
-                            ng-click="PointedToRecord(currencyRow, $event, this); currencyRow.Status == 'Enabled' ? currencyRow.Status = 'Disabled' : currencyRow.Status = 'Enabled'"
-                            ng-dblclick="SelectedToRecord(currencyRow, $event, this)">
-                            <td>{{currencyRow.AlphabeticCode}}</td>
-                            <td>{{currencyRow.Name}}</td>
-                            <td>{{currencyRow.ChineseName}}</td>
-                            <td>
-                                <input type="checkbox" ng-model="currencyRow.Status" class="form-control" id="Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
-                            </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <button type="button" class="btn btn-success" ng-click="SubmitData()">
-                <span class="fas fa-save" aria-hidden="true"></span> Update Account Currency Only</button>
+            <form>
+                <fieldset>
+                    <div class="table-responsive">
+                        <table class="table table-condensed table-hover">
+                            <thead>
+                            <tr>
+                                <th>Alphabetic Code</th>
+                                <th>Name</th>
+                                <th>Chinese Name</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="currencyRow in processCtrl.ngModel.ProcessRecord"
+                                    ng-click="PointedToRecord(currencyRow, $event, this);"
+                                    ng-dblclick="SelectedToRecord(currencyRow, $event, this)">
+                                    <td>{{currencyRow.AlphabeticCode}}</td>
+                                    <td>{{currencyRow.Name}}</td>
+                                    <td>{{currencyRow.ChineseName}}</td>
+                                    <td>
+                                        <!-- <input type="checkbox" ng-model="currencyRow.Status" class="form-control" id="Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'"> -->
+                                        <label class="switch">
+                                            <input type="checkbox" ng-model="currencyRow.Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-success" ng-click="SubmitData()">
+                        <span class="fas fa-save" aria-hidden="true"></span> Update Account Currency Only</button>
+                </fieldset>
+            </form>
         </process>
 
     </div>
