@@ -167,12 +167,14 @@ app.directive('entry', ['$rootScope',
 
         		if (colDataType == "date"){
                     if(typeof dataValue == "string"){
-                        var dateArray = dataValue.split("-");
-                        var year = dateArray[0]; var month = dateArray[1]; var day = dateArray[2];
-                        year = parseInt(year);
-                        month = parseInt(month);
-                        day = parseInt(day);
-                        newColumn = new Date(year, month, day);
+                        // 20190709, keithpoon, fixed: month conversion added 1 month forward
+                        // var dateArray = dataValue.split("-");
+                        // var year = dateArray[0]; var month = dateArray[1]; var day = dateArray[2];
+                        // year = parseInt(year);
+                        // month = parseInt(month-1);
+                        // day = parseInt(day);
+                        // newColumn = new Date(year, month, day);
+                        newColumn = getDateFromFormat(dataValue, "yyyy-MM-dd");
                     }else{
                         newColumn = dataValue;
                     }
@@ -192,8 +194,7 @@ app.directive('entry', ['$rootScope',
 //    			}
 
                 $ctrl.ngModel[columnName] = newColumn;
-        	}
-
+            }
         }
         function GetTableStructure(){
         	var programId = $scope.programId.toLowerCase();

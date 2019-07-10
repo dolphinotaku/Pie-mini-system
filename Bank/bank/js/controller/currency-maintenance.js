@@ -9,8 +9,8 @@ app.controller('updateCurrencyController', ['$scope', 'MessageService', '$timeou
 	$scope.directiveScopeDict = {};
     $scope.directiveCtrlDict = {};
     
-    $scope.processModel = {};
-    $scope.processModel.Record = {};
+    $scope.inquiryModel = {};
+    $scope.inquiryModel.Record = {};
 
 	$scope.EventListener = function(scope, iElement, iAttrs, controller){
 		var tagName = iElement[0].tagName.toLowerCase();

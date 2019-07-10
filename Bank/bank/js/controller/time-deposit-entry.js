@@ -12,12 +12,15 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 
 	$scope.directiveScopeDict = {};
     $scope.directiveCtrlDict = {};
+    
+    $scope.inquiryModel = {};
+    $scope.inquiryModel.Record = {};
 
 	$scope.SwitchToCreate = function(){
 		$scope.entryFormMode = "create"
 		$scope.entryFormTitle = "Create Time Deposit";
 
-		var hashID = "entry_be31timedeposit";
+        var hashID = "entry_be31timedeposit";
 		$scope.directiveScopeDict[hashID].ResetForm();
 		$scope.ShowEntryForm();
 	}
@@ -26,13 +29,95 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
         $scope.entryFormTitle = "Amend Time Deposit";
         
 		$scope.ShowEntryForm();
-	}
+    }
+    $scope.SelectedOnDataTable = function(timeDepositTranID){
+        $scope.SwitchToAmend();
+        var entryHashID = "entry_be31timedeposit";
+
+        $scope.entryCreateForm.TimeDepositTranID = timeDepositTranID;
+        $scope.directiveScopeDict[entryHashID].FindData();
+
+        var hashID = "editbox_bw21bank";
+        $scope.directiveCtrlDict[hashID].ngModel.BankCode = $scope.directiveCtrlDict[entryHashID].ngModel.BankCode;
+        $scope.directiveScopeDict[hashID].FindData();
+    }
 	$scope.HideEntryForm = function(){
 		$scope.showEntryForm = false;
 	}
 	$scope.ShowEntryForm = function(){
 		$scope.showEntryForm = true;
 	}
+    
+    $scope.datatable;
+    $scope.InitializeDataTable = function(){
+        $scope.datatable = $( "#timedeposit_datatable" ).DataTable({
+            // https://datatables.net/reference/option/pageLength
+            "pageLength": 100,
+            "select": "single",
+            "responsive": true,
+            // https://datatables.net/examples/advanced_init/length_menu.html
+            "lengthMenu": [[-1,10,20,50,100], ["All", 10, 20, 50, 100]],
+            "columns": [
+                { "data": "TimeDepositTranID" },
+                { "data": "MaturityInstruction" },
+                { "data": "EffectiveDate" },
+                { "data": "BankCode" },
+                { "data": "DepositPeriodAmt" },
+                { "data": "DepositPeriodUnit" },
+                { "data": "DepositRate" },
+                { "data": "MaturityDate" },
+                { "data": "AdjustedMaturityDate" },
+                { "data": "PrincipalCurrency" },
+                { "data": "Principal" },
+                { "data": "Interest" },
+                { "data": "AdjustedInterest" },
+                { "data": "TotalCredit" },
+                { "data": "AdjustedCredit" },
+                { "data": "ActualCredit" },
+                { "data": "Remarks" }
+            ],
+            "columnDefs": [
+                // https://datatables.net/manual/styling/classes#Cell-classes
+                {
+                    // The `data` parameter refers to the data for the cell (defined by the
+                    // `data` option, which defaults to the column being worked with, in
+                    // this case `data: 0`.
+                    "targets": [0],
+                    className: 'dt-body-right'
+                },
+                {
+                    // The `data` parameter refers to the data for the cell (defined by the
+                    // `data` option, which defaults to the column being worked with, in
+                    // this case `data: 0`.
+                    "targets": [3,10,12,14],
+                    "render": function ( data, type, row ) {
+                        return "$"+data ;
+                    },
+                    className: 'dt-body-right'
+                },
+                {
+                    "targets": [ 1,3,4,5,6,11,13,15,16 ],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            // http://legacy.datatables.net/usage/i18n#oLanguage.sSearch
+            "oLanguage": {
+              "sSearch": "Filter records:"
+            }
+        });
+
+        
+        $scope.datatable.on('select', function ( e, dt, type, indexes ) {
+            if ( type === 'row' ) {
+                // var data = $scope.datatable.rows( indexes ).data().pluck( 'id' );
+                var row = $scope.datatable.rows( indexes ).data()[0];
+                var timeDepositTranID = parseInt(row.TimeDepositTranID)
+
+                $scope.SelectedOnDataTable(timeDepositTranID);
+            }
+        });
+    }
 
 	$scope.EventListener = function(scope, iElement, iAttrs, controller){
 //		console.log("<"+iElement[0].tagName+">" +" Directive overried EventListener()");
@@ -55,7 +140,9 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 		// click, dblclick, mousedown, mouseup, mousemove, mouseover, mouseout, mouseenter, mouseleave,
 		// change, select, submit, keydown, keypress, and keyup.
 		iElement.ready(function() {
-
+            if(!$.fn.DataTable.isDataTable( '#timedeposit_datatable' )){
+                $scope.InitializeDataTable();
+            }
 		})
 	}
 
@@ -63,16 +150,24 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
         var tagName = iElement[0].tagName.toLowerCase();
 		var prgmID = scope.programId.toLowerCase();
         var scopeID = scope.$id;
-		var hashID = tagName + '_' + prgmID;
-		
-        var newRecord = controller.ngModel;
-		newRecord.EffectiveDate = new Date();
-		newRecord.PrincipalCurrency = "HKD";
-		newRecord.DepositPeriodUnit = "Y";
-		newRecord.MaturityInstruction = "NO_RENEWAL";
+        var hashID = tagName + '_' + prgmID;
+        
+        if(prgmID == "be31timedeposit"){
+            var newRecord = controller.ngModel;
+            newRecord.EffectiveDate = new Date();
+            newRecord.PrincipalCurrency = "HKD";
+            newRecord.DepositPeriodUnit = "Y";
+            newRecord.MaturityInstruction = "NO_RENEWAL";
 
-		$scope.SwitchToCreate();
-		$scope.HideEntryForm();
+            $scope.SwitchToCreate();
+            $scope.HideEntryForm();
+        }
+
+        if(prgmID=="bi46timedeposit"){
+            var newRecord = controller.ngModel.InquiryCriteria;
+            newRecord.PrincipalCurrency = "All";
+            newRecord.Status = "All";
+        }
 	}
 
 	$scope.StatusChange = function(fieldName, newValue, newObj, scope, iElement, iAttrs, controller){
@@ -129,56 +224,73 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
     }
 
 	$scope.ValidateBuffer = function(scope, iElement, iAttrs, controller){
-//		console.log("<"+iElement[0].tagName+">" +" Directive overried ValidateBuffer()");
-		var isValid = true;
+        var tagName = iElement[0].tagName.toLowerCase();
+		var prgmID = scope.programId.toLowerCase();
+        var scopeID = scope.$id;
+        var hashID = tagName + '_' + prgmID;
+
 		var record = controller.ngModel;
-		var errorMsgList = [];
 
-		if(record.MaturityInstruction == ""){
-            errorMsgList.push("Maturity Instruction is required.");
-            isValid = false;
-		}
-
-		if(!Core.IsDateInvalid(record.EffectiveDate)){
-            errorMsgList.push("Effective Date is required or the format incorrect, the year must greater than 1970.");
-            isValid = false;
-        }
-
-		if(record.BankCode == ""){
-            errorMsgList.push("Bank record is required.");
-            isValid = false;
-		}
-
-		if(!record.DepositPeriodAmt || record.DepositPeriodAmt <=0){
-            errorMsgList.push("Period Amount is required and greater than zero.");
-            isValid = false;
-		}
-
-		if(record.DepositPeriodUnit == ""){
-            errorMsgList.push("Period Unit is required.");
-            isValid = false;
-		}
-
-		if(!Core.IsDateInvalid(record.MaturityDate)){
-            errorMsgList.push("Maturity date is required or the format incorrect.");
-            isValid = false;
-		}else{
-
-        }
-
-		if(record.PrincipalCurrency == ""){
-            errorMsgList.push("Principal Currency is required.");
-            isValid = false;
-        }
+		var isValid = true;
+        var errorMsgList = [];
         
-        // 20190703, ketihpoon, fixed: allowed to create record with empty Principal after delete/backspace the value
-		if(!record.Principal || record.Principal <=0 ){
-            errorMsgList.push("Principal is required and greater than zero.");
-            isValid = false;
+        if(prgmID == "be31timedeposit"){
+
+            if(record.MaturityInstruction == ""){
+                errorMsgList.push("Maturity Instruction is required.");
+                isValid = false;
+            }
+
+            if(!Core.IsDateInvalid(record.EffectiveDate)){
+                errorMsgList.push("Effective Date is required or the format incorrect, the year must greater than 1970.");
+                isValid = false;
+            }
+
+            if(record.BankCode == ""){
+                errorMsgList.push("Bank record is required.");
+                isValid = false;
+            }
+
+            if(!record.DepositPeriodAmt || record.DepositPeriodAmt <=0){
+                errorMsgList.push("Period Amount is required and greater than zero.");
+                isValid = false;
+            }
+
+            if(record.DepositPeriodUnit == ""){
+                errorMsgList.push("Period Unit is required.");
+                isValid = false;
+            }
+
+            if(!Core.IsDateInvalid(record.MaturityDate)){
+                errorMsgList.push("Maturity date is required or the format incorrect.");
+                isValid = false;
+            }else{
+
+            }
+
+            if(record.PrincipalCurrency == ""){
+                errorMsgList.push("Principal Currency is required.");
+                isValid = false;
+            }
+            
+            // 20190703, ketihpoon, fixed: allowed to create record with empty Principal after delete/backspace the value
+            if(!record.Principal || record.Principal <=0 ){
+                errorMsgList.push("Principal is required and greater than zero.");
+                isValid = false;
+            }
+            
+            if(!isValid){
+                MessageService.setPostponeMsg(errorMsgList);
+            }
+
         }
-		
-        if(!isValid){
-            MessageService.setPostponeMsg(errorMsgList);
+
+        if(prgmID == "bi46timedeposit"){
+            var record = controller.ngModel.InquiryCriteria;
+            if(record.PrincipalCurrency == ""){
+                errorMsgList.push("Please specify a currency or select 'All' currency.");
+                isValid = false;
+            }
         }
         // isValid = false;
 
@@ -195,10 +307,16 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 			if(prgmID == "bw21bank")
             	CustomSelectedToRecordUnderEditbox(sRecord, rowScope, scope, iElement, controller);
 		}else{
-            hashID = "editbox_bw21bank";
-            $scope.SwitchToAmend(sRecord);
+            $scope.SwitchToAmend();
+            
+            // 20190708, keithpoon, update: CustomSelectedToRecord due to pageview changed to inquriy directive
+            // $scope.entryCreateForm = sRecord;
+            var entryHashID = "entry_be31timedeposit";
+            $scope.entryCreateForm.TimeDepositTranID = parseInt(sRecord.TimeDepositTranID);
+            $scope.directiveScopeDict[entryHashID].FindData();
 
-            $scope.entryCreateForm = sRecord;
+
+            hashID = "editbox_bw21bank";
             $scope.directiveCtrlDict[hashID].ngModel.BankCode = sRecord.BankCode;
             $scope.directiveScopeDict[hashID].FindData();
 		}
@@ -218,7 +336,29 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 		if(prgmID == "be31timedeposit"){
 			$scope.directiveScopeDict[effectiveHashID].ClearNRefreshData();
 			$scope.directiveScopeDict[historyHashID].ClearNRefreshData();
-		}
+		}else if(prgmID == "bi46timedeposit"){
+            var data = data_or_JqXHR.data;
+
+            $scope.datatable.clear();
+            // add row by row
+            for (var key in data) {
+                var rowObj = data[key];
+                var rowArray = Object.values(rowObj);
+            }
+            
+            $scope.datatable.rows.add(data).draw();
+            // $('#example').DataTable( {
+            //     "ajax": "data/objects.txt",
+            //     "columns": [
+            //         { "data": "name" },
+            //         { "data": "position" },
+            //         { "data": "office" },
+            //         { "data": "extn" },
+            //         { "data": "start_date" },
+            //         { "data": "salary" }
+            //     ]
+            // } );
+        }
 	}
 
     function CustomSelectedToRecordUnderEditbox(sRecord, rowScope, scope, iElement, controller){
@@ -235,7 +375,8 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 	function CalculateMaturityDateDaysDifference(screenRecord){
 		var periodAmt = screenRecord.DepositPeriodAmt;
 		var periodUnit = screenRecord.DepositPeriodUnit;
-		var periodUnitDivisionAmt = 0;
+        var periodUnitDivisionAmt = 0;
+        
 		var effectiveDate = new Date(screenRecord.EffectiveDate.getTime());
         var maturityDate = new Date(screenRecord.EffectiveDate.getTime());
         // 20190630, fixed: esimated Maturity Date increase two time, because javascript datetime object is pass by reference
@@ -282,8 +423,6 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
         // maturityDate.setDate(checkMaturityDate.getDate()+satSunSteps);
         maturityDate = new Date(checkMaturityDate);
         maturityDate.setDate(checkMaturityDate.getDate()+satSunSteps);
-
-        
 
         console.dir(periodUnitDivisionAmt)
         console.dir(checkMaturityDate)

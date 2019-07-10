@@ -12,7 +12,6 @@ function InquiryData($requestData){
 
 function FindData($requestData){
 	$currencyManager = new CurrencyManager();
-	$currencyManager = new CurrencyManager();
 	
 	$searchRows = new stdClass();
 	$searchRows = $requestData->InquiryRecord;
