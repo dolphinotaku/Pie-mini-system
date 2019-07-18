@@ -473,6 +473,13 @@ app.controller('homeController', ['$scope', function ($scope, $rootScope) {
                 // var todayInterestValue = pastDays / td_WholePeriodInDays * interest * rate;
 
                 var principalValue = principal * rate;
+                // 20190718, keithpoon, if the exchange rate data incomplete, the Rate will undefined
+                // NaN will be assigned to timedeposit in below, that will break the chart drawing
+                if(typeof(rate) == "undefined"){
+                    console.warn("Exchange rate not exists for this record");
+                    console.dir(element);
+                    rate = 1;
+                }
                 var interestValue = interest * rate;
 
                 // if the deposit withdraw in the same yyyymm, is not a asset, then skip
@@ -489,8 +496,6 @@ app.controller('homeController', ['$scope', function ($scope, $rootScope) {
                         ){
                         var belongsToMonthStr = monthPointer.getFullYear()+("0" + (monthPointer.getMonth() + 1)).slice(-2);
 
-                        // console.dir(monthPointer)
-                        // console.dir(belongsToMonthStr)
                         if(last12MonthsInYYYYMM.hasOwnProperty(belongsToMonthStr)){
                             last12MonthsInYYYYMM[belongsToMonthStr].timedeposit += principalValue;
                             // last12MonthsInYYYYMM[belongsToMonthStr].income += interestValue;

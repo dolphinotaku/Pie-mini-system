@@ -74,13 +74,39 @@ class TimeDepositTranManager extends DatabaseManager {
                 $forex_sql_str .= "WHERE e.EffectiveDate >= '".$t_EffectiveDate."' " ;
                 $forex_sql_str .= "AND e.OutCurrencyID = '".$t_PrincipalCurrency."' ";
                 $forex_sql_str .= "AND e.IsEffective = 'Enabled' ";
-                $forex_sql_str .= "ORDER BY e.EffectiveDate ASC ";
+                $forex_sql_str .= "ORDER BY e.EffectiveDate DESC ";
                 $forex_sql_str .= "LIMIT 1 ";
                 $forexArray = $this->runSQL($forex_sql_str);
                 if($forexArray["num_rows"]>0){
                     $foreignCurrencyArray["data"][$rowIndex] = array_merge($foreignCurrencyArray["data"][$rowIndex],$forexArray["data"][0]);
+                }else{
+                    // 20190718
+                    // if no exchange rate record effective date is greater or equal to the td effective date
+                    // find the most recent past record
+                    $forex_sql_str = "select e.Rate, e.EffectiveDate as `ExchangeRate_EffectiveDate`, (($t_Interest + $t_Principal) * e.Rate) as `LocalValue` ";
+                    $forex_sql_str .= "FROM `exchangerate` e ";
+                    $forex_sql_str .= "WHERE e.EffectiveDate < '".$t_EffectiveDate."' " ;
+                    $forex_sql_str .= "AND e.OutCurrencyID = '".$t_PrincipalCurrency."' ";
+                    //$forex_sql_str .= "AND e.IsEffective = 'Enabled' ";
+                    $forex_sql_str .= "ORDER BY e.EffectiveDate DESC ";
+                    $forex_sql_str .= "LIMIT 1 ";
+                    $forexArray = $this->runSQL($forex_sql_str);
+                    if($forexArray["num_rows"]>0){
+                        $foreignCurrencyArray["data"][$rowIndex] = array_merge($foreignCurrencyArray["data"][$rowIndex],$forexArray["data"][0]);
+                    }else{
+                        // if no exchange rate record effective date is early than the time deposit effective date
+                        // use the system default exchange rate 
+                    }
                 }
             }
+            // e.g
+            /*
+            select e.Rate, 
+            e.EffectiveDate as `ExchangeRate_EffectiveDate`, ((305.01 + 11000.96) * e.Rate) as `LocalValue` 
+            FROM `exchangerate` e 
+            WHERE e.EffectiveDate >= '2019-07-04' AND e.OutCurrencyID = 'CNY' AND e.IsEffective = 'Enabled' 
+            ORDER BY e.EffectiveDate DESC LIMIT 1 
+            */
         }
         
         // e.g
