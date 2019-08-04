@@ -1,6 +1,5 @@
 <?php
 // require_once 'DatabaseManager.php';
-require_once 'Core.php';
 require_once '../third-party/PHPExcel_1.8.1/PHPExcel.php';
 
 class ExcelManager {
@@ -19,7 +18,9 @@ class ExcelManager {
     
     public $isTemplate;
 	public $outputAsFileType;
-	public $filename;
+    public $filename;
+    
+    protected $fileTitle;
 	protected $filenamePost;
 	protected $table = "";
 	protected $tableList = array();
@@ -42,13 +43,18 @@ class ExcelManager {
 		ini_set('display_startup_errors', TRUE);
 		$this->tableList = array();
     }
-	function Initialize(){
+	function Initialize($_fileTitle=""){
 //		if(Core::IsNullOrEmptyString($this->table)){
 //			$response = Core::CreateResponseArray();
 //			$response['access_status'] = $this->access_status['Error'];
 //			$response['error'] = $this->sys_err_msg['TableNameNotFound'];
 //			return $response;
 //		}
+        if($_fileTitle){
+            $this->fileTitle = $_fileTitle;
+        }else{
+            $this->fileTitle = "";
+        }
 
 		//parent::setDataSchemaForSet();
 		//parent::setArrayIndex();
@@ -583,13 +589,18 @@ class ExcelManager {
 		// Set the active Excel worksheet to sheet 0
 		//$objPHPExcel->setActiveSheetIndex(0);
 
-		$objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-		->setLastModifiedBy("Maarten Balliauw")
-		->setTitle("Office 2007 XLSX Test Document")
-		->setSubject("Office 2007 XLSX Test Document")
-		->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-		->setKeywords("office 2007 openxml php")
-		->setCategory("Test result file");
+		// $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+		// ->setLastModifiedBy("Maarten Balliauw")
+		// ->setTitle("Office 2007 XLSX Test Document")
+		// ->setSubject("Office 2007 XLSX Test Document")
+		// ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+		// ->setKeywords("office 2007 openxml php")
+		// ->setCategory("Test result file");
+
+		$objPHPExcel->getProperties()->setCreator("PIMS")
+		->setTitle($this->fileTitle)
+		->setCategory("Utility Import/Export Template")
+		->setDescription("This document involved ".count($this->tableList)." table(s).");
 		
 		$objPHPExcel->removeSheetByIndex(0);
 

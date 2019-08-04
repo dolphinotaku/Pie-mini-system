@@ -1,7 +1,7 @@
 // JavaScript Document
 // both are not include '/' at the end
-var serverHost = "http://192.168.0.190/Develop";
-var webRoot = "http://192.168.0.190/Develop";
+var serverHost = "http://192.168.0.190/PIMS_DEV";
+var webRoot = "http://192.168.0.190/PIMS_DEV";
 
 var requireLoginPage = "login.html";
 var afterLoginPage = "main-menu.html";

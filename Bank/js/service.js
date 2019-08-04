@@ -1637,6 +1637,7 @@ app.service('DataAdapterMySQL', function($rootScope, Security, Core){
 				KeyColumns: data_or_JqXHR.ActionResult.KeyColumns
 			},
 			data: data_or_JqXHR.ActionResult.data,
+			InquiryResult: data_or_JqXHR.ActionResult.InquiryResult,
 			TotalRecordCount: (data_or_JqXHR.TotalRecordCount) ? data_or_JqXHR.TotalRecordCount : -1,
 			message: data_or_JqXHR.ActionResult.processed_message,
 			status: data_or_JqXHR.Status,

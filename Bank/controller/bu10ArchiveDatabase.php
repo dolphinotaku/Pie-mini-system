@@ -1,10 +1,10 @@
 <?php
 
-require_once('dumper.php');
+include (__DIR__ . '/../third-party/shuttle-export-namespaced/vendor/autoload.php');
+use ShuttleExport\Exporter;
+use ShuttleExport\Exception as ShuttleException;
 
-// https://github.com/2createStudio/shuttle-export
-// https://hotexamples.com/examples/-/Shuttle_Dumper/-/php-shuttle_dumper-class-examples.html
-// https://stackoverflow.com/questions/22195493/export-mysql-database-using-php-only
+// https://github.com/2createStudio/shuttle-export/tree/namespaced
 
 function ExportData($httpRequest){
 	$responseArray = Core::CreateResponseArray();
@@ -12,12 +12,29 @@ function ExportData($httpRequest){
     $sql_filename = "PIMS.database.".date("Ymd").".".uniqid().".sql";
     $sql_filenameForDownload = "PIMS.database.".date("Ymd").".sql";
     $sql_fullpath = "../temp/export/$sql_filename";
+    //$sql_fullpath = __DIR__ . '/../temp/export/' . date('Y_m_d_H_i_s') . '.sql.gz';
     
+	Exporter::export(array(
+		'db_host'        => _DB_HOST,
+		'db_user'        => _DB_USER,
+		'db_password'    => _DB_PASS,
+		'db_name'        => _DB_NAME,
+		'db_port'        => 3306,
+		//'prefix'         => 'wp_',
+		//'only_tables'    => ['bank', 'holiday'],
+		'exclude_tables' => ["area", "card", "cardcontent", "cardspellclass", "cardtype", "catalog", "demo_tree", "demo_closuretable", "demo_naivetrees", "department", "permission", "member"],
+		'charset'        => 'utf8mb4',
+		//'export_file'    => __DIR__ . '/../temp/export/' . date('Y_m_d_H_i_s') . '.sql.gz',
+        'export_file'    => $sql_fullpath,
+	));
+    
+    /*
 	$world_dumper = Shuttle_Dumper::create(array(
 		'host' => _DB_HOST,
 		'username' => _DB_USER,
 		'password' => _DB_PASS,
 		'db_name' => _DB_NAME,
+        'charset' => 'utf8',
         'exclude_tables' => array(
     "area",
     "card",
@@ -29,9 +46,10 @@ function ExportData($httpRequest){
     "department"
     )
 	));
+    */
     
     //print_r($world_dumper->dump('PIMS.database.sql'));
-    $world_dumper->dump($sql_fullpath);
+    //$world_dumper->dump($sql_fullpath);
     
     // use excelmanager to performs base64 encode
     $exportManager = new ExcelManager();

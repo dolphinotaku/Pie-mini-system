@@ -11,8 +11,8 @@ date_default_timezone_set('Asia/Hong_Kong');
  * DB_PASS: the password of the above user
  */
 define("_DB_HOST", "192.168.0.190", true);
-define("_DB_NAME", "nijyuuamineex_pims", true);
-define("_DB_USER", "pims_admin", true);
+define("_DB_NAME", "nijyuuamineex_pims_dev", true);
+define("_DB_USER", "pims_dev_admin", true);
 define("_DB_PASS", "Admin_pims_23", true);
 
 /**
@@ -23,7 +23,7 @@ define("_DB_PASS", "Admin_pims_23", true);
  * RESOURSE_PATH: the directory of mail merge word template
  * TEMP_PATH: the directory of temporary to store some files, such as a excel prepare for download
  */
-define("DOMIAN_NAME", "192.168.0.190/Bank/");
+define("DOMIAN_NAME", "192.168.0.190/PIMS_DEV/");
 
 
 /**

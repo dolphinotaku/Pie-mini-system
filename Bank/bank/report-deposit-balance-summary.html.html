@@ -1,0 +1,102 @@
+<div id="page-wrapper" ng-controller="reportDepositBalanceSummaryController">
+    <div class="container-fluid">
+        <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Report - Deposit Balance Summary</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <message ng-model="processMsg" auto-close></message>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                How to use:<br>
+                - For inquire effective deposit as at a specific date<br>
+                - For Amend record, select a record on list, update or delete record
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        
+        <hr>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#search" aria-controls="search" role="tab" data-toggle="tab"><i class="fas fa-search fa-fw fa-lg"></i> Search</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="list">
+                <pageview ng-model="inquiryCurrencyModel" program-id="bw22currency" style="display: none;">
+                </pageview>
+                <inquiry ng-model="inquiryModel" program-id="br01depositbalancesummary" id="inquiryPanel">
+                    <form class="form-horizontal" ng-submit="SubmitData()">
+                        <fieldset>
+                            <legend>Effective Deposit Inquiry</legend>
+                            <div class="form-group">
+                                <label for="inquiryEffectiveAsAt" class="col-sm-2 control-label">As At</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveAsAt" id="inquiryEffectiveAsAt">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryEffetiveCurrency" class="col-sm-2 control-label">Effetive Currency Code</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryEffetiveCurrency" id="inquiryEffetiveCurrency" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffetiveCurrency" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.EffetiveCurrency | lowercase}}"></span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryForexAsAt" class="col-sm-2 control-label">Exchange rate base on</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.ForexAsAt" id="inquiryForexAsAt">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryEquivalentCurrency" class="col-sm-2 control-label">Equivalent Currency Code</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryEquivalentCurrency" id="inquiryEquivalentCurrency" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency | lowercase}}"></span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Output Format</label>
+                                <div class="col-sm-10">
+                                        <label ng-repeat="outputOption in reportCtrl.ExportFileTypeAs.availableOptions" class="radio-inline">
+                                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.ExportFileTypeAs" ng-value="outputOption.value">
+                                        {{outputOption.name}}
+                                        </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="button" class="btn btn-default" ng-click="SubmitData()">Submit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <hr>
+                    <div>
+                    <!-- <screen></screen> -->
+                    </div>
+                </inquiry>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+</div>

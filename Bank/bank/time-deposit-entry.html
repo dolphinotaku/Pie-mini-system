@@ -176,7 +176,7 @@
                 <fieldset>
                     <legend>{{entryFormTitle}}</legend>
                     <div class="form-group">
-                        <label for="inputMaturityInstruction" class="col-sm-2 control-label">Maturity Instruction 到期指示</label>
+                        <label for="inputMaturityInstruction" class="col-sm-2 control-label">Maturity Instruction</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="inputMaturityInstruction" id="inputMaturityInstruction" ng-model="entryCtrl.ngModel.MaturityInstruction" required>
                                 <option value="">---Please select instruction---</option>
@@ -189,7 +189,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputEffectiveDate" class="col-sm-2 control-label">Effective Date 生效日期</label>
+                        <label for="inputEffectiveDate" class="col-sm-2 control-label">Effective Date</label>
                         <div class="col-sm-10">
                             <input type="date" class="form-control" id="inputEffectiveDate" ng-model="entryCtrl.ngModel.EffectiveDate" required>
                         </div>
@@ -209,6 +209,21 @@
                                 </div>
                                 <input type="text" class="form-control" ng-model="editboxCtrl.ngModel.BankChineseName" readonly>
                             </editbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPurpose" class="col-sm-2 control-label">Purpose</label>                                    
+                        <div class="col-sm-10">
+                            <div class="radio">
+                                <label for="inputPurposeInvestment">
+                                <input type="radio" ng-model="entryCtrl.ngModel.Purpose" ng-value="'Investment'" class="" id="inputPurposeInvestment">
+                                Investment</label>
+                            </div>
+                            <div class="radio">
+                                <label for="inputPurposeSpending">
+                                <input type="radio" ng-model="entryCtrl.ngModel.Purpose" ng-value="'Daily Spending'" class="" id="inputPurposeSpending">
+                                Daily Spending</label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -246,7 +261,7 @@
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <input type="date" class="form-control" id="inputAdjustedMaturityDate" ng-model="entryCtrl.ngModel.AdjustedMaturityDate" required>
-                                <span class="input-group-addon">Term {{customData.daysDiff}} days</span>
+                                <span class="input-group-addon">Term {{entryCtrl.ngModel.NoOfDays}} days</span>
                             </div>
                         </div>
                     </div>

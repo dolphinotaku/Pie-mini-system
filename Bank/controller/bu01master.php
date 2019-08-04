@@ -3,7 +3,7 @@ function ExportData($httpRequest){
 	$responseArray = array();
 
 	$exportManager = new ExcelManager();
-	$exportManager->Initialize();
+	$exportManager->Initialize("Import/Export Master Template");
 
 	$requestData = new stdClass();
 	$requestData = $httpRequest; //->Data->Header;

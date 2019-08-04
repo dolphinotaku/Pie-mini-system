@@ -158,6 +158,7 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
             newRecord.PrincipalCurrency = "HKD";
             newRecord.DepositPeriodUnit = "Y";
             newRecord.MaturityInstruction = "NO_RENEWAL";
+            newRecord.Purpose = "Investment";
 
             $scope.SwitchToCreate();
             $scope.HideEntryForm();
@@ -202,6 +203,7 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 
 		switch (fieldName) {
 			case "Principal":
+            case "EffectiveDate":
 			case "DepositPeriodAmt":
 			case "DepositPeriodUnit":
 			case "DepositRate":
@@ -209,6 +211,18 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 					DisplayInterest(newObj, interest);
 				break;
             default:
+                break;
+        }
+
+        switch(fieldName){
+            case "AdjustedMaturityDate":
+                    var daysDuringPeriod = CalculateAdjustedMaturityDateDaysDifference(newObj);
+                    $scope.customData.daysDiff = daysDuringPeriod;
+                    newObj.NoOfDays = daysDuringPeriod;
+                    if(daysDuringPeriod>0){
+                        var interest = CalculateInterest(newObj);
+                        DisplayInterest(newObj, interest);
+                    }
                 break;
         }
         
@@ -272,15 +286,27 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
                 errorMsgList.push("Principal Currency is required.");
                 isValid = false;
             }
+
+            if(Core.IsDateInvalid(record.EffectiveDate) && Core.IsDateInvalid(record.AdjustedMaturityDate)){
+                if(record.EffectiveDate >= record.AdjustedMaturityDate ){
+                    errorMsgList.push("Adjusted Maturity Date must greater than Effective Date.");
+                    isValid = false;
+                }
+            }
             
             // 20190703, ketihpoon, fixed: allowed to create record with empty Principal after delete/backspace the value
             if(!record.Principal || record.Principal <=0 ){
                 errorMsgList.push("Principal is required and greater than zero.");
                 isValid = false;
             }
-            
-            if(!isValid){
-                MessageService.setPostponeMsg(errorMsgList);
+            // 20190720, keithpoon, fixed: allowed to create record with negative amount of Rate, Adjusted Interest
+            if(!record.DepositRate || record.DepositRate <=0 ){
+                errorMsgList.push("Rate is required and greater than zero.");
+                isValid = false;
+            }
+            if(!record.AdjustedInterest || record.AdjustedInterest <=0 ){
+                errorMsgList.push("Adjusted Interest is required and greater than zero.");
+                isValid = false;
             }
 
         }
@@ -293,6 +319,10 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
             }
         }
         // isValid = false;
+            
+        if(!isValid){
+            MessageService.setPostponeMsg(errorMsgList);
+        }
 
         return isValid;
 	}
@@ -334,8 +364,8 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 		var historyHashID = 'pageview_bw42timedeposithistory';
 		
 		if(prgmID == "be31timedeposit"){
-			$scope.directiveScopeDict[effectiveHashID].ClearNRefreshData();
-			$scope.directiveScopeDict[historyHashID].ClearNRefreshData();
+			// $scope.directiveScopeDict[effectiveHashID].ClearNRefreshData();
+			// $scope.directiveScopeDict[historyHashID].ClearNRefreshData();
 		}else if(prgmID == "bi46timedeposit"){
             var data = data_or_JqXHR.data;
 
@@ -424,10 +454,9 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
         maturityDate = new Date(checkMaturityDate);
         maturityDate.setDate(checkMaturityDate.getDate()+satSunSteps);
 
-        console.dir(periodUnitDivisionAmt)
-        console.dir(checkMaturityDate)
-        console.dir(maturityDate)
-
+        // console.dir(periodUnitDivisionAmt)
+        // console.dir(checkMaturityDate)
+        // console.dir(maturityDate)
 
         // if the date is holiday, extend to next working day
         //        ...
@@ -436,9 +465,17 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
         // var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         // var diffDays = dateDiffInDays(effectiveDate, maturityDate);
         var diffDays = dateDiffInDays(effectiveDate, maturityDate);
+        
 		return diffDays;
     }
-    
+
+    function CalculateAdjustedMaturityDateDaysDifference(screenRecord){
+        var effectiveDate = new Date(screenRecord.EffectiveDate.getTime());
+        var adjustedMaturityDate = new Date(screenRecord.AdjustedMaturityDate.getTime());
+        var daysDuringPeriod = dateDiffInDays(effectiveDate, adjustedMaturityDate);
+        return daysDuringPeriod;
+    }
+
     // https://stackoverflow.com/questions/3224834/get-difference-between-2-dates-in-javascript
     function dateDiffInDays(a, b) {
         // Discard the time and time-zone information.
@@ -453,10 +490,11 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 		var effectiveDate = new Date(screenRecord.EffectiveDate.getTime());
 		var maturityDate = screenRecord.MaturityDate;
 		effectiveDate.setDate(effectiveDate.getDate()+days);
-		screenRecord.MaturityDate = effectiveDate;
+        screenRecord.MaturityDate = effectiveDate;
 		screenRecord.AdjustedMaturityDate = effectiveDate;
 
-		$scope.customData.daysDiff = days;
+        $scope.customData.daysDiff = days;
+        screenRecord.NoOfDays = days;
 	}
 
 	function DisplayInterest(screenRecord, interest){

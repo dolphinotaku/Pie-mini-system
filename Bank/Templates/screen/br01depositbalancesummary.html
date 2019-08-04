@@ -1,0 +1,28 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+		<tr>
+				<th>Alphabetic Code</th>
+				<th>Status</th>
+				<th>Name</th>
+				<th>Chinese Name</th>
+				<th></th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="currencyRow in inquiryCtrl.ngModel.InquiryResult.Data"
+				ng-click="PointedToRecord(currencyRow, $event, this)"
+				ng-dblclick="SelectedToRecord(currencyRow, $event, this)">
+				<td>{{currencyRow.AlphabeticCode}}</td>
+				<td>{{currencyRow.Status}}</td>
+				<td>{{currencyRow.Name}}</td>
+				<td>{{currencyRow.ChineseName}}</td>
+				<td>
+					<button type="button" class="btn btn-link" aria-label="Edit" ng-click="PointedToRecord(currencyRow, $event, this); SelectedToRecord(currencyRow, $event, this);">
+						<i class="fas fa-angle-right" aria-hidden="true"></i>
+					</button>
+				</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

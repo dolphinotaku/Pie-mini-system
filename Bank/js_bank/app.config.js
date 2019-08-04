@@ -66,7 +66,7 @@ function(config, $httpProvider, $locationProvider, $controllerProvider, $compile
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
     // $httpProvider.defaults.headers.post['Access-Control-Max-Age'] = '1728000';
     // $httpProvider.defaults.headers.common['Access-Control-Max-Age'] = '1728000';
-    $httpProvider.defaults.headers.common['Accept'] = 'application/json, text/javascript';
+    $httpProvider.defaults.headers.common['Accept'] = 'application/json, text/javascript, text/html';
     $httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
 	$httpProvider.defaults.useXDomain = true;
 	
@@ -473,7 +473,54 @@ function(config, $httpProvider, $locationProvider, $controllerProvider, $compile
 				return $ocLazyLoad.load('./js/controller/update-log.js');
 			}]
 		}
-	}
+    }
+    
+	var report_1 = {
+		name: "Home.report-deposit-balance-summary",
+		url: "/report-deposit-balance-summary",
+		views: {
+			"content@": {
+				templateUrl: '../bank/report-deposit-balance-summary.html',
+                controller: 'reportDepositBalanceSummaryController'
+			}
+		},
+		resolve: {
+			loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load('./js/controller/report-deposit-balance-summary.js');
+			}]
+		}
+    }
+	var report_2 = {
+		name: "Home.report-arranged-deposit",
+		url: "/report-arranged-deposit",
+		views: {
+			"content@": {
+				templateUrl: '../bank/report-arranged-deposit.html',
+                controller: 'reportArrangedDepositController'
+			}
+		},
+		resolve: {
+			loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load('./js/controller/report-arranged-deposit.js');
+			}]
+		}
+    }
+	var report_3 = {
+		name: "Home.report-matured-deposit",
+		url: "/report-matured-deposit",
+		views: {
+			"content@": {
+				templateUrl: '../bank/report-matured-deposit.html',
+                controller: 'reportMaturedDepositController'
+			}
+		},
+		resolve: {
+			loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load('./js/controller/report-matured-deposit.js');
+			}]
+		}
+    }
+
 	$stateProvider.state(homeState);
 	// $stateProvider.state(spec_01);
 	// $stateProvider.state(spec_02);
@@ -496,6 +543,9 @@ function(config, $httpProvider, $locationProvider, $controllerProvider, $compile
 	$stateProvider.state(bank_16);
 	$stateProvider.state(bank_20);
 	$stateProvider.state(bank_21);
-	$stateProvider.state(bank_23);
-
+    $stateProvider.state(bank_23);
+    
+    $stateProvider.state(report_1);
+    $stateProvider.state(report_2);
+    $stateProvider.state(report_3);
 }]);
