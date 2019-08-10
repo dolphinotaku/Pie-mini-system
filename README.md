@@ -4,6 +4,9 @@ The lite system to manage your certificate deposit, foreign exchange. Provide ov
 ## Abstract
 I want to earn more money then I go to invest. I was using excel at the very beinging, it was well after I made it becomes a little intelligent, to process calculation in semi-automatic. But a excel cannot satisfy my pet, so I am trying to find a open source to help me. After that I give up when I cannot found a suitable open sources fit for us. In conclusion, we belives that the company/organization would purchase one because they can afford, the demends of similar open source softwares decreased in public. Finally, we try to make one for free, fun and what we are interested.
 
+## Screenshots
+[View PIMS Screenshots](https://1drv.ms/u/s!AuKYJxNRuye9g_kvEXLYqC-3dBbT8g?e=85UPxQ)
+
 ## Technologies
 In brief, this project develop in several computer languages, markup language and involves more than than 10 open source project used.
 - The web site builded in HTML/CSS/JS/PHP,
