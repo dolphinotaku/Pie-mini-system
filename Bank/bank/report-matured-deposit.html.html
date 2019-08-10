@@ -15,8 +15,9 @@
         <div class="row">
             <div class="col-lg-12">
                 How to use:<br>
-                - For Create record, click on the "Create Form" tab, create record and then click the "Create" button<br>
-                - For Amend record, select a record on list, update or delete record
+                - For inquire the matured deposits in a period<br>
+                - Provide the report criteria<br>
+                - Select a report output format
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -31,57 +32,76 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="list">
-                <inquiry ng-model="inquiryModel" program-id="bi22currency" id="inquiryPanel">
-                    <div class="form-group">
-                        <label for="AlphabeticCode">Alphabetic Code</label>
-                        <input type="text" class="form-control" ng-model="inquiryCtrl.ngModel.Record.AlphabeticCode" id="AlphabeticCode">
-                    </div>
-                    <div class="form-group">
-                        <label for="Status">Enable</label>
-                        <input type="checkbox" ng-model="inquiryCtrl.ngModel.Record.Status" class="form-control" id="Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
-                    </div>
-                    <button type="button" class="btn btn-default" ng-click="SubmitData()">Search</button>
-                    <screen></screen>
-                </inquiry>
-                <entry ng-model="entryAmendForm" program-id="bs22currency" edit-mode="amend">
+                <pageview ng-model="inquiryCurrencyModel" program-id="bw22currency" style="display: none;">
+                </pageview>
+                <inquiry ng-model="inquiryModel" program-id="br03matureddeposit" id="inquiryPanel">
                     <form class="form-horizontal" ng-submit="SubmitData()">
                         <fieldset>
-                            <legend>Amend Currency</legend>
+                            <legend>Matured Deposit Inquiry</legend>
                             <div class="form-group">
-                                <label for="inputAlphabeticCode" class="col-sm-2 control-label">Alphabetic Code</label>
+                                <label for="inquiryEffectiveFrom" class="col-sm-2 control-label">Quick Dates</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputAlphabeticCode" ng-model="entryCtrl.ngModel.AlphabeticCode" readonly>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeLast7Days()">Last 7 days</button>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeLast30Days()">Last 30 days</button>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeThisMonth()">This month</button>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeLastMonth()">Last month</button>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputStatus" class="col-sm-2 control-label">Enable</label>
+                                <label for="inquiryEffectiveFrom" class="col-sm-2 control-label">Date Range</label>
                                 <div class="col-sm-10">
-                                    <!-- <input type="text" class="form-control" id="inputStatus" ng-model="entryCtrl.ngModel.Status"> -->
-                                    <input type="checkbox" id="inputStatus" class="form-control" ng-model="entryCtrl.ngModel.Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveFrom" id="inquiryEffectiveFrom">
+                                        <label class="input-group-addon" for="inquiryEffectiveTo">to</label>
+                                        <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveTo" id="inquiryEffectiveTo">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="inquiryEffectiveFrom" class="col-sm-2 control-label">From</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveFrom" id="inquiryEffectiveFrom">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputName" class="col-sm-2 control-label">Name</label>
+                                <label for="inquiryEffectiveTo" class="col-sm-2 control-label">To</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputName" ng-model="entryCtrl.ngModel.Name">
+                                    <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveTo" id="inquiryEffectiveTo">
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="inquiryEffetiveCurrency" class="col-sm-2 control-label">Currency Code</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryEffetiveCurrency" id="inquiryEffetiveCurrency" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffetiveCurrency" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.EffetiveCurrency | lowercase}}"></span></label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputChineseName" class="col-sm-2 control-label">Chinese Name</label>
+                                <label class="col-sm-2 control-label">Output Format</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputChineseName" ng-model="entryCtrl.ngModel.ChineseName">
+                                        <label ng-repeat="outputOption in reportCtrl.ExportFileTypeAs.availableOptions" class="radio-inline">
+                                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.ExportFileTypeAs" ng-value="outputOption.value">
+                                        {{outputOption.name}}
+                                        </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-5">
-                                    <button type="submit" class="btn btn-success" aria-label="Save">
-                                        <span class="fas fa-save" aria-hidden="true"></span> Save
-                                    </button>
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="button" class="btn btn-default" ng-click="SubmitData()">Submit</button>
                                 </div>
                             </div>
                         </fieldset>
                     </form>
-                </entry>
+                    <hr>
+                    <div>
+                    <!-- <screen></screen> -->
+                    </div>
+                </inquiry>
             </div>
         </div>
 

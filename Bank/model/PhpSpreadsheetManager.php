@@ -400,12 +400,21 @@ class PhpSpreadsheetManager {
     }
 
     // shift template row position
-    function PrintGroupInterval($_indicatorArray){
+    function PrintGroupInterval($_indicatorsList){
         $spreadsheet = $this->GetSpreadsheet();
         $worksheet = $this->GetSpreadsheet()->getActiveSheet();
 
         $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
         $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+
+        // 0. Check indicatoryArray
+        $_indicatorArray = array();
+        foreach($_indicatorsList as $indicatorIndex => $_indicator){
+            if(!property_exists($this->columnAMapping->ShiftedTemplateMergePosition, $_indicator)){
+                continue;
+            }
+            array_push($_indicatorArray, $_indicator);
+        }
 
         // 1. find the bottom merged row position
         $bottomMergedRowPosition = 0;

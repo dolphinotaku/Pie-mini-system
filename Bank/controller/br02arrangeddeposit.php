@@ -16,11 +16,14 @@ function InquiryData($requestData){
 }
 
 function FindData($requestData){
-	$effectiveAsAtStr = $requestData->InquiryCriteria->EffectiveAsAt;
-    $effectiveAsAt = date('Y-m-d', strtotime($effectiveAsAtStr));
+    $responseArray = Core::CreateResponseArray();
+
+	$effectiveFromStr = $requestData->InquiryCriteria->EffectiveFrom;
+    $effectiveFrom = date('Y-m-d', strtotime($effectiveFromStr));
+	$effectiveToStr = $requestData->InquiryCriteria->EffectiveTo;
+    $effectiveTo = date('Y-m-d', strtotime($effectiveToStr));
     
-	$effectiveCurrency = $requestData->InquiryCriteria->EffetiveCurrency;
-	$baseCurrency = $requestData->InquiryCriteria->EquivalentCurrency;
+	$effectiveCurrency = $requestData->InquiryCriteria->EffectiveCurrency;
 	$fileFormat = $requestData->InquiryCriteria->ExportFileTypeAs;
     
     // sql select data
@@ -29,57 +32,62 @@ function FindData($requestData){
     
     $sql_str = "SELECT PrincipalCurrency";
     $sql_str .= " FROM `timedeposittran`";
-	$sql_str .= " WHERE EffectiveDate <= '$effectiveAsAt'";
+	$sql_str .= " WHERE EffectiveDate >= '$effectiveFrom'";
+	$sql_str .= " AND EffectiveDate <= '$effectiveTo'";
     if(!empty($effectiveCurrency)){
         $sql_str .= " AND PrincipalCurrency = '$effectiveCurrency' ";
     }
-	$sql_str .= " AND AdjustedMaturityDate >= '$effectiveAsAt'";
 	$sql_str .= " GROUP BY PrincipalCurrency ";
 	$sql_str .= " ORDER BY PrincipalCurrency ASC ";
     $currencyGroupResponseArray = $timeDepositManager->runSQL($sql_str);
     /*
     SELECT PrincipalCurrency 
     FROM `timedeposittran` 
-    WHERE EffectiveDate <= '2019-07-28' 
+    WHERE EffectiveDate >= '2019-07-01'
+    AND EffectiveDate <= '2019-08-31'
     AND AdjustedMaturityDate >= '2019-07-28' 
     GROUP BY PrincipalCurrency 
-    ORDER BY PrincipalCurrency ASC, AdjustedMaturityDate ASC
+    ORDER BY PrincipalCurrency ASC
     */
     if($currencyGroupResponseArray["num_rows"] == 0){
         $responseArray["data"][0] = "";
         $responseArray["data"][1] = "";
         $responseArray["access_status"] = "Error";
-        $responseArray["processed_message"] = array("No deposit matured found as at $effectiveAsAt.");
+        $responseArray["processed_message"] = array("No deposit arranged during the period from $effectiveFrom to $effectiveTo.");
         
         return $responseArray;
     }
     
     $sql_str = "SELECT *";
     $sql_str .= " FROM `timedeposittran`";
-	$sql_str .= " WHERE EffectiveDate <= '$effectiveAsAt'";
-	$sql_str .= " AND AdjustedMaturityDate >= '$effectiveAsAt'";
-	$sql_str .= " ORDER BY PrincipalCurrency ASC, AdjustedMaturityDate ASC ";
+	$sql_str .= " WHERE EffectiveDate >= '$effectiveFrom'";
+	$sql_str .= " AND EffectiveDate <= '$effectiveTo'";
+    if(!empty($effectiveCurrency)){
+        $sql_str .= " AND PrincipalCurrency = '$effectiveCurrency' ";
+    }
+	$sql_str .= " ORDER BY PrincipalCurrency ASC, EffectiveDate ASC ";
     // $sql_str .= " Limit 1 ";
     // e.g
     /*
     SELECT *
      FROM `timedeposittran`
-      WHERE EffectiveDate <= '2019-07-28'
-      AND AdjustedMaturityDate >= '2019-07-28'
-      ORDER BY PrincipalCurrency ASC, AdjustedMaturityDate ASC
+      WHERE EffectiveDate >= '2019-07-01'
+      AND EffectiveDate <= '2019-08-31'
+      ORDER BY PrincipalCurrency ASC, EffectiveDate ASC
     */
 	
     $depositResponseArray = $timeDepositManager->runSQL($sql_str);
     
-    $responseArrayExchangeRate = GetExchangeRate($effectiveAsAt, $baseCurrency);
+    // $responseArrayExchangeRate = GetExchangeRate($effectiveTo, $baseCurrency);
 
     // initialize PhpSpreadsheet
-    $phpSpreadsheetManager = new PhpSpreadsheetManager("br01depositbalancesummary.xlsx");
+    $phpSpreadsheetManager = new PhpSpreadsheetManager("br02arrangeddeposit.xlsx");
     $phpSpreadsheetManager->Initialize();
 
-    $phpSpreadsheetManager->MergeDataRow("H", array("EffectiveAsAt"=>$effectiveAsAt));
+    $phpSpreadsheetManager->MergeDataRow("H", array(
+        "EffectiveFrom"=>$effectiveFrom,
+        "EffectiveTo"=>$effectiveTo));
 
-    // $phpSpreadsheetManager->MergeDataRow("G", array("PrincipalCurrency"=>"AUD"));
     foreach($currencyGroupResponseArray["data"] as $currencyIndex => $currencyRow){
         $currency = $currencyRow["PrincipalCurrency"];
         
@@ -97,12 +105,12 @@ function FindData($requestData){
             "SubTotalInterest"=>0,
             "SubTotalPI"=>0,
         );
-        $equivalentTotal = array(
-            "BaseCurrency"=>$baseCurrency,
-            "EquivalentPrincipal"=>0,
-            "EquivalentInterest"=>0,
-            "EquivalentPI"=>0
-        );
+        // $equivalentTotal = array(
+        //     "BaseCurrency"=>$baseCurrency,
+        //     "EquivalentPrincipal"=>0,
+        //     "EquivalentInterest"=>0,
+        //     "EquivalentPI"=>0
+        // );
 
         // calculate sub total
         foreach($dataRows as $rowIndex => $dataRow){
@@ -113,29 +121,29 @@ function FindData($requestData){
         }
 
         // calculate equivalent value
-        if($currency != $baseCurrency){
-            foreach($dataRows as $rowIndex => $dataRow){
-                foreach($responseArrayExchangeRate as $forexRowIndex => $forexRow){
+        // if($currency != $baseCurrency){
+        //     foreach($dataRows as $rowIndex => $dataRow){
+        //         foreach($responseArrayExchangeRate as $forexRowIndex => $forexRow){
 
-                    if($forexRow["OutCurrencyID"] == $currency && $forexRow["InCurrencyID"] == $baseCurrency){
-                        $rate = $forexRow["Rate"];
+        //             if($forexRow["OutCurrencyID"] == $currency && $forexRow["InCurrencyID"] == $baseCurrency){
+        //                 $rate = $forexRow["Rate"];
 
-                        $equivalentTotal["EquivalentPrincipal"] += ($dataRow["Principal"] * $rate);
-                        $equivalentTotal["EquivalentInterest"] += ($dataRow["Interest"] * $rate);
-                        $equivalentTotal["EquivalentPI"] += (($dataRow["Principal"]+$dataRow["Interest"]) * ($rate));
-                    }
-                }
-            }
-        }
+        //                 $equivalentTotal["EquivalentPrincipal"] += ($dataRow["Principal"] * $rate);
+        //                 $equivalentTotal["EquivalentInterest"] += ($dataRow["Interest"] * $rate);
+        //                 $equivalentTotal["EquivalentPI"] += (($dataRow["Principal"]+$dataRow["Interest"]) * ($rate));
+        //             }
+        //         }
+        //     }
+        // }
 
         $phpSpreadsheetManager->MergeDataRow("G", $currencyRow);
         $phpSpreadsheetManager->MergeDataRows("R", $dataRows);
         $phpSpreadsheetManager->MergeDataRow("S", $subTotal);
 
-        if($currency != $baseCurrency){
-            $phpSpreadsheetManager->MergeDataRow("E", $equivalentTotal);
-        }
-        $phpSpreadsheetManager->PrintGroupInterval(array("G", "R", "S", "E"));
+        // if($currency != $baseCurrency){
+        //     $phpSpreadsheetManager->MergeDataRow("E", $equivalentTotal);
+        // }
+        $phpSpreadsheetManager->PrintGroupInterval(array("G", "R", "S"));
 
         // if($currency == "CNY")
         // break;
@@ -150,7 +158,7 @@ function FindData($requestData){
     $spreadsheet = $phpSpreadsheetManager->GetSpreadsheet();
 
     $spreadsheet->getProperties()
-            ->setTitle("br01depositbalancesummary")
+            ->setTitle("br02arrangeddeposit")
             ->setSubject("Deposit Balance Details Summary")
             ->setDescription(
                 "Describe effective deposit as at date"

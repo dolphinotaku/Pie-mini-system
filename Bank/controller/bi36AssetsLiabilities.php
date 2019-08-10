@@ -32,7 +32,9 @@ function FindData($requestData){
             $responseArray = SelectHistoryData();
             break;
     }
-			
+
+    $responseArray["processed_message"] = array("Assets and Liabilities data refreshed.");
+    
 	return $responseArray;
 }
 function SelectALLData($searchRows){

@@ -5,7 +5,7 @@
 // 	//Security.RequiresAuthorization();
 // 	config.uiTheme = "B";
 // });
-app.controller('updateSALController', ['$scope', function ($scope, $rootScope) {
+app.controller('updateSALController', ['$scope', '$rootScope', 'Core', 'MessageService', function ($scope, $rootScope, Core, MessageService) {
 	$scope.directiveScopeDict = {};
     $scope.directiveCtrlDict = {};
     
@@ -160,10 +160,47 @@ app.controller('updateSALController', ['$scope', function ($scope, $rootScope) {
     }
 
 	$scope.ValidateBuffer = function(scope, iElement, iAttrs, controller){
-//		console.log("<"+iElement[0].tagName+">" +" Directive overried ValidateBuffer()");
-		var isValid = true;
+        var tagName = iElement[0].tagName.toLowerCase();
+		var prgmID = scope.programId.toLowerCase();
+
 		var record = controller.ngModel;
-        var msg = [];
+
+		var isValid = true;
+        var errorMsgList = [];
+        
+        if(prgmID == "be36assetsliabilities"){
+            if(!Core.IsDateInvalid(record.EffectiveDate)){
+                errorMsgList.push("Effective Date is required.");
+                isValid = false;
+            }
+            if(record.Type == ""){
+                errorMsgList.push("Type is required.");
+                isValid = false;
+            }
+            if(record.Item == ""){
+                errorMsgList.push("Item Name is required.");
+                isValid = false;
+            }
+            if(typeof(record.Amount) == "undefined" || record.Amount == null || record.Amount <0){
+                errorMsgList.push("Amount is required and equal or greater than zero.");
+                isValid = false;
+            }
+        }
+
+        if(prgmID == "bp35salsavingentry"){
+            var recordList = controller.ngModel.ProcessRecord;
+            recordList.forEach(function(savingRecord) {
+                if(typeof(savingRecord.AvailableBalance) == "undefined" || savingRecord.AvailableBalance == null || savingRecord.AvailableBalance <0){
+                    errorMsgList.push("Account '"+savingRecord.FullAccountCodeWithDash+"' available balance is required and equal or greater than zero.");
+                    isValid = false;
+                }
+            });
+        }
+        
+        
+        if(!isValid){
+            MessageService.setPostponeMsg(errorMsgList);
+        }
 
         return isValid;
     }
@@ -241,7 +278,6 @@ app.controller('updateSALController', ['$scope', function ($scope, $rootScope) {
 		var scopeID = scope.$id;
         var assetsListHashId = 'inquiry_bi36assetsliabilities';
 		if(prgmID == "be36assetsliabilities"){
-            console.dir($scope.directiveScopeDict)
 			$scope.directiveScopeDict[assetsListHashId].SubmitData();
         }
 		var respondRecords = controller.ngModel.InquiryResult.Data;

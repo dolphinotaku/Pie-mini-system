@@ -11,6 +11,20 @@ app.controller('reportArrangedDepositController', ['$scope', 'MessageService', '
     
     $scope.inquiryModel = {};
     $scope.inquiryModel.Record = {};
+    
+    $scope.baseCurrencyCode = "HKD";
+    
+    $scope.reportCtrl = {};
+
+    $scope.reportCtrl.ExportFileTypeAs = {
+        availableOptions: [
+            {id: '1', value: 'xls', name: 'xls'},
+            {id: '2', value: 'xlsx', name: 'xlsx'},
+            {id: '3', value: 'pdf', name: 'pdf'}
+            // {id: '3', value: 'screen', name: 'on screen'}
+        ],
+        selectedOption: {id: '3', value: 'pdf', name: 'pdf'} //This sets the default value of the select in the ui
+    }
 
 	$scope.EventListener = function(scope, iElement, iAttrs, controller){
 		var tagName = iElement[0].tagName.toLowerCase();
@@ -39,9 +53,46 @@ app.controller('reportArrangedDepositController', ['$scope', 'MessageService', '
 	}
 
 	$scope.SetDefaultValue = function(scope, iElement, iAttrs, controller){
+        var newRecord = controller.ngModel;
+        newRecord.InquiryCriteria.EffectiveFrom = new Date();
+        newRecord.InquiryCriteria.EffectiveTo = new Date();
+        newRecord.InquiryCriteria.EffectiveCurrency = "";
+        newRecord.InquiryCriteria.ExportFileTypeAs = $scope.reportCtrl.ExportFileTypeAs.availableOptions[2].value;
 
-		var newRecord = controller.ngModel;
-	}
+        $scope.SetDateRangeLast30Days();
+    }
+    
+    $scope.SetDateRangeLast7Days = function(){
+        var endDate = new Date();
+        var startDate = new Date();
+        endDate.setDate(endDate.getDate() - 1);
+        startDate.setDate(endDate.getDate() - 6);
+        $scope.SetDateRange(startDate, endDate);
+    }
+    $scope.SetDateRangeLast30Days = function(){
+        var endDate = new Date();
+        var startDate = new Date();
+        endDate.setDate(endDate.getDate() - 1);
+        startDate.setDate(endDate.getDate() - 29);
+        $scope.SetDateRange(startDate, endDate);
+    }
+    $scope.SetDateRangeThisMonth = function(){
+        var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
+        var startDate = new Date(y, m, 1);
+        var endDate = new Date(y, m + 1, 0);
+        $scope.SetDateRange(startDate, endDate);
+    }
+    $scope.SetDateRangeLastMonth = function(){
+        var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
+        var startDate = new Date(y, m-1, 1);
+        var endDate = new Date(y, m, 0);
+        $scope.SetDateRange(startDate, endDate);
+    }
+
+    $scope.SetDateRange = function(adjustedFromDate, adjustedToDate){
+        $scope.inquiryModel.InquiryCriteria.EffectiveFrom = adjustedFromDate;
+        $scope.inquiryModel.InquiryCriteria.EffectiveTo = adjustedToDate;
+    }
 
 	$scope.StatusChange = function(fieldName, newValue, newObj, scope, iElement, iAttrs, controller){
 		switch (fieldName) {
@@ -63,13 +114,7 @@ app.controller('reportArrangedDepositController', ['$scope', 'MessageService', '
             errorMsgList.push("Please search and select a currency record for amend.");
             isValid = false;
         }
-
-        if(record.AlphabeticCode != "")
-            if(record.Name == ""){
-                errorMsgList.push("Name is a mandatory field.");
-                isValid = false;
-            }
-
+        
         if(!isValid){
             MessageService.setPostponeMsg(errorMsgList);
         }
@@ -113,16 +158,27 @@ app.controller('reportArrangedDepositController', ['$scope', 'MessageService', '
 		var tagName = iElement[0].tagName.toLowerCase();
 		var prgmID = scope.programId;
 		var scopeID = scope.$id;
-		var hashID = 'inquiry_bi22currency';
-		
-		if(prgmID == "bs01currency"){
-
-		//   $scope.directiveScopeDict[hashID].SubmitData();
-			$timeout(function(){
-        		$scope.directiveScopeDict[hashID].SubmitData();
-			  	}, 1000); // (milliseconds),  1s = 1000ms
-		}
+        var hashID = 'inquiry_bi22currency';
+        
+        if(data_or_JqXHR["status"] == "success"){
+            saveByteArray(data_or_JqXHR["data"][0], data_or_JqXHR["data"][1]);
+        }
 	}
+    function saveByteArray(fileName, b64Data) {
+        // http://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+        var byteCharacters = atob(b64Data);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+    
+        var blob = new Blob([byteArray], {
+            // type: "application/vnd.ms-excel;charset=charset=utf-8"
+            // type: "Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
+    
+        saveAs(blob, fileName);
+    }
 
 }]);
-

@@ -164,6 +164,14 @@ app.directive('process', ['$rootScope',
             isValid = isValid && isBufferValid;
 			if(!isBufferValid){
                 $scope.UnLockAllControls();
+
+                // print error msg to message service
+                var postponeMsgList = MessageService.getPostponeMsg();
+                var abortMsg = "Process aborted.";
+                
+                postponeMsgList.unshift(abortMsg)
+                MessageService.setPostponeMsg(postponeMsgList);
+                MessageService.printPostponeMsg();
             }
 
             return isValid;

@@ -18,8 +18,8 @@ app.controller('reportDepositBalanceSummaryController', ['$scope', 'MessageServi
 
     $scope.reportCtrl.ExportFileTypeAs = {
         availableOptions: [
-            {id: '1', value: 'xlsx', name: 'xlsx'},
-            {id: '2', value: 'xls', name: 'xls'},
+            {id: '1', value: 'xls', name: 'xls'},
+            {id: '2', value: 'xlsx', name: 'xlsx'},
             {id: '3', value: 'pdf', name: 'pdf'}
             // {id: '3', value: 'screen', name: 'on screen'}
         ],
@@ -55,8 +55,10 @@ app.controller('reportDepositBalanceSummaryController', ['$scope', 'MessageServi
 	$scope.SetDefaultValue = function(scope, iElement, iAttrs, controller){
         var newRecord = controller.ngModel;
         newRecord.InquiryCriteria.EffectiveAsAt = new Date();
+        newRecord.InquiryCriteria.ForexAsAt = new Date();
+        newRecord.InquiryCriteria.EffetiveCurrency = "";
         newRecord.InquiryCriteria.EquivalentCurrency = "HKD";
-        newRecord.InquiryCriteria.ExportFileTypeAs = $scope.reportCtrl.ExportFileTypeAs.availableOptions[1].value;
+        newRecord.InquiryCriteria.ExportFileTypeAs = $scope.reportCtrl.ExportFileTypeAs.availableOptions[2].value;
 	}
 
 	$scope.StatusChange = function(fieldName, newValue, newObj, scope, iElement, iAttrs, controller){
@@ -125,8 +127,9 @@ app.controller('reportDepositBalanceSummaryController', ['$scope', 'MessageServi
 		var scopeID = scope.$id;
         var hashID = 'inquiry_bi22currency';
         
-        // console.dir(data_or_JqXHR);
-        saveByteArray(data_or_JqXHR["data"][0], data_or_JqXHR["data"][1]);
+        if(data_or_JqXHR["status"] == "success"){
+            saveByteArray(data_or_JqXHR["data"][0], data_or_JqXHR["data"][1]);
+        }
 		
 		if(prgmID == "bs01currency"){
 

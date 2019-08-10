@@ -5,9 +5,10 @@
 // 	//Security.RequiresAuthorization();
 // 	config.uiTheme = "B";
 // });
-app.controller('updateBankAccountController', ['$scope', function ($scope, $rootScope) {
+app.controller('updateBankAccountController', ['$scope', '$timeout', 'Core', 'MessageService', '$rootScope', function ($scope, $timeout, Core, MessageService, $rootScope) {
 	$scope.directiveScopeDict = {};
     $scope.directiveCtrlDict = {};
+    var globalCriteria = $rootScope.globalCriteria;
 
 	$scope.SwitchToCreate = function(){
 		$scope.entryFormMode = "create"
@@ -95,7 +96,40 @@ app.controller('updateBankAccountController', ['$scope', function ($scope, $root
 //		console.log("<"+iElement[0].tagName+">" +" Directive overried ValidateBuffer()");
 		var isValid = true;
 		var record = controller.ngModel;
-        var msg = [];
+
+		var isValid = true;
+        var errorMsgList = [];
+
+		if(record.BankCode == ""){
+            errorMsgList.push("Bank Code is required.");
+            isValid = false;
+        }
+
+		if(record.BranchCode == ""){
+            errorMsgList.push("Branch Code is required.");
+            isValid = false;
+        }
+
+		if(record.AccountCode == ""){
+            errorMsgList.push("Account Code is required.");
+            isValid = false;
+        }
+
+		if(record.FullAccountCodeWithDash == ""){
+            errorMsgList.push("Full Account Code With Dash is required.");
+            isValid = false;
+        }
+        
+		if(scope.editMode == globalCriteria.editMode.Amend){
+            if(record.AutoID == "" || record.AutoID == 0){
+                errorMsgList.push("Please select holiday for amend.");
+                isValid = false;
+            }
+        }
+        
+        if(!isValid){
+            MessageService.setPostponeMsg(errorMsgList);
+        }
 
         return isValid;
     }

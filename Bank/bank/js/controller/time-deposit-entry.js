@@ -249,7 +249,6 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
         var errorMsgList = [];
         
         if(prgmID == "be31timedeposit"){
-
             if(record.MaturityInstruction == ""){
                 errorMsgList.push("Maturity Instruction is required.");
                 isValid = false;
@@ -308,7 +307,6 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
                 errorMsgList.push("Adjusted Interest is required and greater than zero.");
                 isValid = false;
             }
-
         }
 
         if(prgmID == "bi46timedeposit"){
@@ -318,8 +316,7 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
                 isValid = false;
             }
         }
-        // isValid = false;
-            
+        
         if(!isValid){
             MessageService.setPostponeMsg(errorMsgList);
         }
