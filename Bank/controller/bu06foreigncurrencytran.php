@@ -13,7 +13,7 @@ function ExportData($httpRequest){
 
 	// export multiple table
 	$exportManager->AddTable("foreigncurrencytran");
-	$exportManager->AddTable("trandagedge");
+	//$exportManager->AddTable("trandagedge");
 	
 	// set excel header sequence
 //	$exportManager->SetSkipExportColumn("staff", "UserID");

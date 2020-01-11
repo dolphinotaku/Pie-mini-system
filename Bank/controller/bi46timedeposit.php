@@ -28,11 +28,7 @@ function FindData($requestData){
 	$sql_str .= "timedeposittran td_tran ";
     $sql_str .= "WHERE ";
     
-    if($principalCurrency == "All"){
-        $sql_str .= "PrincipalCurrency LIKE '%' ";
-    }else{
-        $sql_str .= "PrincipalCurrency = '$principalCurrency' ";
-    }
+    $sql_str .= "PrincipalCurrency LIKE '%".$principalCurrency."%' ";
     if($status == "Immature"){
         $sql_str .= "AND AdjustedMaturityDate > CURDATE()";
     }else if($status == "Matured"){
@@ -40,9 +36,6 @@ function FindData($requestData){
     }
 	
 	$responseArray = $timeDepositTranManager->runSQL($sql_str);
-    
-    
-    $responseArray["test"] = $status;
 			
 	return $responseArray;
 }

@@ -68,7 +68,7 @@ app.controller('homeController', ['$scope', function ($scope, $rootScope) {
 		  $scope.directiveCtrlDict[hashID] = controller;
         }
         
-        if(prgmID == "bi43timedeposithistoryinyearmonth"){
+        if(prgmID == "bi43timedepositinyearmonth"){
             $scope.RefreshTimeDepositPanel();
         }
         if(prgmID == "bi47gettotalassets"){
@@ -147,7 +147,7 @@ app.controller('homeController', ['$scope', function ($scope, $rootScope) {
         var currentYear = new Date().getFullYear();
         var currentMonth = new Date().getMonth();
 
-        var panelProgramId = "bi43timedeposithistoryinyearmonth";
+        var panelProgramId = "bi43timedepositinyearmonth";
         var scope = $scope.directiveScopeDict["inquiry_"+panelProgramId];
         var controller = $scope.directiveCtrlDict["inquiry_"+panelProgramId];
 
@@ -255,7 +255,7 @@ app.controller('homeController', ['$scope', function ($scope, $rootScope) {
 			$scope.directiveScopeDict[historyHashID].ClearNRefreshData();
         }
         
-        if(prgmID == "bi43timedeposithistoryinyearmonth"){
+        if(prgmID == "bi43timedepositinyearmonth"){
             var data = data_or_JqXHR.data;
 
             $scope.timeDepositPanelData = {};

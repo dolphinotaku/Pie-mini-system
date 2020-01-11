@@ -34,11 +34,11 @@
                 <inquiry ng-model="inquiryModel" program-id="bi22currency" id="inquiryPanel">
                     <div class="form-group">
                         <label for="AlphabeticCode">Alphabetic Code</label>
-                        <input type="text" class="form-control" ng-model="inquiryCtrl.ngModel.Record.AlphabeticCode" id="AlphabeticCode">
+                        <input type="text" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.AlphabeticCode" id="AlphabeticCode">
                     </div>
                     <div class="form-group">
                         <label for="Status">Enable</label>
-                        <input type="checkbox" ng-model="inquiryCtrl.ngModel.Record.Status" class="form-control" id="Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
+                        <input type="checkbox" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" class="form-control" id="Status" ng-true-value="'Enabled'" ng-false-value="'Disabled'">
                     </div>
                     <button type="button" class="btn btn-default" ng-click="SubmitData()">Search</button>
                     <screen></screen>

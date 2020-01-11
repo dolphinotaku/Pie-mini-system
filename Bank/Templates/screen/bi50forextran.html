@@ -1,0 +1,41 @@
+<div class="table-responsive">
+	<table class="table table-condensed table-hover">
+		<thead>
+		<tr>
+			<th>#</th>
+			<th>ExchangeDate</th>
+			<th>BankCode</th>
+			<th>Type</th>
+			<th>Purpose</th>
+			<th>TradePath</th>
+			<th>OutCurrencyID</th>
+			<th>OutAmount</th>
+			<th>Rate</th>
+			<th>InCurrencyID</th>
+			<th>InAmount</th>
+			<th>Status</th>
+			<th>Remarks</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="timeDepositRow in inquiryCtrl.ngModel.InquiryResult.Data"
+				ng-click="PointedToRecord(timeDepositRow, $event, this)"
+				ng-dblclick="SelectedToRecord(timeDepositRow, $event, this)">
+				<td>{{timeDepositRow.ExchangeTranID}}</td>
+				<td>{{timeDepositRow.ExchangeDate | date:'yyyy/MM/dd'}}</td>
+				<td>{{timeDepositRow.Type}}</td>
+				<td>{{timeDepositRow.Purpose}}</td>
+				<td>{{timeDepositRow.TradePath}}</td>
+				<td><span class="currency-flag currency-flag-{{timeDepositRow.OutCurrencyID | lowercase}} currency-flag-sm"></span>
+				{{timeDepositRow.OutCurrencyID}}</td>
+				<td>$<span class="pull-right">{{timeDepositRow.OutAmount | currency:"":4}}</span></td>
+				<td><span class="pull-right">{{timeDepositRow.Rate | number:4}}</span></td>
+				<td><span class="currency-flag currency-flag-{{timeDepositRow.InCurrencyID | lowercase}} currency-flag-sm"></span>
+				{{timeDepositRow.InCurrencyID}}</td>
+				<td>$<span class="pull-right">{{timeDepositRow.InAmount | currency:"":2}}</span></td>
+				<td>{{timeDepositRow.Status}}</td>
+				<td>{{timeDepositRow.Remarks}}</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

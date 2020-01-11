@@ -58,6 +58,9 @@ function GetData($requestData){
 function UpdateData($requestData){
 	$responseArray = array();
 	$currencyManager = new CurrencyManager();
+	$bankAccountManager = new BankAccountManager();
+	$bankAccountCurrencyManager = new BankAccountCurrencyManager();
+	// $bankAccountCurrencyManager = new BankAccountCurrencyManager();
 
 	$updateRows = new stdClass();
 	$updateRows = $requestData->Data->Header;
@@ -67,8 +70,79 @@ function UpdateData($requestData){
 		}
 		$responseArray = $currencyManager->update();
 
-	}
+    }
+
+    // if update success, insert bankaccountcurrency records
+    if($responseArray["affected_rows"] > 0){
+        // if enabled currency, 
+        if($currencyManager->Status == "'Enabled'"){
+            AddBankAcCurrency($currencyManager->AlphabeticCode);
+        }else if($currencyManager->Status == "'Disabled'"){
+            DisableBankAcCurrency($currencyManager->AlphabeticCode);
+        }
+    }
+
 	return $responseArray;
+}
+
+function AddBankAcCurrency($alphabeticCode){
+	$bankAccountManager = new BankAccountManager();
+	$bankAccountCurrencyManager = new BankAccountCurrencyManager();
+
+    // find exists bank account
+    $bankAccountManager->Initialize();
+    $bankAC_responseArray = $bankAccountManager->select();
+
+    // add currency to bank accounts
+    if($bankAC_responseArray["num_rows"]>0){
+        foreach($bankAC_responseArray["data"] as $rowIndex => $rowItem){
+            $bankAccountCurrencyManager->Initialize();
+            $bankAccountCurrencyManager->BankAccountID = $rowItem["BankAccountID"];
+            $bankAccountCurrencyManager->AlphabeticCode = $alphabeticCode;
+
+            // check Bank AC currency exists
+            $bankAcCurrency_responseArray = $bankAccountCurrencyManager->select();
+
+            if($bankAcCurrency_responseArray["num_rows"]>0){
+                // $bankAccountCurrencyManager->Status = "Disabled";
+            }else{
+                // create Bank AC currency
+                $bankAccountCurrencyManager->Status = "Disabled";
+                $bankAccountCurrencyManager->insert();
+            }
+        }
+    }
+}
+
+function DisableBankAcCurrency($alphabeticCode){
+	$bankAccountManager = new BankAccountManager();
+	$bankAccountCurrencyManager = new BankAccountCurrencyManager();
+
+    // find exists bank account
+    $bankAccountManager->Initialize();
+    $bankAC_responseArray = $bankAccountManager->select();
+
+    // add currency to bank accounts
+    if($bankAC_responseArray["num_rows"]>0){
+        foreach($bankAC_responseArray["data"] as $rowIndex => $rowItem){
+            $bankAccountCurrencyManager->Initialize();
+            $bankAccountCurrencyManager->BankAccountID = $rowItem["BankAccountID"];
+            $bankAccountCurrencyManager->AlphabeticCode = $alphabeticCode;
+
+            // check Bank AC currency exists
+            $bankAcCurrency_responseArray = $bankAccountCurrencyManager->select();
+
+            if($bankAcCurrency_responseArray["num_rows"]>0){
+                foreach($bankAcCurrency_responseArray["data"] as $bankAcIndex => $bankAcCurrencyRow){
+                    // update Bank AC currency
+                    $bankAccountCurrencyManager->BankAccountCurrencyID = $bankAcCurrencyRow["BankAccountCurrencyID"];
+                    $bankAccountCurrencyManager->Status = "Disabled";
+                    $bankAccountCurrencyManager->update();
+
+                }
+            }
+        }
+    }
 }
 
 function DeleteData($requestData){
@@ -83,7 +157,11 @@ function DeleteData($requestData){
 		}
 		$responseArray = $currencyManager->delete();
 
-	}
+    }
+    
+    // if delete success
+
+
 	return $responseArray;
 }
 

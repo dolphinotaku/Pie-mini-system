@@ -223,7 +223,9 @@ app.controller('viewCalendarController', ['$scope', '$timeout', function ($scope
 
         $scope.CreateFullCalendar();
         // $scope.GetDataByPeriod($scope.calendarStart, scope.calendarEnd)
-        $scope.GetDataByYear($scope.calendarStart.getFullYear());
+
+        // 20191202, keithpoon, below line will trigger twice call in Dec 2019
+        //$scope.GetDataByYear($scope.calendarStart.getFullYear());
     }
 
     $scope.SetDefaultValueForExportIcs = function(scope, iElement, iAttrs, controller){
@@ -247,7 +249,7 @@ app.controller('viewCalendarController', ['$scope', '$timeout', function ($scope
 
         $scope.calendarInquiry.Record.StartDate = start;
         $scope.calendarInquiry.Record.EndDate = end;
-        
+        console.trace();
         $scope.directiveScopeDict[hashID].SubmitData();
     }
 
@@ -301,6 +303,8 @@ app.controller('viewCalendarController', ['$scope', '$timeout', function ($scope
 		if(hashID == "inquiry_bi44timedepositforcalendarview"){
             if(data_or_JqXHR.status == "success"){
                 var events = $scope.GetEventsList(data_or_JqXHR.data);
+                console.trace();
+                console.dir(events);
 				// https://stackoverflow.com/questions/15139780/jquerys-full-calendar-removing-all-events-for-a-single-day
                 $scope.fullcalendarObj.fullCalendar('removeEvents', function(){return true;});
                 //$scope.fullcalendarObj.fullCalendar('removeEventSources');

@@ -299,17 +299,17 @@ function(config, $httpProvider, $locationProvider, $controllerProvider, $compile
 	}
     
 	var bank_08 = {
-		name: "Home.foreign-currency-entry",
-		url: "/foreign-currency-entry",
+		name: "Home.foreign-exchange-entry",
+		url: "/foreign-exchange-entry",
 		views: {
 			"content@": {
-				templateUrl: '../bank/foreign-currency-entry.html',
-				controller: 'updateForeignCurrencyController'
+				templateUrl: '../bank/foreign-exchange-entry.html',
+				controller: 'updateForeignExchangeController'
 			}
         },
 		resolve: {
 			loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-				return $ocLazyLoad.load(['./js/controller/foreign-currency-entry.js'],{cache: false});
+				return $ocLazyLoad.load(['./js/controller/foreign-exchange-entry.js'],{cache: false});
 			}]
 		}
 	}

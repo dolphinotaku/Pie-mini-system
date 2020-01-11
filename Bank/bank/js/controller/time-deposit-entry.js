@@ -166,7 +166,7 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 
         if(prgmID=="bi46timedeposit"){
             var newRecord = controller.ngModel.InquiryCriteria;
-            newRecord.PrincipalCurrency = "All";
+            newRecord.PrincipalCurrency = "";
             newRecord.Status = "All";
         }
 	}
@@ -311,10 +311,10 @@ app.controller('updateTimeDepositController', ['$scope', '$rootScope', 'Core', '
 
         if(prgmID == "bi46timedeposit"){
             var record = controller.ngModel.InquiryCriteria;
-            if(record.PrincipalCurrency == ""){
-                errorMsgList.push("Please specify a currency or select 'All' currency.");
-                isValid = false;
-            }
+            // if(record.PrincipalCurrency == ""){
+            //     errorMsgList.push("Please specify a currency or select 'All' currency.");
+            //     isValid = false;
+            // }
         }
         
         if(!isValid){

@@ -95,14 +95,6 @@ app.controller('reportArrangedDepositController', ['$scope', 'MessageService', '
     }
 
 	$scope.StatusChange = function(fieldName, newValue, newObj, scope, iElement, iAttrs, controller){
-		switch (fieldName) {
-			case "AlphabeticCode":
-                newObj.AlphabeticCode = newObj.AlphabeticCode.toUpperCase(); 
-				break;
-			default:
-
-		}
-
 	}
 
 	$scope.ValidateBuffer = function(scope, iElement, iAttrs, controller){

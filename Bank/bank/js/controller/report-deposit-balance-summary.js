@@ -56,7 +56,7 @@ app.controller('reportDepositBalanceSummaryController', ['$scope', 'MessageServi
         var newRecord = controller.ngModel;
         newRecord.InquiryCriteria.EffectiveAsAt = new Date();
         newRecord.InquiryCriteria.ForexAsAt = new Date();
-        newRecord.InquiryCriteria.EffetiveCurrency = "";
+        newRecord.InquiryCriteria.EffectiveCurrency = "";
         newRecord.InquiryCriteria.EquivalentCurrency = "HKD";
         newRecord.InquiryCriteria.ExportFileTypeAs = $scope.reportCtrl.ExportFileTypeAs.availableOptions[2].value;
 	}

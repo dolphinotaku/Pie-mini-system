@@ -9,7 +9,7 @@
 <script src="../third-party/datatable/DataTables-1.10.18/Select-1.3.0/js/select.bootstrap.min.js"></script>
 <script src="../third-party/datatable/DataTables-1.10.18/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
 <script src="../third-party/datatable/DataTables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js"></script>
-<div id="page-wrapper" ng-controller="updateTimeDepositController">
+<div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
                 <div class="col-lg-12">
@@ -27,9 +27,8 @@
             <div class="col-lg-12">
                 How to use:<br>
                 - For Create record, click on "Create Form" tab, create record and then click the "Create" button<br>
-                - Auto re-calculate Interest, Estimated Principal & Interest, Maturity Date on related information changes
-                - For Amend record, Select a record on list, update or delete record<br>
-                - View time deposit histroy on "Histroy List" tab
+                - For View or Amend record, click on "Search" tab, input search criteria, click the "Search" button<br>
+                - On the search results, select a record on list, update or delete record<br>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -52,12 +51,6 @@
                         <fieldset>
                             <legend>Time Deposit Inquiry</legend>
                             <div class="form-group">
-                                <label for="inquiryPrincipalCurrencyAll" class="col-sm-2 control-label">All Currency</label>
-                                <div class="col-sm-10">
-                                    <input type="checkbox" ng-model="inquiryCtrl.ngModel.InquiryCriteria.PrincipalCurrency" class="form-control" id="inquiryPrincipalCurrencyAll" ng-true-value="'All'" ng-false-value="''">
-                                </div>
-                            </div>
-                            <div class="form-group" ng-show="inquiryCtrl.ngModel.InquiryCriteria.PrincipalCurrency != 'All'">
                                 <label for="inquiryPrincipalCurrency" class="col-sm-2 control-label">Specify Currency</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
@@ -68,6 +61,11 @@
                                                 {{currencyRow.AlphabeticCode}}</option>
                                             </select>
                                         <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.PrincipalCurrency | lowercase}}"></span></label>
+                                        <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.PrincipalCurrency!=''">
+                                            <button type="button" class="btn btn-default" aria-label="Earse Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.PrincipalCurrency=''">
+                                                <span class="fas fa-times" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -103,7 +101,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-default" ng-click="SubmitData()">Search</button>
+                                    <button type="submit" class="btn btn-default">Search</button>
                                 </div>
                             </div>
                         </fieldset>
@@ -172,7 +170,7 @@
         </div>
 
         <entry ng-model="entryCreateForm" program-id="be31timedeposit" edit-mode="create" ng-show="showEntryForm">
-            <form class="form-horizontal" ng-submit="SubmitData()">
+            <form class="form-horizontal" ng-submit="UpdateData()">
                 <fieldset>
                     <legend>{{entryFormTitle}}</legend>
                     <div class="form-group">
@@ -338,7 +336,7 @@
                     </div> -->
                     <div class="form-group" ng-hide="entryFormMode != 'amend'">
                         <div class="col-sm-offset-2 col-sm-5">
-                            <button type="submit" class="btn btn-success" aria-label="Save" ng-click="UpdateData()">
+                            <button type="submit" class="btn btn-success" aria-label="Save">
                                 <span class="fas fa-save" aria-hidden="true"></span> Save
                             </button>
                         </div>

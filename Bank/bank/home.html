@@ -409,7 +409,7 @@ color: red;
 				</div>
 				<!-- /.panel-heading -->
 				<div class="panel-body">
-					<inquiry ng-model="inquiryModel" program-id="bi43timedepositHistoryInYearMonth">
+					<inquiry ng-model="inquiryModel" program-id="Bi43timedepositInYearMonth">
 						<!-- <div class="list-group" ng-repeat="row in inquiryModel.Data">
 							<div class="list-group-item">
                                 <div>{{row.Period}}</div>
@@ -432,7 +432,7 @@ color: red;
 						</div>
 					</inquiry>
 					<!-- /.list-group -->
-					<a href="http://192.168.0.190/Develop/bank/#!/Home/time-deposit-entry" class="btn btn-default btn-block">View All Time Deposit Record</a>
+					<a ui-sref=".time-deposit-entry" class="btn btn-default btn-block">View All Time Deposit Record</a>
 				</div>
 				<!-- /.panel-body -->
 			</div>
@@ -443,7 +443,7 @@ color: red;
 				</div>
 				<div class="panel-body">
 					<div id="total-assets-ratio-donut-chart"></div>
-					<a href="#" class="btn btn-default btn-block">View Details</a>
+                    <a ui-sref=".sal-entry" class="btn btn-default btn-block">View Details</a>
 				</div>
 				<!-- /.panel-body -->
 			</div>
@@ -454,7 +454,7 @@ color: red;
 				</div>
 				<div class="panel-body">
 					<div id="timedeposit-ratio-donut-chart"></div>
-					<a href="#" class="btn btn-default btn-block">View Details</a>
+                    <a ui-sref=".time-deposit-entry" class="btn btn-default btn-block">View Details</a>
 				</div>
 				<!-- /.panel-body -->
 			</div>

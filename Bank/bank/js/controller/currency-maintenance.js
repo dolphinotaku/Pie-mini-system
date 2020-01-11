@@ -40,7 +40,9 @@ app.controller('updateCurrencyController', ['$scope', 'MessageService', '$timeou
 
 	$scope.SetDefaultValue = function(scope, iElement, iAttrs, controller){
 
-		var newRecord = controller.ngModel;
+        var newRecord = controller.ngModel;
+        newRecord.InquiryCriteria.AlphabeticCode = "";
+        newRecord.InquiryCriteria.Status = "Disabled";
 	}
 
 	$scope.StatusChange = function(fieldName, newValue, newObj, scope, iElement, iAttrs, controller){

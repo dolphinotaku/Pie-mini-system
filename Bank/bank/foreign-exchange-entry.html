@@ -1,0 +1,598 @@
+<style>
+.series_forex_currency{
+    font-family: sans-serif;
+}
+.series_amount, .series_node_amount, .current_value, .earning_or_deduction_value {
+    text-align: right;
+}
+.positive_amount {
+    color: green;
+}
+.negative_amount {
+    color: red;
+}
+.series_node_row{
+    display: none;
+}
+</style>
+<script src="../third-party/datatable/DataTables-1.10.18/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+<script src="../third-party/datatable/DataTables-1.10.18/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
+<script src="../third-party/datatable/DataTables-1.10.18/Select-1.3.0/js/dataTables.select.min.js"></script>
+<script src="../third-party/datatable/DataTables-1.10.18/Select-1.3.0/js/select.bootstrap.min.js"></script>
+<script src="../third-party/datatable/DataTables-1.10.18/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+<script src="../third-party/datatable/DataTables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js"></script>
+<div id="page-wrapper" ng-controller="updateForeignExchangeController">
+    <div class="container-fluid">
+        <div class="row">
+                <div class="col-lg-12">
+                        <h1 class="page-header">Foreign Exchange Transaction</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <message ng-model="processMsg" auto-close></message>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                How to use:<br>
+                - For Create record, click on "Create Form" tab, create record and then click the "Create" button<br>
+                - For View or Amend record, click on "Search" tab, input search criteria, click the "Search" button<br>
+                - On the search results, select a record on list, update or delete record<br>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <hr>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#map" ng-click="HideEntryForm()" aria-controls="map" role="tab" data-toggle="tab"><i class="fas fa-project-diagram fa-fw fa-lg"></i> Map Trading Flow</a></li>
+            <li role="presentation"><a href="#search" ng-click="HideEntryForm()" aria-controls="search" role="tab" data-toggle="tab"><i class="fas fa-search fa-fw fa-lg"></i> Search</a></li>
+            <li role="presentation"><a href="#create" ng-click="SwitchToCreate()" aria-controls="create" role="tab" data-toggle="tab"><i class="far fa-file-alt fa-fw fa-lg"></i> Create Form</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="map">
+                <inquiry ng-model="inquirySeriesModel" program-id="bi51forextranseries" id="inquiryMapPanel">
+                    <form class="form-horizontal" ng-submit="SubmitData()">
+                        <fieldset>
+                            <legend>Foreign Exchange Transaction Inquiry</legend>
+                            <div class="form-group">
+                                <label for="inquiryEffectiveFrom" class="col-sm-2 control-label">Quick Dates</label>
+                                <div class="col-sm-10">
+                                    <!-- <button type="button" class="btn btn-link" ng-click="SetDateRangeLast7Days()">Last 7 days</button> -->
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeThisMonth()">This month</button>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeLastMonths(1)">Last month</button>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeLastMonths(3)">Last 3 months</button>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeLastMonths(6)">Last 6 months</button>
+                                    <button type="button" class="btn btn-link" ng-click="SetDateRangeLastMonths(12)">Last 12 months</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryMapEffectiveFrom" class="col-sm-2 control-label">Date Range</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveFrom" id="inquiryMapEffectiveFrom">
+                                        <label class="input-group-addon" for="inquiryMapEffectiveTo">to</label>
+                                        <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveTo" id="inquiryMapEffectiveTo">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryMapOutCurrencyID" class="col-sm-2 control-label">Out Currency</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryMapOutCurrencyID" id="inquiryMapOutCurrencyID" ng-model="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID | lowercase}}"></span></label>
+                                        <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID!=''">
+                                            <button type="button" class="btn btn-default" aria-label="Earse Out Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID=''">
+                                                <span class="fas fa-times" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryMapInCurrencyID" class="col-sm-2 control-label">In Currency</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryMapInCurrencyID" id="inquiryMapInCurrencyID" ng-model="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID | lowercase}}"></span></label>
+                                        <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID!=''">
+                                            <button type="button" class="btn btn-default" aria-label="Earse In Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID=''">
+                                                <span class="fas fa-times" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryMapType" class="col-sm-2 control-label">Type</label>
+                                <div class="col-sm-10">
+                                    <label for="inquiryMapTypeAll" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="''" class="" id="inquiryMapTypeAll">
+                                    All</label>
+                                    <label for="inquiryMapTypeTT" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="'T/T'" class="" id="inquiryMapTypeTT">
+                                    Telegraphic Transfer (T/T)</label>
+                                    <label for="inquiryMapTypeNotes" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="'Notes'" class="" id="inquiryMapTypeNotes">
+                                    Notes</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryMapPurpose" class="col-sm-2 control-label">Status</label>                                    
+                                <div class="col-sm-10">
+                                    <label for="inquiryMapStatusAll" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" ng-value="'%'" class="" id="inquiryMapStatusAll">
+                                    All</label>
+                                    <label for="inquiryMapStatusArchived" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" ng-value="'Archived'" class="" id="inquiryMapStatusArchived">
+                                    Archived Series</label>
+                                    <label for="inquiryMapStatusUnarchived" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" ng-value="'Unarchived'" class="" id="inquiryMapStatusUnarchived">
+                                    Unarchived</label>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="inquiryMapStatus" class="col-sm-2 control-label">Archive</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" class="form-control" id="inquiryMapStatus" ng-true-value="'Archive'" ng-false-value="''">
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="inquiryMapEquivalentCurrency" class="col-sm-2 control-label">Equivalent Currency Code</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryMapEquivalentCurrency" id="inquiryMapEquivalentCurrency" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency | lowercase}}"></span></label>
+                                        <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency!=''">
+                                            <button type="button" class="btn btn-default" aria-label="Earse Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency=''">
+                                                <span class="fas fa-times" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Search</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <hr>
+                    <!-- <screen style="display: none;"></screen> -->
+                    <div class="row">
+                        <div class="col-sm-12 text-right">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default" ng-click="ChangeViewToCompact()">
+                                    <input type="radio" name="options" id="option1" ng-change="ChangeViewToCompact()" ng-model="tableView" value="compact">Compact <i class="fas fa-border-all"></i>
+                                </label>
+                                <!-- <label class="btn btn-default" ng-click="ChangeViewToHybrid()">
+                                    <input type="radio" name="options" id="option2" ng-change="ChangeViewToHybrid()" ng-model="tableView" value="hybrid">Hybrid <i class="fas fa-link"></i>
+                                </label> -->
+                                <label class="btn btn-default" ng-click="ChangeViewToExpand()">
+                                    <input type="radio" name="options" id="option3" ng-change="ChangeViewToExpand()" ng-model="tableView" value="expand">Expand Series Details <i class="fas fa-angle-double-down"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-condensed table-bordered table-hover" id="series_table">
+                            <thead>
+                                <th>#</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </inquiry>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="search">
+                <inquiry ng-model="inquiryModel" program-id="bi50forextran" id="inquiryPanel">
+                    <form class="form-horizontal" ng-submit="SubmitData()">
+                        <fieldset>
+                            <legend>Foreign Exchange Transaction Inquiry</legend>
+                            <div class="form-group">
+                                <label for="inquiryOutCurrencyID" class="col-sm-2 control-label">Out Currency</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryOutCurrencyID" id="inquiryOutCurrencyID" ng-model="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID | lowercase}}"></span></label>
+                                        <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID!=''">
+                                            <button type="button" class="btn btn-default" aria-label="Earse Out Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID=''">
+                                                <span class="fas fa-times" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryInCurrencyID" class="col-sm-2 control-label">In Currency</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <select class="form-control" name="inquiryInCurrencyID" id="inquiryInCurrencyID" ng-model="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID" required>
+                                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                                {{currencyRow.AlphabeticCode}}</option>
+                                            </select>
+                                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID | lowercase}}"></span></label>
+                                        <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID!=''">
+                                            <button type="button" class="btn btn-default" aria-label="Earse In Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID=''">
+                                                <span class="fas fa-times" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryType" class="col-sm-2 control-label">Type</label>
+                                <div class="col-sm-10">
+                                    <label for="inquiryTypeAll" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="''" class="" id="inquiryTypeAll">
+                                    All</label>
+                                    <label for="inquiryTypeTT" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="'T/T'" class="" id="inquiryTypeTT">
+                                    Telegraphic Transfer (T/T)</label>
+                                    <label for="inquiryTypeNotes" class="radio-inline">
+                                    <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="'Notes'" class="" id="inquiryTypeNotes">
+                                    Notes</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryPurpose" class="col-sm-2 control-label">Purpose</label>                                    
+                                <div class="col-sm-10">
+                                        <label for="inquiryPurposeAll" class="radio-inline">
+                                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Purpose" ng-value="''" class="" id="inquiryPurposeAll">
+                                        All</label>
+                                        <label for="inquiryPurposeInvestment" class="radio-inline">
+                                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Purpose" ng-value="'Investment'" class="" id="inquiryPurposeInvestment">
+                                        Investment</label>
+                                        <label for="inquiryTravel" class="radio-inline">
+                                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Purpose" ng-value="'Travel'" class="" id="inquiryTravel">
+                                        Travel</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryStatus" class="col-sm-2 control-label">Archive</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" class="form-control" id="inquiryStatus" ng-true-value="'Archive'" ng-false-value="''">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Search</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <!-- <div class="input-group">
+                        <label for="inputPrincipalCurrency" class="input-group-addon">Currency</label>
+                        <label for="inquiryPrincipalCurrency">Currency</label>
+                        <select class="form-control" name="inquiryPrincipalCurrency" id="inquiryPrincipalCurrency" ng-model="inquiryCtrl.ngModel.InquiryCriteria.PrincipalCurrency" required>
+                                <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                {{currencyRow.AlphabeticCode}}</option>
+                            </select>
+                        <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.PrincipalCurrency | lowercase}}"></span></label>
+                    </div> -->
+                    <hr>
+                    <screen style="display: none;"></screen>
+                </inquiry>
+                <table id="timedeposit_datatable" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Exchange Date</th>
+                            <th>Bank Code</th>
+                            <th>Type</th>
+                            <th>Purpose</th>
+                            <th>Trade Path</th>
+                            <th>Out Currency</th>
+                            <th>Out Amount</th>
+                            <th>Rate</th>
+                            <th>In Currency</th>
+                            <th>In Amount</th>
+                            <th>Rate Relatively</th>
+                            <th>Remarks</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                </table>
+                <pageview ng-model="inquiryCurrencyModel" program-id="bw22currency" style="display: none;">
+                </pageview>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="create">
+            </div>
+        </div>
+
+        <entry ng-model="entryCreateForm" program-id="be37forextran" edit-mode="create" ng-show="showEntryForm">
+            <form class="form-horizontal" ng-submit="UpdateData()">
+                <fieldset>
+                    <legend>{{entryFormTitle}}</legend>
+                    <div class="form-group">
+                        <label for="inputExchangeDate" class="col-sm-2 control-label">Exchange Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="inputExchangeDate" ng-model="entryCtrl.ngModel.ExchangeDate" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputBankName" class="col-sm-2 control-label">Bank</label>
+                        <div class="col-sm-10">
+                            <editbox ng-model="bankCodeEditBox" program-id="bw21bank">
+                                <div class="input-group">
+                                    <input type="text" id="inputBankName" class="form-control" ng-model="entryCtrl.ngModel.BankCode" readonly required>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" aria-label="Page view" ng-click="OpenPageView()">
+                                            <span class="fas fa-bars" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control" ng-model="editboxCtrl.ngModel.BankEnglishName" readonly>
+                                </div>
+                                <input type="text" class="form-control" ng-model="editboxCtrl.ngModel.BankChineseName" readonly>
+                            </editbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputType" class="col-sm-2 control-label">Type</label>                                    
+                        <div class="col-sm-10">
+                            <div class="radio">
+                                <label for="inputTypeTT">
+                                <input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'T/T'" class="" id="inputTypeTT">
+                                Telegraphic Transfer (T/T)</label>
+                            </div>
+                            <div class="radio">
+                                <label for="inputTypeNotes">
+                                <input type="radio" ng-model="entryCtrl.ngModel.Type" ng-value="'Notes'" class="" id="inputTypeNotes">
+                                Notes</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPurpose" class="col-sm-2 control-label">Purpose</label>                                    
+                        <div class="col-sm-10">
+                            <div class="radio">
+                                <label for="inputPurposeInvestment">
+                                <input type="radio" ng-model="entryCtrl.ngModel.Purpose" ng-value="'Investment'" class="" id="inputPurposeInvestment">
+                                Investment</label>
+                            </div>
+                            <div class="radio">
+                                <label for="inputTravel">
+                                <input type="radio" ng-model="entryCtrl.ngModel.Purpose" ng-value="'Travel'" class="" id="inputTravel">
+                                Travel</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputTradePath" class="col-sm-2 control-label">Trade Path</label>
+                        <div class="col-sm-10">
+                                <input type="text" id="inputTradePath" class="form-control" ng-model="entryCtrl.ngModel.TradePath" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputOutAmount" class="col-sm-2 control-label">Out Currency</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="inputOutAmount" min="0" step="0.01" ng-model="entryCtrl.ngModel.OutAmount" required>
+                                <label for="inputOutCurrencyID" class="input-group-addon">Currency</label>
+                                <select class="form-control" name="inputOutCurrencyID" id="inputOutCurrencyID" ng-model="entryCtrl.ngModel.OutCurrencyID" required>
+                                    <option ng-repeat="currencyRow in currencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                    {{currencyRow.AlphabeticCode}}</option>
+                                </select>
+                                <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{entryCtrl.ngModel.OutCurrencyID | lowercase}}"></span></label>
+                            </div>
+                        </div>
+                        <pageview ng-model="currencyModel" program-id="bw22currency" style="display: none;">
+                        </pageview>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputRate" class="col-sm-2 control-label">Rate</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="number" id="inputRate" class="form-control" min="0" step="0.01" ng-model="entryCtrl.ngModel.Rate">
+                                <span class="input-group-addon" for="inputRateRelatively">Rate Relatively</span>
+                                <input type="number" id="inputRateRelatively" class="form-control" min="0" step="0.01" ng-model="entryCtrl.ngModel.RateRelatively" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputInAmount" class="col-sm-2 control-label">In Currency</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="inputInAmount" min="0" step="0.01" ng-model="entryCtrl.ngModel.InAmount" required>
+                                <label for="inputInCurrencyID" class="input-group-addon">Currency</label>
+                                <select class="form-control" name="inputInCurrencyID" id="inputInCurrencyID" ng-model="entryCtrl.ngModel.InCurrencyID" required>
+                                    <option ng-repeat="currencyRow in currencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                    {{currencyRow.AlphabeticCode}}</option>
+                                </select>
+                                <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{entryCtrl.ngModel.InCurrencyID | lowercase}}"></span></label>
+                            </div>
+                        </div>
+                        <pageview ng-model="currencyModel" program-id="bw22currency" style="display: none;">
+                        </pageview>
+                    </div>    
+                    <div class="form-group">
+                        <label for="inputRemarks" class="col-sm-2 control-label">Remarks</label>
+                        <div class="col-sm-10">
+                            <textarea id="inputRemarks" class="form-control" ng-model="entryCtrl.ngModel.Remarks"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputStatus" class="col-sm-2 control-label">Archive</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" id="inputStatus" class="form-control" ng-model="entryCtrl.ngModel.Status" ng-true-value="'Archive'" ng-false-value="''">
+                        </div>
+                    </div>
+                    <div class="form-group" ng-hide="entryFormMode != 'amend'">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <button type="submit" class="btn btn-success" aria-label="Save">
+                                <span class="fas fa-save" aria-hidden="true"></span> Save
+                            </button>
+                        </div>
+                        <div class="col-sm-5">
+                            <button type="button" class="btn btn-danger" aria-label="Delete" ng-click="DeleteData()">
+                                <span class="fas fa-trash-alt" aria-hidden="true"></span> Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-hide="entryFormMode != 'create'">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-primary" aria-label="Create" ng-click="CreateData()">
+                                <span class="far fa-plus-square" aria-hidden="true"></span> Create
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </entry>
+    </div>
+    <!-- /.container-fluid -->
+    
+    <inquiry ng-model="inquirySeriesForReferencePath" program-id="bi52forextranseries" id="inquiryMapPanel">
+        <form class="form-horizontal" ng-submit="SubmitData()">
+            <fieldset>
+                <div class="form-group">
+                    <label for="inquiryMapEffectiveFrom" class="col-sm-2 control-label">Date Range</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveFrom" id="inquiryMapEffectiveFrom">
+                            <label class="input-group-addon" for="inquiryMapEffectiveTo">to</label>
+                            <input type="date" class="form-control" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EffectiveTo" id="inquiryMapEffectiveTo">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inquiryMapOutCurrencyID" class="col-sm-2 control-label">Out Currency</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <select class="form-control" name="inquiryMapOutCurrencyID" id="inquiryMapOutCurrencyID" ng-model="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID" required>
+                                    <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                    {{currencyRow.AlphabeticCode}}</option>
+                                </select>
+                            <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID | lowercase}}"></span></label>
+                            <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID!=''">
+                                <button type="button" class="btn btn-default" aria-label="Earse Out Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.OutCurrencyID=''">
+                                    <span class="fas fa-times" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inquiryMapInCurrencyID" class="col-sm-2 control-label">In Currency</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <select class="form-control" name="inquiryMapInCurrencyID" id="inquiryMapInCurrencyID" ng-model="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID" required>
+                                    <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                    {{currencyRow.AlphabeticCode}}</option>
+                                </select>
+                            <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID | lowercase}}"></span></label>
+                            <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID!=''">
+                                <button type="button" class="btn btn-default" aria-label="Earse In Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.InCurrencyID=''">
+                                    <span class="fas fa-times" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inquiryMapType" class="col-sm-2 control-label">Type</label>
+                    <div class="col-sm-10">
+                        <label for="inquiryMapTypeAll" class="radio-inline">
+                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="''" class="" id="inquiryMapTypeAll">
+                        All</label>
+                        <label for="inquiryMapTypeTT" class="radio-inline">
+                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="'T/T'" class="" id="inquiryMapTypeTT">
+                        Telegraphic Transfer (T/T)</label>
+                        <label for="inquiryMapTypeNotes" class="radio-inline">
+                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Type" ng-value="'Notes'" class="" id="inquiryMapTypeNotes">
+                        Notes</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inquiryMapPurpose" class="col-sm-2 control-label">Status</label>                                    
+                    <div class="col-sm-10">
+                        <label for="inquiryMapStatusAll" class="radio-inline">
+                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" ng-value="'%'" class="" id="inquiryMapStatusAll">
+                        All</label>
+                        <label for="inquiryMapStatusArchived" class="radio-inline">
+                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" ng-value="'Archived'" class="" id="inquiryMapStatusArchived">
+                        Archived Series</label>
+                        <label for="inquiryMapStatusUnarchived" class="radio-inline">
+                        <input type="radio" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" ng-value="'Unarchived'" class="" id="inquiryMapStatusUnarchived">
+                        Unarchived</label>
+                    </div>
+                </div>
+                <!-- <div class="form-group">
+                    <label for="inquiryMapStatus" class="col-sm-2 control-label">Archive</label>
+                    <div class="col-sm-10">
+                        <input type="checkbox" ng-model="inquiryCtrl.ngModel.InquiryCriteria.Status" class="form-control" id="inquiryMapStatus" ng-true-value="'Archive'" ng-false-value="''">
+                    </div>
+                </div> -->
+                <div class="form-group">
+                    <label for="inquiryMapEquivalentCurrency" class="col-sm-2 control-label">Equivalent Currency Code</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <select class="form-control" name="inquiryMapEquivalentCurrency" id="inquiryMapEquivalentCurrency" ng-model="inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency" required>
+                                    <option ng-repeat="currencyRow in inquiryCurrencyModel" value="{{currencyRow.AlphabeticCode}}">
+                                    {{currencyRow.AlphabeticCode}}</option>
+                                </select>
+                            <label class="input-group-addon"><span class="form-control currency-flag currency-flag-{{inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency | lowercase}}"></span></label>
+                            <span class="input-group-btn" ng-show="inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency!=''">
+                                <button type="button" class="btn btn-default" aria-label="Earse Currency" ng-click="inquiryCtrl.ngModel.InquiryCriteria.EquivalentCurrency=''">
+                                    <span class="fas fa-times" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <hr>
+        <!-- <screen style="display: none;"></screen> -->
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default" ng-click="ChangeViewToCompact()">
+                        <input type="radio" name="options" id="option1" ng-change="ChangeViewToCompact()" ng-model="tableView" value="compact">Compact <i class="fas fa-border-all"></i>
+                    </label>
+                    <!-- <label class="btn btn-default" ng-click="ChangeViewToHybrid()">
+                        <input type="radio" name="options" id="option2" ng-change="ChangeViewToHybrid()" ng-model="tableView" value="hybrid">Hybrid <i class="fas fa-link"></i>
+                    </label> -->
+                    <label class="btn btn-default" ng-click="ChangeViewToExpand()">
+                        <input type="radio" name="options" id="option3" ng-change="ChangeViewToExpand()" ng-model="tableView" value="expand">Expand Series Details <i class="fas fa-angle-double-down"></i>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="table-responsive">
+            <table class="table table-condensed table-bordered table-hover" id="series_path_reference_table">
+                <thead>
+                    <th>#</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </inquiry>
+</div>

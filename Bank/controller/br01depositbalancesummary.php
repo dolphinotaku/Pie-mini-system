@@ -19,7 +19,7 @@ function FindData($requestData){
 	$effectiveAsAtStr = $requestData->InquiryCriteria->EffectiveAsAt;
     $effectiveAsAt = date('Y-m-d', strtotime($effectiveAsAtStr));
     
-	$effectiveCurrency = $requestData->InquiryCriteria->EffetiveCurrency;
+	$effectiveCurrency = $requestData->InquiryCriteria->EffectiveCurrency;
 	$baseCurrency = $requestData->InquiryCriteria->EquivalentCurrency;
 	$fileFormat = $requestData->InquiryCriteria->ExportFileTypeAs;
     
