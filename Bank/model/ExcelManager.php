@@ -398,7 +398,13 @@ class ExcelManager {
                                         $dateObject = date_create($tempColValue);
                                         $tempColValue = $dateObject;
                                 }
-                                
+                                /*
+                                                print_r("isDateValue:".$isDateValue);
+                                                print_r("isEmptyDate:".$isEmptyDate);
+                                                print_r("tempDataType:".$tempDataType);
+                                                print_r("temp col value:".$tempColValue);
+                                                */
+                                                //print_r("temp col value:".$tempColValue);
 								if($isDateValue){
                                     if(!$isEmptyDate){
                                         // 20180901, keithpoon, fixed: create date value in excel through PHPExcel_Shared_Date::PHPToExcel class
@@ -407,16 +413,18 @@ class ExcelManager {
                                                 $tempColValue = DateTime::createFromFormat('Y-m-d', $tempColValue)->setTime(0, 0, 0);
                                                 break;
                                             case $tempDataType==="datetime":
-                                                $tempColValue = DateTime::createFromFormat('Y-m-d hh:mm:ss', $tempColValue);
+                                                $tempColValue = DateTime::createFromFormat('Y-m-d H:i:s', $tempColValue);
                                                 break;
                                             case $tempDataType==="timestamp":
-                                                $tempColValue = DateTime::createFromFormat('Y-m-d hh:mm:ss', $tempColValue);
+                                                $tempColValue = DateTime::createFromFormat('Y-m-d H:i:s', $tempColValue);
                                                 break;
                                             case $tempDataType==="time":
-                                                $tempColValue = DateTime::createFromFormat('hh:mm:ss', $tempColValue);
+                                                $tempColValue = DateTime::createFromFormat('H:i:s', $tempColValue);
                                                 break;
                                         }
                                         $objPHPExcel->getActiveSheet()->setCellValue($excelCellCoordinate, PHPExcel_Shared_Date::PHPToExcel($tempColValue));
+                                                //print_r("temp col value:".$tempColValue);
+                                                //print_r("PHPExcel_Shared_Date:".PHPExcel_Shared_Date::PHPToExcel($tempColValue));
                                         
                                     }
                                 }else{
@@ -920,6 +928,7 @@ class ExcelManager {
 		foreach($this->tableList as $tableName) {
 			$dataSet[$tableName] = $this->ConvertWorksheet2Array($uploadedExcelPath, $tableName);
 		}
+        
 		// Import worksheet
 		foreach($this->tableList as $tableName) {
 			$tempProcessMessage = "Import $tableName";
@@ -1170,21 +1179,22 @@ class ExcelManager {
 						switch($type){
 							case "datetime":
 							case "timestamp":
-								$dateTimeValue = $cell->getFormattedValue();
+								//$dateTimeValue = $cell->getFormattedValue();
+                                $dateTimeValue = (string) $cell->getValue();
+                                
 								//$cellValue = date($format, PHPExcel_Shared_Date::ExcelToPHP($dateTimeValue, true, date_default_timezone_get()));
 								//$cellValue = date($format, PHPExcel_Shared_Date::ExcelToPHP($dateTimeValue, true, 'Asia/Hong_Kong'));
 								//$cellValue = date($format, PHPExcel_Shared_Date::ExcelToPHP($dateTimeValue, true, 'UTC'));
 								// echo "cellValue:$cellValue, dateTimeValue:$dateTimeValue";
 								$cellValue = date($format, PHPExcel_Shared_Date::ExcelToPHP($dateTimeValue));
-								// echo "cellValue2:$cellValue";
-
-								
+								//echo "cellValue2:$cellValue, ";
+                                
 								$tempDateObj = new DateTime();
 								$tempDateObj = date_create_from_format($format, $cellValue);
                                 // 20180829, keithpoon, PHPExcel translates to UTC time inside, and then go back to the default timezone.
                                 // https://stackoverflow.com/questions/10887967/phpexcel-gets-wrong-timezone-even-after-setting-date-default-timezone-set/31237645#31237645
                                 // should not add 8 hours to Hong Kong local time zone by manual 
-								// $tempDateObj->sub(new DateInterval('PT8H'));
+								//$tempDateObj->sub(new DateInterval('PT8H'));
 								
 								$cellValue = $tempDateObj->format($format);
 								break;

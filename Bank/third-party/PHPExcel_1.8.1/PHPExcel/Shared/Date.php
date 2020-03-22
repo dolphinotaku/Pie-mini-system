@@ -199,6 +199,26 @@ class PHPExcel_Shared_Date
 
 		return $retValue;
 	}	//	function PHPToExcel()
+    // keith, 20200322
+    // PHPExcel gets wrong timezone even after setting date_default_timezone_set
+    // https://stackoverflow.com/questions/10887967/phpexcel-gets-wrong-timezone-even-after-setting-date-default-timezone-set/29351009
+	public static function PHPToExcelWithoutUTC($dateValue = 0, $adjustToTimezone = FALSE, $timezone = NULL) {
+		//$saveTimeZone = date_default_timezone_get();
+		//date_default_timezone_set('UTC');
+		$retValue = FALSE;
+		if ((is_object($dateValue)) && ($dateValue instanceof DateTime)) {
+			$retValue = self::FormattedPHPToExcel( $dateValue->format('Y'), $dateValue->format('m'), $dateValue->format('d'),
+												   $dateValue->format('H'), $dateValue->format('i'), $dateValue->format('s')
+												 );
+		} elseif (is_numeric($dateValue)) {
+			$retValue = self::FormattedPHPToExcel( date('Y',$dateValue), date('m',$dateValue), date('d',$dateValue),
+												   date('H',$dateValue), date('i',$dateValue), date('s',$dateValue)
+												 );
+		}
+		//date_default_timezone_set($saveTimeZone);
+
+		return $retValue;
+	}	//	function PHPToExcelWithoutUTC()
 
 
 	/**

@@ -429,6 +429,21 @@ function(config, $httpProvider, $locationProvider, $controllerProvider, $compile
 			}]
 		}
 	}
+	var bank_17 = {
+		name: "Home.import-export-bank-account-balance",
+		url: "/import-export-bank-account-balance",
+		views: {
+			"content@": {
+				templateUrl: '../bank/import-export-bank-account-balance.html',
+                controller: 'imBankAccountBalanceController'
+			}
+		},
+		resolve: {
+			loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load('./js/controller/import-export-bank-account-balance.js');
+			}]
+		}
+	}
 	var bank_20 = {
 		name: "Home.export-database",
 		url: "/export-database",
@@ -541,6 +556,7 @@ function(config, $httpProvider, $locationProvider, $controllerProvider, $compile
 	$stateProvider.state(bank_14);
 	$stateProvider.state(bank_15);
 	$stateProvider.state(bank_16);
+	$stateProvider.state(bank_17);
 	$stateProvider.state(bank_20);
 	$stateProvider.state(bank_21);
     $stateProvider.state(bank_23);
