@@ -1,7 +1,5 @@
 <?php
 require_once '../config/config.php';
-//require_once '../model/ExcelManager.php';
-
 
 $responseArray = array('name' => '', 'tmp_name'=> '','erorr'=>'','size'=>'','errorMsg'=>'');
 

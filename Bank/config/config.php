@@ -10,10 +10,10 @@ date_default_timezone_set('Asia/Hong_Kong');
  * DB_USER: user for your database. the user needs to have rights for SELECT, UPDATE, DELETE and INSERT.
  * DB_PASS: the password of the above user
  */
-define("_DB_HOST", "192.168.0.190", true);
-define("_DB_NAME", "nijyuuamineex_pims_dev", true);
-define("_DB_USER", "pims_dev_admin", true);
-define("_DB_PASS", "Admin_pims_23", true);
+define("_DB_HOST", "192.168.0.190");
+define("_DB_NAME", "nijyuuamineex_pims_dev");
+define("_DB_USER", "pims_dev_admin");
+define("_DB_PASS", "Admin_pims_23");
 
 /**
  * Configuration for: Database Connection

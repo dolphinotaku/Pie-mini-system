@@ -1,7 +1,6 @@
 <?php
 require_once '../config/config.php';
 require_once '../model/Core.php';
-//require_once '../model/ExcelManager.php';
 
 function Random_string($length = 30) {
     $key = '';

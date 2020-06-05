@@ -1,7 +1,5 @@
 <?php
-
 require_once '../vendor/autoload.php';
-
 use PhpOffice\PhpSpreadsheet\ReferenceHelper;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -10,11 +8,6 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 
 class PhpSpreadsheetManager {
-
-	/* 
-		Construct attributes (table column)
-		for insert(), update(), delete()
-	*/
     protected $_ = array(
     );
     protected $fileType = array(
@@ -979,10 +972,6 @@ class PhpSpreadsheetManager {
     function GetSpreadsheet(){
         return $this->spreadsheet;
     }
-
-	function SetDefaultValue(){
-		parent::setDefaultValue();
-	}
 	
 	function setFileName($name){
 		$this->filename = $name;
@@ -1036,7 +1025,7 @@ class PhpSpreadsheetManager {
 			//$excelCellCoordinate = $this->getNameFromNumber($columnIndex).$rowCount;
 			$excelCellCoordinate = PHPExcel_Cell::stringFromColumnIndex($columnIndex).$rowCount;
 			$excelColumnCoordinate = PHPExcel_Cell::stringFromColumnIndex($columnIndex).":".PHPExcel_Cell::stringFromColumnIndex($columnIndex);
-//			if(parent::IsSystemField($headerColumn))
+            
 			if(Core::IsSystemField($headerColumn))
 				continue;
 			//$objPHPExcel->setActiveSheetIndex(0)->SetCellValue($excelCellCoordinate, $headerColumn);
@@ -1318,13 +1307,13 @@ class PhpSpreadsheetManager {
                                                 $tempColValue = DateTime::createFromFormat('Y-m-d', $tempColValue)->setTime(0, 0, 0);
                                                 break;
                                             case $tempDataType==="datetime":
-                                                $tempColValue = DateTime::createFromFormat('Y-m-d hh:mm:ss', $tempColValue);
+                                                $tempColValue = DateTime::createFromFormat('Y-m-d H:i:s', $tempColValue);
                                                 break;
                                             case $tempDataType==="timestamp":
-                                                $tempColValue = DateTime::createFromFormat('Y-m-d hh:mm:ss', $tempColValue);
+                                                $tempColValue = DateTime::createFromFormat('Y-m-d H:i:s', $tempColValue);
                                                 break;
                                             case $tempDataType==="time":
-                                                $tempColValue = DateTime::createFromFormat('hh:mm:ss', $tempColValue);
+                                                $tempColValue = DateTime::createFromFormat('H:i:s', $tempColValue);
                                                 break;
                                         }
                                         $objPHPExcel->getActiveSheet()->setCellValue($excelCellCoordinate, PHPExcel_Shared_Date::PHPToExcel($tempColValue));
@@ -1500,13 +1489,18 @@ class PhpSpreadsheetManager {
 		// Set the active Excel worksheet to sheet 0
 		//$objPHPExcel->setActiveSheetIndex(0);
 
-		$objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-		->setLastModifiedBy("Maarten Balliauw")
-		->setTitle("Office 2007 XLSX Test Document")
-		->setSubject("Office 2007 XLSX Test Document")
-		->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-		->setKeywords("office 2007 openxml php")
-		->setCategory("Test result file");
+		// $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+		// ->setLastModifiedBy("Maarten Balliauw")
+		// ->setTitle("Office 2007 XLSX Test Document")
+		// ->setSubject("Office 2007 XLSX Test Document")
+		// ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+		// ->setKeywords("office 2007 openxml php")
+		// ->setCategory("Test result file");
+
+		$objPHPExcel->getProperties()->setCreator("PIMS")
+		->setTitle($this->fileTitle)
+		->setCategory("Utility Import/Export Template")
+		->setDescription("This document involved ".count($this->tableList)." table(s).");
 		
 		$objPHPExcel->removeSheetByIndex(0);
 
